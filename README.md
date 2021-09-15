@@ -1,1 +1,1 @@
-# FYS-STK4155_Prosjekter
+# FYS-STK4155_Projects
