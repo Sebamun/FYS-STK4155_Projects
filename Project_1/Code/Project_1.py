@@ -29,25 +29,29 @@ def FrankeFunction(x,y): # Returns value from frenke function + noise.
     term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
     term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
     term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
-    return term1 + term2 + term3 + term4 #+ np.random.uniform(0,1,N)
+    return term1 + term2 + term3 + term4 #+ np.random.normal(0,1,N)
 
-dx = 0.05 # Steplength.
-x = np.arange(0, 1, dx)
-y = np.arange(0, 1, dx)
-N = len(x)
+#dx = 0.05 # Steplength.
+#x = np.arange(0, 1, dx)
+#y = np.arange(0, 1, dx)
+#N = len(x)
+np.random.seed(1234)
+N = 1000
+x = np.sort(np.random.uniform(0, 1, N))
+y = np.sort(np.random.uniform(0, 1, N))
 z = FrankeFunction(x,y)
 
-X = design_matrix(x,y,4) # Calls on function.
-X_ = pd.DataFrame(X) # Converts matrix to dataframe.
-#print(X_)
-a = np.linalg.matrix_rank(X) # We check that it is not a singular matrix
-#print(f'The matrix rank is {a}.')
-
-MSE = np.zeros((2, a))
-R2 = np.zeros((2, a))
-poly_degrees = np.arange(1, a+1)
+poly_degrees = np.arange(1, 6)
+MSE = np.zeros((2, len(poly_degrees)))
+R2 = np.zeros((2, len(poly_degrees)))
 
 for idx, degree in enumerate(poly_degrees): # (Test->20%, train->80%)
+    X = design_matrix(x,y,n=degree) # Calls on function.
+    a = np.linalg.matrix_rank(X) # We check if the matrix is singular.
+    print(f'The rank of the matrix is {a} for polynomial of degree n={degree}.')
+    #X_ = pd.DataFrame(X) # Converts matrix to dataframe for easier reading.
+    #print(X_)
+
     # Split in training and test data:
     split_size = 0.2
     X_train, X_test, y_train, y_test = train_test_split(X, z, test_size = 0.2)
@@ -76,7 +80,10 @@ for idx, degree in enumerate(poly_degrees): # (Test->20%, train->80%)
     MSE[1, idx] = mean_squared_error(y_test, y_predict_test)
     R2[0, idx] = r2_score(y_train, y_predict_train)
     R2[1, idx] = r2_score(y_test, y_predict_test)
-# Plotting:
+# Ploting:
+plt.style.use('seaborn')
+plt.rc('text', usetex=True)
+plt.rc('text.latex', preamble=r'\usepackage{amsmath}')
 fig, axes = plt.subplots(1, 2)
 # Mean squared error:
 ax = axes[0]
