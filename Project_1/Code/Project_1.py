@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 from random import random, seed
 import pandas as pd
-
+# Exercise 1:
 def design_matrix(x,y,n): # Returns a design matrix given dimension of fit.
     if len(x.shape) > 1:
         x = np.ravel(x)
@@ -29,18 +29,18 @@ def FrankeFunction(x,y): # Returns value from frenke function + noise.
     term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
     term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
     term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
-    return term1 + term2 + term3 + term4 #+ np.random.normal(0,1,N)
+    terms = term1 + term2 + term3 + term4
+    return terms + np.random.normal(0,0.1,terms.shape) #normal(mean,deviation,shape)
 
-#dx = 0.05 # Steplength.
+#dx = 0.001 # Steplength.
 #x = np.arange(0, 1, dx)
 #y = np.arange(0, 1, dx)
 #N = len(x)
 np.random.seed(1234)
-N = 1000
+N = 10000
 x = np.sort(np.random.uniform(0, 1, N))
 y = np.sort(np.random.uniform(0, 1, N))
 z = FrankeFunction(x,y)
-
 poly_degrees = np.arange(1, 6)
 MSE = np.zeros((2, len(poly_degrees)))
 R2 = np.zeros((2, len(poly_degrees)))
@@ -115,6 +115,9 @@ linewidth=0, antialiased=False)
 ax.set_zlim(-0.10, 1.40)
 ax.zaxis.set_major_locator(LinearLocator(10))
 ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_zlabel('z')
 # Add a color bar which maps values to colors:
 fig.colorbar(surf, shrink=0.5, aspect=5)
 fig.savefig('plots/surface_project1.pdf')
