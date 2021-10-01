@@ -14,7 +14,7 @@ import pandas as pd
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 # Make data.
-np.random.seed(1234)
+np.random.seed(2018)
 N = 50
 x = np.sort(np.random.uniform(0, 1, N))
 y = np.sort(np.random.uniform(0, 1, N))
@@ -34,6 +34,7 @@ def create_X(x, y, n ):
     N = len(x)
     l = int((n+1)*(n+2)/2)		# Number of elements in beta
     X = np.ones((N,l))
+    print()
 
     for i in range(1,n+1):
         q = int((i)*(i+1)/2)
@@ -64,7 +65,7 @@ ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
 fig.colorbar(surf, shrink=0.5, aspect=5)
 plt.show()
 
-poly_degrees = np.arange(1, 9)
+poly_degrees = np.arange(1, 6)
 MSE = np.zeros((2, len(poly_degrees)))
 R2 = np.zeros((2, len(poly_degrees)))
 z = np.ravel(z)
