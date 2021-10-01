@@ -1,0 +1,5 @@
+# Attributes of folder on mac:
+.DS_Store
+# python:
+__pycache__
+common.cpython-37.pyc
