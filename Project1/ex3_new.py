@@ -23,7 +23,7 @@ def FrankeFunction(x,y):
     term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
     term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
     term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
-    return term1 + term2 + term3 + term4 + np.random.normal(0, 0.01, (N,N))
+    return term1 + term2 + term3 + term4 + np.random.normal(0, 0.5, (N,N))
 
 # Generate the data.
 N = 100
@@ -39,7 +39,7 @@ xy[:,1] = y
 x, y = np.meshgrid(x, y)
 z = FrankeFunction(x, y)
 
-poly_degrees = np.arange(1, 7)
+poly_degrees = np.arange(1, 10)
 
 
 # Initialize a KFold instance, number of splitted parts
@@ -51,7 +51,7 @@ scores_KFold = np.zeros((2, len(poly_degrees), k))
 
 for idx, degree in enumerate(poly_degrees):
     poly = PolynomialFeatures(degree)
-    OLS = LinearRegression() #fit_intercept = False
+    OLS = LinearRegression() #fit_intercept = False ##########
     j = 0
     for train_inds, test_inds in kfold.split(xy,y=z):
         xytrain = xy[train_inds]
