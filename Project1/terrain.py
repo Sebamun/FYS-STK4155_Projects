@@ -8,7 +8,7 @@ error_of_lambda, plot_terrain)
 terrain = imread('map_data/SRTM_data_Norway_1.tif')
 
 N = 1000 #len(terrain[0])
-poly_degrees = np.arange(1, 20)
+poly_degrees = np.arange(1, 10)
 N_boostraps = 100
 k = 5
 N_lambdas = 9

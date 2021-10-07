@@ -5,7 +5,7 @@ from plot import (MSE_R2, bias_variance, error_of_polydeg, owncode_vs_sklearn,
 error_of_lambda)
 
 N = 50
-poly_degrees = np.arange(1, 10)
+poly_degrees = np.arange(1, 15)
 N_boostraps = 100
 k = 5
 N_lambdas = 9
@@ -26,7 +26,7 @@ z = FrankeFunction(x, y)
 """ OLS; SIMPLE, BOOTSTRAP, K-FOLD """
 def produce_results_OLS():
     model = OLSReg(poly_degrees)
-    error, r2, bias, variance = model.simple_regression(x, y, z, 0, False)
+    error, r2, bias, variance = model.simple_regression(x, y, z, 0, True)
     MSE_R2(
         poly_degrees, error, r2,
         title='OLS regression with simple resampling',
@@ -88,7 +88,7 @@ def produce_results_ridge():
 
     error_of_lambda(
         lambdas, error[:, deg_idx],
-        title=f'Ridge regression with k-foldning for polynomial degree {poly_degrees[deg_idx]:.2e}',
+        title=f'Ridge regression with k-foldning for polynomial degree {poly_degrees[deg_idx]}',
         fname=f'plots/exercise4_k-fold_lambda_deg_{poly_degrees[deg_idx]:.2e}_{N}.pdf'
     )
 
@@ -126,10 +126,10 @@ def produce_results_lasso():
 
     error_of_lambda(
         lambdas, error[:, deg_idx],
-        title=f'Lasso regression with k-foldning for polynomial degree {poly_degrees[deg_idx]:.2e}',
+        title=f'Lasso regression with k-foldning for polynomial degree {poly_degrees[deg_idx]}',
         fname=f'plots/exercise5_k-fold_lambda_deg_{poly_degrees[deg_idx]:.2e}_{N}.pdf'
     )
 
 produce_results_OLS()
-produce_results_ridge()
-produce_results_lasso()
+# produce_results_ridge()
+# produce_results_lasso()
