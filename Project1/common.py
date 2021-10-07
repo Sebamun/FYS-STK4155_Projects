@@ -16,7 +16,7 @@ def FrankeFunction(x, y):
 def prepare_data_set(x, y, z, degree, scale_data):
     z = np.ravel(z)
     X = create_X(x, y, n=degree)
-    X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2)
+    X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2, random_state=2018)
     if scale_data:
         X_train, X_test = scale(X_train, X_test)
     return X_train, X_test, z_train, z_test
