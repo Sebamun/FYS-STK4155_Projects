@@ -4,9 +4,9 @@ from common import FrankeFunction
 from plot import (MSE_R2, bias_variance, error_of_polydeg, owncode_vs_sklearn,
 error_of_lambda)
 
-N = 50
+N = 20
 poly_degrees = np.arange(1, 10)
-N_boostraps = 100
+N_boostraps = 1
 k = 5
 N_lambdas = 9
 lambdas = np.logspace(-4, 1, N_lambdas)
@@ -131,5 +131,5 @@ def produce_results_lasso():
     )
 
 produce_results_OLS()
-produce_results_ridge()
-produce_results_lasso()
+#produce_results_ridge()
+#produce_results_lasso()
