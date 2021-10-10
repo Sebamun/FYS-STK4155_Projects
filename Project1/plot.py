@@ -31,33 +31,54 @@ def MSE_R2(poly_degrees, MSE, R2, title, fname):
     fig.savefig(fname)
     plt.close(fig)
 
-def bias_variance(poly_degrees, MSE, bias, variance, title, fname):
+def test_vs_train(poly_degrees, MSE, N, title, fname):
     poly_degrees_new = np.arange(1, len(poly_degrees), 2)
-    fig, axes = plt.subplots(1, 2)
-    fig.suptitle(title, fontsize=20)
-    ax = axes[0]
+    fig, ax = plt.subplots()
+    ax.set_title(title, fontsize=20)
     ax.set_xticks(poly_degrees_new)
     ax.tick_params(axis='both', which='major', labelsize=18)
-    fig.suptitle(title, fontsize=20)
-    ax.set_title('Training data', fontsize=18)
-    ax.plot(poly_degrees, MSE[0], label='MSE')
-    ax.plot(poly_degrees, bias[0], label='Bias')
-    ax.plot(poly_degrees, variance[0], label='Variance')
+    ax.set_title(f'Training vs test data, MSE, {N}x{N} datapoints', fontsize=18)
+    ax.plot(poly_degrees, MSE[0], label='MSE, Training')
+    ax.plot(poly_degrees, MSE[1], label='MSE, Test')
     ax.set_xlabel('Polynomial Degree', fontsize=18)
     ax.tick_params(axis='both', which='major', labelsize=18)
     ax.legend(fontsize=18)
+    fig.savefig(fname)
+    plt.close(fig)
 
-    ax = axes[1]
+def bias_variance(poly_degrees, MSE, bias, variance, N, title, fname):
+    poly_degrees_new = np.arange(1, len(poly_degrees), 2)
+    fig, ax = plt.subplots()
+    ax.set_title(title, fontsize=20)
     ax.set_xticks(poly_degrees_new)
     ax.tick_params(axis='both', which='major', labelsize=18)
-    fig.suptitle(title, fontsize=20)
-    ax.set_title('Test data', fontsize=18)
+    ax.set_title(f'Test data, {N}x{N} datapoints', fontsize=18)
     ax.plot(poly_degrees, MSE[1], label='MSE')
     ax.plot(poly_degrees, bias[1], label='Bias')
     ax.plot(poly_degrees, variance[1], label='Variance')
     ax.set_xlabel('Polynomial Degree', fontsize=18)
     ax.tick_params(axis='both', which='major', labelsize=18)
     ax.legend(fontsize=18)
+    fig.savefig(fname)
+    plt.close(fig)
+
+def bias_variance_poly(poly_degrees, MSE, bias, variance, title, fname):
+    poly_degrees_new = np.arange(1, len(poly_degrees), 2)
+    fig, axes = plt.subplots(1, 2)
+    fig.suptitle(title, fontsize=20)
+    ax = axes[0]
+    ax.set_xticks(poly_degrees_new)
+    ax.tick_params(axis='both', which='major', labelsize=18)
+    ax.plot(poly_degrees, variance[1], label='Variance')
+    ax.set_xlabel('Polynomial Degree', fontsize=15)
+    ax.legend(fontsize=15)
+
+    ax = axes[1]
+    ax.set_xticks(poly_degrees_new)
+    ax.tick_params(axis='both', which='major', labelsize=18)
+    ax.plot(poly_degrees, bias[1], label='Bias')
+    ax.set_xlabel('Polynomial Degree', fontsize=15)
+    ax.legend(fontsize=15)
     fig.savefig(fname)
     plt.close(fig)
 
@@ -113,3 +134,64 @@ def plot_terrain(terrain):
     ax.tick_params(axis='both', which='major', labelsize=18)
     fig.savefig('plot/exercise6_terrain.pdf')
     plt.close(fig)
+
+def variance_of_lambda(lambdas, var_lmbd, title, fname):
+    fig, ax = plt.subplots()
+    ax.set_title(title, fontsize=20)
+    ax.plot(np.log10(lambdas), var_lmbd[0], label = 'Variance, train data')
+    ax.plot(np.log10(lambdas), var_lmbd[1], label = 'Variance, test data')
+    ax.set_xlabel(r'$\log_{10}(\lambda)$', fontsize=15)
+    ax.set_ylabel('Variance', fontsize=15)
+    ax.legend(fontsize=15)
+    fig.savefig(fname)
+    plt.close(fig)
+
+def bias_variance_of_lambda(lambdas, var, bias, title, fname):
+    var_min = np.argmin(var[1])
+    fig, ax = plt.subplots(1,2)
+    fig.suptitle(title, fontsize=20)
+    ax[0].set_title('Variance')
+    ax[0].plot(np.log10(lambdas), var[1], label = 'Variance')
+    ax[0].scatter(np.log10(lambdas[var_min]), var[1][var_min], label = r'$\lambda$ =' + f'{lambdas[var_min]:.2f}')
+    ax[1].set_title('Bias')
+    ax[1].plot(np.log10(lambdas), bias[1], label = 'Bias')
+    ax[1].scatter(np.log10(lambdas[var_min]), bias[1][var_min], label = r'$\lambda$ =' + f'{lambdas[var_min]:.2f}')
+    ax[0].set_xlabel(r'$\log_{10}(\lambda)$', fontsize=15)
+    ax[1].set_xlabel(r'$\log_{10}(\lambda)$', fontsize=15)
+    ax[0].legend(fontsize=15)
+    ax[1].legend(fontsize=15)
+    fig.savefig(fname)
+    plt.close(fig)
+
+def model_terrain(X, x, y, beta, degree, N, title, fname):
+    xx, yy = np.meshgrid(x,y)
+    z_model = X@beta
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    ax.set_title(title + f'p={degree}')
+    surf = ax.plot_surface(xx, yy, z_model, cmap=cm.coolwarm,
+    linewidth=0, antialiased=False)
+    ax.set_zlim(-0.10, 1.40)
+    ax.zaxis.set_major_locator(LinearLocator(10))
+    ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
+    fig.colorbar(surf, shrink=0.5, aspect=5)
+    plt.savefig(fname)
+
+def CI(beta):
+    diag_ele = np.zeros(len(beta))
+    X_i = np.linalg.pinv(X.T@X)
+    for i in range(len(beta)):
+        diag_ele[i] = X_i[i,i]
+    var_beta = var_error*diag_ele
+    betas = np.arange(1, len(beta) + 1)
+    CI_u = beta + 1.96*var_beta/np.sqrt(N)
+    CI_l = beta - 1.96*var_beta/np.sqrt(N)
+    yerr = 2*var_beta/np.sqrt(N)
+    plt.fill_between(betas, CI_u, CI_l, alpha = 0.9)
+    plt.scatter(betas, beta, marker = 'x', color = 'red', label = 'beta')
+    plt.title(r'$\beta$ values with corresponding confidence interval of 95$\%$,' + f'p={degree}, n={N}')
+    plt.xlabel(r'$\beta$')
+    plt.xticks(betas)
+    plt.ylabel(r'$\beta$ values')
+    plt.legend()
+    plt.savefig(f'conf_plot_p{degree}_N{N}.png')

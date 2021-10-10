@@ -36,7 +36,7 @@ class Regression:
             variance[0, idx] = variance_(z_pred_train)
             variance[1, idx] = variance_(z_pred_test)
 
-        return error, r2, bias, variance
+        return error, r2, bias, variance, X, beta
 
     def bootstrap(self, x, y, z, lambdas, N_bootstraps):
         n_lambdas = len(lambdas)
