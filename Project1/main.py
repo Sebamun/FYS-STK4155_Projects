@@ -4,18 +4,14 @@ from common import FrankeFunction
 from plot import (MSE_R2, bias_variance, error_of_polydeg, owncode_vs_sklearn,
 error_of_lambda)
 
-<<<<<<< HEAD
+
 N = 20
-poly_degrees = np.arange(1, 10)
-N_boostraps = 1
-=======
-N = 50
 poly_degrees = np.arange(1, 15)
-N_boostraps = 100
->>>>>>> f5ea6cc4ea8663c64faaf8d63046e23464467b0f
+N_boostraps = 20
+
 k = 5
-N_lambdas = 9
-lambdas = np.logspace(-4, 1, N_lambdas)
+N_lambdas = 20
+lambdas = np.logspace(-4, 2, N_lambdas)
 
 np.random.seed(2018)
 
@@ -136,11 +132,5 @@ def produce_results_lasso():
         fname=f'plots/exercise5_k-fold_lambda_deg_{poly_degrees[deg_idx]:.2e}_{N}.pdf'
     )
 
-produce_results_OLS()
-<<<<<<< HEAD
-#produce_results_ridge()
-#produce_results_lasso()
-=======
-# produce_results_ridge()
-# produce_results_lasso()
->>>>>>> f5ea6cc4ea8663c64faaf8d63046e23464467b0f
+#produce_results_OLS()
+produce_results_ridge()
