@@ -4,10 +4,10 @@ from common import FrankeFunction
 from plot import (MSE_R2, bias_variance, error_of_polydeg, owncode_vs_sklearn,
 error_of_lambda)
 
-N = 50
-poly_degrees = np.arange(1, 15)
+N = 10
+poly_degrees = np.arange(1, 10)
 N_boostraps = 100
-k = 5
+k = 10
 N_lambdas = 9
 lambdas = np.logspace(-4, 1, N_lambdas)
 
@@ -29,12 +29,12 @@ def produce_results_OLS():
     error, r2, bias, variance = model.simple_regression(x, y, z, 0, True)
     MSE_R2(
         poly_degrees, error, r2,
-        title='OLS regression with simple resampling',
+        title='OLS regression without resampling',
         fname=f'plots/exercise1_MSE_R2score{N}.pdf'
     )
     bias_variance(
         poly_degrees, error, bias, variance,
-        title='OLS regression with simple resampling',
+        title='OLS regression without resampling',
         fname=f'plots/exercise2_bias_variance{N}.pdf'
     )
 
@@ -48,13 +48,13 @@ def produce_results_OLS():
     error, error_sklearn = model.k_fold(xy, x, y, z, [0], k)
     error_of_polydeg(
         poly_degrees, error,
-        title='OLS regression with k-foldning',
-        fname=f'plots/exercise3_k-fold{N}.pdf'
+        title=f'OLS regression with k-foldning for k = {k}',
+        fname=f'plots/exercise3_k-fold_{k}_{N}.pdf'
     )
 
     owncode_vs_sklearn(poly_degrees, error[:, :, 0], error_sklearn[:, 0],
         title='OLS regression with k-foldning',
-        fname=f'plots/exercise3_k-fold_sklearn{N}.pdf'
+        fname=f'plots/exercise3_k-fold_sklearn_{k}_{N}.pdf'
     )
 
 """ RIDGE; SIMPLE, BOOTSTRAP, K-FOLD """
@@ -64,7 +64,7 @@ def produce_results_ridge():
     error, _, bias, variance = model.simple_regression(x, y, z, lmb, True)
     bias_variance(
         poly_degrees, error, bias, variance,
-        title=r'Ridge regression with simple resampling for $\lambda = $' + f'{lmb}',
+        title=r'Ridge regression without resampling for $\lambda = $' + f'{lmb}',
         fname=f'plots/exercise4_bias_variance_lmb_{lmb}_{N}.pdf'
     )
     error, bias, variance = model.bootstrap(x, y, z, lambdas, N_boostraps)
@@ -80,16 +80,16 @@ def produce_results_ridge():
     error_of_polydeg(
         poly_degrees, error[:, :, lmb_idx],
         title=r'Ridge regression with k-foldning for $\lambda = $' + f'{lambdas[lmb_idx]:.2e}',
-        fname=f'plots/exercise4_k-fold_lmb_{lambdas[lmb_idx]:.2e}_{N}.pdf'
+        fname=f'plots/exercise4_k-fold_{k}_lmb_{lambdas[lmb_idx]:.2e}_{N}.pdf'
     )
     owncode_vs_sklearn(poly_degrees, error[:, :, lmb_idx], error_sklearn[:, lmb_idx],
         title='Ridge regression with k-foldning for $\lambda = $' + f'{lambdas[lmb_idx]:.2e}',
-        fname=f'plots/exercise4_k-fold_sklearn_lmb_{lambdas[lmb_idx]:.2e}_{N}.pdf')
+        fname=f'plots/exercise4_k-fold_sklearn_{k}_lmb_{lambdas[lmb_idx]:.2e}_{N}.pdf')
 
     error_of_lambda(
         lambdas, error[:, deg_idx],
         title=f'Ridge regression with k-foldning for polynomial degree {poly_degrees[deg_idx]}',
-        fname=f'plots/exercise4_k-fold_lambda_deg_{poly_degrees[deg_idx]:.2e}_{N}.pdf'
+        fname=f'plots/exercise4_k-fold_{k}_lambda_deg_{poly_degrees[deg_idx]:.2e}_{N}.pdf'
     )
 
 """ LASSO; SIMPLE, BOOTSTRAP, K-FOLD """
@@ -99,7 +99,7 @@ def produce_results_lasso():
     error, _, bias, variance = model.simple_regression(x, y, z, lmb, True)
     bias_variance(
         poly_degrees, error, bias, variance,
-        title=r'Lasso regression with simple resampling for $\lambda = $' + f'{lmb}',
+        title=r'Lasso regression without resampling for $\lambda = $' + f'{lmb}',
         fname=f'plots/exercise5_bias_variance_lmb_{lmb}_{N}.pdf'
     )
 
@@ -116,18 +116,18 @@ def produce_results_lasso():
     error_of_polydeg(
         poly_degrees, error[:, :, lmb_idx],
         title=r'Lasso regression with k-foldning for $\lambda = $' + f'{lambdas[lmb_idx]:.2e}',
-        fname=f'plots/exercise5_k-fold_lmb_{lambdas[lmb_idx]:.2e}_{N}.pdf'
+        fname=f'plots/exercise5_k-fold_{k}_lmb_{lambdas[lmb_idx]:.2e}_{N}.pdf'
     )
 
     owncode_vs_sklearn(poly_degrees, error[:, :, lmb_idx], error_sklearn[:, lmb_idx],
         title='Lasso regression with k-foldning for $\lambda = $' + f'{lambdas[lmb_idx]:.2e}',
-        fname=f'plots/exercise5_k-fold_sklearn_lmb_{lambdas[lmb_idx]:.2e}_{N}.pdf'
+        fname=f'plots/exercise5_k-fold_sklearn_{k}_lmb_{lambdas[lmb_idx]:.2e}_{N}.pdf'
     )
 
     error_of_lambda(
         lambdas, error[:, deg_idx],
         title=f'Lasso regression with k-foldning for polynomial degree {poly_degrees[deg_idx]}',
-        fname=f'plots/exercise5_k-fold_lambda_deg_{poly_degrees[deg_idx]:.2e}_{N}.pdf'
+        fname=f'plots/exercise5_k-fold_{k}_lambda_deg_{poly_degrees[deg_idx]:.2e}_{N}.pdf'
     )
 
 produce_results_OLS()
