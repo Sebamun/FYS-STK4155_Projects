@@ -64,3 +64,13 @@ def variance_(y):
         return np.mean(np.var(y))
     else:
         return np.mean(np.var(y, axis = 1, keepdims=True))
+
+def compute_means_over_lambda(bias, variance, N_lambdas):
+    mean_bias = np.zeros_like(bias[:, :, 0])
+    mean_variance = np.zeros_like(variance[:, :, 0])
+    for i in range(0, N_lambdas):
+        mean_bias += bias[:, :, i]
+        mean_variance += variance[:, :, i]
+    mean_bias = mean_bias/N_lambdas
+    mean_variance = mean_variance/N_lambdas
+    return mean_bias, mean_variance
