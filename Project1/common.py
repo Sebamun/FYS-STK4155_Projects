@@ -16,10 +16,10 @@ def FrankeFunction(x, y):
 def prepare_data_set(x, y, z, degree, scale_data):
     z = np.ravel(z)
     X = create_X(x, y, n=degree)
-    X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2) #, random_state=2018)
+    X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2)
     if scale_data:
         X_train, X_test = scale(X_train, X_test)
-    return X_train, X_test, z_train, z_test
+    return X, X_train, X_test, z_train, z_test
 
 def create_X(x, y, n):
     if len(x.shape) > 1:
@@ -34,6 +34,7 @@ def create_X(x, y, n):
         q = int((i)*(i+1)/2)
         for k in range(i+1):
             X[:,q+k] = (x**(i-k))*(y**k)
+
 
     return X
 

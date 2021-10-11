@@ -11,19 +11,25 @@ class Regression:
         self.poly_degrees = poly_degrees
 
     def simple_regression(self, x, y, z, lmbda, scale=False):
+        X_array = np.zeros(len(self.poly_degrees), dtype = object)
+        beta_array = np.zeros(len(self.poly_degrees), dtype = object)
         error = np.zeros((2, len(self.poly_degrees)))
         r2 = np.zeros_like(error)
         bias = np.zeros_like(error)
         variance = np.zeros_like(error)
 
         for idx, degree in enumerate(self.poly_degrees):
-            X_train, X_test, z_train, z_test = prepare_data_set(
+            X, X_train, X_test, z_train, z_test = prepare_data_set(
                 x, y, z, degree, scale)
+
+            X_array[idx] = X
 
             z_pred_train = np.empty(z_train.shape[0])
             z_pred_test = np.empty(z_test.shape[0])
 
             self.fit(X_train, z_train, lmbda)
+            beta_array[idx] = self.beta
+
             z_pred_train = self.predict(X_train)
             z_pred_test = self.predict(X_test)
 
@@ -36,7 +42,7 @@ class Regression:
             variance[0, idx] = variance_(z_pred_train)
             variance[1, idx] = variance_(z_pred_test)
 
-        return error, r2, bias, variance, X, beta
+        return error, r2, bias, variance, X_array, beta_array
 
     def bootstrap(self, x, y, z, lambdas, N_bootstraps):
         n_lambdas = len(lambdas)
@@ -46,7 +52,7 @@ class Regression:
         variance = np.zeros_like(error)
 
         for idx, degree in enumerate(self.poly_degrees):
-            X_train, X_test, z_train, z_test = prepare_data_set(
+            X, X_train, X_test, z_train, z_test = prepare_data_set(
                 x, y, z, degree, scale_data=True)
 
             z_pred_train = np.empty((z_train.shape[0], N_bootstraps, n_lambdas))
