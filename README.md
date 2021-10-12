@@ -44,3 +44,4 @@ Here;
     * and produces all assosiated plots provided in the pdf.
 
 If one wantes to change the initial contitions, this is done in main.py for exercise 1-5 and terrain.py for exercise 6.
+Due to long run times we recommend to comment out the functions you don't want to use :)
