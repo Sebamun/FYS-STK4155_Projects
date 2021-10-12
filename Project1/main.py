@@ -4,12 +4,13 @@ from common import FrankeFunction, compute_means_over_lambda
 from plot import (MSE_R2, bias_variance_error, error_of_polydeg, owncode_vs_sklearn,
 error_of_lambda, model_terrain, confidence_intervall, bias_variance_compare, error_of_polydeg_compare)
 
+# Generate the data and set initial conditions.
 N = 20
 poly_degrees = np.arange(1, 10)
 N_boostraps = 20
-k = 10
-N_lambdas = 20
-lambdas = np.logspace(-4, 1, N_lambdas)
+k = 10 # Initialize a KFold instance, number of splitted parts
+N_lambdas = 20 # Initialize number of bootstrap iterations
+lambdas = np.logspace(-4, 1, N_lambdas) # Initialize lambdas for Ridge and Lasso
 
 np.random.seed(2018)
 

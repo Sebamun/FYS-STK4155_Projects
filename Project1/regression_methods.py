@@ -27,9 +27,11 @@ class Regression:
             z_pred_train = np.empty(z_train.shape[0])
             z_pred_test = np.empty(z_test.shape[0])
 
+            # Calculate beta
             self.fit(X_train, z_train, lmbda)
             beta_array[idx] = self.beta
 
+            # Evaluate the new model.
             z_pred_train = self.predict(X_train)
             z_pred_test = self.predict(X_test)
 
@@ -64,6 +66,7 @@ class Regression:
             for i in range(N_bootstraps):
                 X_, z_ = resample(X_train, z_train)
                 for j in range(n_lambdas):
+                    # Calculate beta
                     self.fit(X_, z_, lambdas[j])
                     # Evaluate the new model on the same test data each time.
                     z_pred_train[:, i, j] = self.predict(X_train)
@@ -101,7 +104,9 @@ class Regression:
                     z_train = z[train_inds]
                     z_test = z[test_inds]
 
+                    # Calculate beta
                     self.fit(X_train, z_train, lambdas[i])
+                    # Evaluate the new model on the same test data each time.
                     z_pred_train = self.predict(X_train)
                     z_pred_test = self.predict(X_test)
 
@@ -109,8 +114,8 @@ class Regression:
                     error_folds[1, idx, i, j] = MSE(z_test, z_pred_test)
                     j += 1
 
+                # Cross-validation using cross_val_score from sklearn along with KFold
                 method = self.sklearn_model(lmb)
-
                 error_sklearn_folds = cross_val_score(
                     method, X, z, scoring='neg_mean_squared_error', cv=kfold
                 )
