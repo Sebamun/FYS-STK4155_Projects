@@ -45,3 +45,5 @@ Here;
 
 If one wantes to change the initial contitions, this is done in main.py for exercise 1-5 and terrain.py for exercise 6.
 Due to long run times we recommend to comment out the functions you don't want to use :)
+
+You can find our report under the name FYS_STK4155_project1.pdf.
