@@ -109,6 +109,7 @@ def produce_results_Ridge():
         fname=f'plots/Terrain_Norway/Ridge_k-fold_lmb_{lambdas[lmb_idx]:.2e}_{N}.pdf'
     )
 
+
 def produce_results_lasso():
     model = LassoReg(poly_degrees)
     lmb = 0.1

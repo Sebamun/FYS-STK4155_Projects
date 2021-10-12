@@ -73,53 +73,53 @@ def bias_variance_error(poly_degrees, MSE, bias, variance, N, title, fname):
     fig.savefig(fname)
     plt.close(fig)
 
-def bias_variance(poly_degrees, MSE, bias, variance, title, fname):
-    poly_degrees_new = np.arange(1, len(poly_degrees), 2)
-    fig, axes = plt.subplots(1, 2)
-    fig.suptitle(title, fontsize=20)
-    ax = axes[0]
-    ax.set_xticks(poly_degrees_new)
-    ax.tick_params(axis='both', which='major', labelsize=18)
-    ax.plot(poly_degrees, variance[1], label='Variance')
-    ax.set_xlabel('Polynomial Degree', fontsize=18)
-    ax.legend(fontsize=18)
+# def bias_variance(poly_degrees, MSE, bias, variance, title, fname):
+#     poly_degrees_new = np.arange(1, len(poly_degrees), 2)
+#     fig, axes = plt.subplots(1, 2)
+#     fig.suptitle(title, fontsize=20)
+#     ax = axes[0]
+#     ax.set_xticks(poly_degrees_new)
+#     ax.tick_params(axis='both', which='major', labelsize=18)
+#     ax.plot(poly_degrees, variance[1], label='Variance')
+#     ax.set_xlabel('Polynomial Degree', fontsize=18)
+#     ax.legend(fontsize=18)
+#
+#     ax = axes[1]
+#     ax.set_xticks(poly_degrees_new)
+#     ax.tick_params(axis='both', which='major', labelsize=18)
+#     ax.plot(poly_degrees, bias[1], label='Bias')
+#     ax.set_xlabel('Polynomial Degree', fontsize=18)
+#     ax.legend(fontsize=18)
+#     fig.savefig(fname)
+#     plt.close(fig)
 
-    ax = axes[1]
-    ax.set_xticks(poly_degrees_new)
-    ax.tick_params(axis='both', which='major', labelsize=18)
-    ax.plot(poly_degrees, bias[1], label='Bias')
-    ax.set_xlabel('Polynomial Degree', fontsize=18)
-    ax.legend(fontsize=18)
-    fig.savefig(fname)
-    plt.close(fig)
+# def variance_of_lambda(lambdas, var_lmbd, title, fname):
+#     fig, ax = plt.subplots()
+#     ax.set_title(title, fontsize=20)
+#     ax.plot(np.log10(lambdas), var_lmbd[0], label = 'Variance, train data')
+#     ax.plot(np.log10(lambdas), var_lmbd[1], label = 'Variance, test data')
+#     ax.set_xlabel(r'$\log_{10}(\lambda)$', fontsize=18)
+#     ax.set_ylabel('Variance', fontsize=18)
+#     ax.legend(fontsize=18)
+#     fig.savefig(fname)
+#     plt.close(fig)
 
-def variance_of_lambda(lambdas, var_lmbd, title, fname):
-    fig, ax = plt.subplots()
-    ax.set_title(title, fontsize=20)
-    ax.plot(np.log10(lambdas), var_lmbd[0], label = 'Variance, train data')
-    ax.plot(np.log10(lambdas), var_lmbd[1], label = 'Variance, test data')
-    ax.set_xlabel(r'$\log_{10}(\lambda)$', fontsize=18)
-    ax.set_ylabel('Variance', fontsize=18)
-    ax.legend(fontsize=18)
-    fig.savefig(fname)
-    plt.close(fig)
-
-def bias_variance_of_lambda(lambdas, var, bias, title, fname):
-    var_min = np.argmin(var[1])
-    fig, ax = plt.subplots(1,2)
-    fig.suptitle(title, fontsize=20)
-    ax[0].set_title('Variance')
-    ax[0].plot(np.log10(lambdas), var[1], label = 'Variance')
-    ax[0].scatter(np.log10(lambdas[var_min]), var[1][var_min], label = r'$\lambda$ =' + f'{lambdas[var_min]:.2f}')
-    ax[1].set_title('Bias')
-    ax[1].plot(np.log10(lambdas), bias[1], label = 'Bias')
-    ax[1].scatter(np.log10(lambdas[var_min]), bias[1][var_min], label = r'$\lambda$ =' + f'{lambdas[var_min]:.2f}')
-    ax[0].set_xlabel(r'$\log_{10}(\lambda)$', fontsize=18)
-    ax[1].set_xlabel(r'$\log_{10}(\lambda)$', fontsize=18)
-    ax[0].legend(fontsize=18)
-    ax[1].legend(fontsize=18)
-    fig.savefig(fname)
-    plt.close(fig)
+# def bias_variance_of_lambda(lambdas, var, bias, title, fname):
+#     var_min = np.argmin(var[1])
+#     fig, ax = plt.subplots(1,2)
+#     fig.suptitle(title, fontsize=20)
+#     ax[0].set_title('Variance')
+#     ax[0].plot(np.log10(lambdas), var[1], label = 'Variance')
+#     ax[0].scatter(np.log10(lambdas[var_min]), var[1][var_min], label = r'$\lambda$ =' + f'{lambdas[var_min]:.2f}')
+#     ax[1].set_title('Bias')
+#     ax[1].plot(np.log10(lambdas), bias[1], label = 'Bias')
+#     ax[1].scatter(np.log10(lambdas[var_min]), bias[1][var_min], label = r'$\lambda$ =' + f'{lambdas[var_min]:.2f}')
+#     ax[0].set_xlabel(r'$\log_{10}(\lambda)$', fontsize=18)
+#     ax[1].set_xlabel(r'$\log_{10}(\lambda)$', fontsize=18)
+#     ax[0].legend(fontsize=18)
+#     ax[1].legend(fontsize=18)
+#     fig.savefig(fname)
+#     plt.close(fig)
 
 def error_of_lambda(lambdas, error_lmbd, title, fname):
     error_min = np.argmin(error_lmbd[1])
@@ -128,7 +128,7 @@ def error_of_lambda(lambdas, error_lmbd, title, fname):
     ax.set_title(title, fontsize=20)
     ax.plot(np.log10(lambdas), error_lmbd[0], label = 'MSE, train data')
     ax.plot(np.log10(lambdas), error_lmbd[1], label = 'MSE, test data')
-    ax.scatter(np.log10(lambdas[error_min]), error_lmbd[1][error_min], label = r'$\lambda$ =' + f'{lambdas[error_min]:.2f}')
+    ax.scatter(np.log10(lambdas[error_min]), error_lmbd[1][error_min], label = r'$\lambda$ =' + f'{lambdas[error_min]:.4f}')
     ax.set_xlabel(r'$\log_{10}(\lambda)$', fontsize=18)
     ax.set_ylabel('MSE', fontsize=18)
     ax.tick_params(axis='both', which='major', labelsize=18)
@@ -142,10 +142,10 @@ def error_of_polydeg(poly_degrees, MSE, title, fname):
     ax.set_xticks(poly_degrees_new)
     ax.tick_params(axis='both', which='major', labelsize=18)
     ax.set_title(title, fontsize=20)
-    ax.plot(poly_degrees, np.log10(MSE[0]), label = 'MSE, train data')
-    ax.plot(poly_degrees, np.log10(MSE[1]), label = 'MSE, test data')
+    ax.plot(poly_degrees, MSE[0], label = 'MSE, train data')
+    ax.plot(poly_degrees, MSE[1], label = 'MSE, test data')
     ax.set_xlabel('Polynomial Degree', fontsize=18)
-    ax.set_ylabel('log10[MSE]', fontsize=18)
+    ax.set_ylabel('MSE', fontsize=18)
     ax.tick_params(axis='both', which='major', labelsize=18)
     ax.legend(fontsize=18)
     fig.savefig(fname, bbox_inches='tight')
@@ -166,7 +166,7 @@ def owncode_vs_sklearn(poly_degrees, MSE, MSE_sklearn, title, fname):
     fig.savefig(fname)
     plt.close(fig)
 
-def error_of_polydeg_comp(poly_degrees, MSE_0, MSE_1, MSE_2, MSE_3, l_idx0, l_idx1, l_idx2, l_idx3, title, fname):
+def error_of_polydeg_compare(poly_degrees, MSE_0, MSE_1, MSE_2, MSE_3, l_idx0, l_idx1, l_idx2, l_idx3, title, fname):
     poly_degrees_new = np.arange(1, len(poly_degrees), 2)
     fig, ax = plt.subplots()
     ax.set_xticks(poly_degrees_new)
@@ -183,7 +183,7 @@ def error_of_polydeg_comp(poly_degrees, MSE_0, MSE_1, MSE_2, MSE_3, l_idx0, l_id
     fig.savefig(fname)
     plt.close(fig)
 
-def bias_variance_comp(poly_degrees, bias_0, variance_0, bias_1, variance_1, bias_2, variance_2, bias_3, variance_3, l_idx0, l_idx1, l_idx2, l_idx3, fname):
+def bias_variance_compare(poly_degrees, bias_0, variance_0, bias_1, variance_1, bias_2, variance_2, bias_3, variance_3, l_idx0, l_idx1, l_idx2, l_idx3, fname):
     poly_degrees_new = np.arange(0, len(poly_degrees), 2)
     fig, axes = plt.subplots(1, 2)
     fig.suptitle('Bias and variance given $\lambda$', fontsize=20)
@@ -202,12 +202,12 @@ def bias_variance_comp(poly_degrees, bias_0, variance_0, bias_1, variance_1, bia
     ax.set_xticks(poly_degrees_new)
     ax.tick_params(axis='both', which='major', labelsize=18)
     ax.set_title("Bias", fontsize=18)
-    ax.plot(poly_degrees, bias_0[1]) #, label=f'$\lambda$={l_idx0:.2e}')
-    ax.plot(poly_degrees, bias_1[1]) #, label=f'$\lambda$={l_idx1:.2e}')
-    ax.plot(poly_degrees, bias_2[1]) #, label=f'$\lambda$={l_idx2:.2e}')
-    ax.plot(poly_degrees, bias_3[1], color='orange') #, label=f'$\lambda$={l_idx3:.2e}')
+    ax.plot(poly_degrees, bias_0[1], label=f'$\lambda$={l_idx0:.2e}')
+    ax.plot(poly_degrees, bias_1[1], label=f'$\lambda$={l_idx1:.2e}')
+    ax.plot(poly_degrees, bias_2[1], label=f'$\lambda$={l_idx2:.2e}')
+    ax.plot(poly_degrees, bias_3[1], color='orange', label=f'$\lambda$={l_idx3:.2e}')
     ax.set_xlabel('Polynomial Degree', fontsize=18)
-    #ax.legend(fontsize=18)
+    ax.legend(fontsize=18)
     plt.savefig(fname)
 
 def model_terrain(X, x, y, beta, N, title, fname):
@@ -221,10 +221,9 @@ def model_terrain(X, x, y, beta, N, title, fname):
     ax.set_yticklabels([])
     surf = ax.plot_surface(x, y, z_model, cmap=cm.coolwarm,
     linewidth=0, antialiased=False)
-    ax.set_title(title, fontsize=20)
+    ax.set_title(title, fontsize=25)
     ax.zaxis.set_major_locator(LinearLocator(10))
-    # ax.set_zlim(-0.10, 1.40)
-    plt.savefig(fname)
+    plt.savefig(fname, bbox_inches='tight')
 
 def plot_terrain(terrain):
     fig, ax = plt.subplots()

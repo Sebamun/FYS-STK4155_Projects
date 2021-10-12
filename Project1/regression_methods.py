@@ -55,6 +55,9 @@ class Regression:
             X, X_train, X_test, z_train, z_test = prepare_data_set(
                 x, y, z, degree, scale_data=True)
 
+            # The following (idx x N_bootstraps x N_lambdas) matrix holds
+            # the column vectors z_pred for each bootstrap iteration for
+            # each lambda.
             z_pred_train = np.empty((z_train.shape[0], N_bootstraps, n_lambdas))
             z_pred_test = np.empty((z_test.shape[0], N_bootstraps, n_lambdas))
 
@@ -62,6 +65,7 @@ class Regression:
                 X_, z_ = resample(X_train, z_train)
                 for j in range(n_lambdas):
                     self.fit(X_, z_, lambdas[j])
+                    # Evaluate the new model on the same test data each time.
                     z_pred_train[:, i, j] = self.predict(X_train)
                     z_pred_test[:, i, j] = self.predict(X_test)
 
@@ -141,6 +145,8 @@ class LassoReg(Regression):
             lmbda, fit_intercept=False, max_iter=1e6, tol=1e-2
         )
         self.regLasso.fit(X, z)
+
+        self.beta = 0 # We dont need beta for Lasso, so we set this to 0
 
     def predict(self, X):
         return self.regLasso.predict(X)
