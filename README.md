@@ -29,28 +29,17 @@ python3 terrain.py
 ```
 Here; 
 * python3 main.py fits the Franke’s function and calculates:
-  * confidence intervals of the parameters beta for OLS without resampling. 
-  * the MSE and R2-score when using OLS, Ridge and Lasso regression without resampling.
-  * the MSE, bias and variance for all the regression methods with Bootstrap as resampling technique. 
-  * the MSE obtained with our own algorithm as well as that from Scikit-Learn for all the regression methods with cross-validation. 
-    * with N = 20, N_bootstraps = 20, k = 10, N_lambdas = 20, polynomials up to order 10. 
+  * confidence intervals of the parameters beta for OLS without resampling 
+  * the MSE and R2-score when using OLS, Ridge and Lasso regression without resampling,
+  * the MSE, bias and variance for all the regression methods with Bootstrap as resampling technique, 
+  * the MSE obtained with our own algorithm as well as that from Scikit-Learn for all the regression methods with cross-validation, 
+    * with N = 20, N_bootstraps = 20, k = 10, N_lambdas = 20, polynomials up to order 10,
+    * and produces all assosiated plots provided in the pdf.
 
 * python3 terrain.py fits real data of Norway and calculates:
-  * the MSE and R2-score when using OLS, Ridge and Lasso regression without resampling.
-  * the MSE, bias and variance for all the regression methods with Bootstrap as resampling technique. 
-  * the MSE obtained with our own algorithm as well as that from Scikit-Learn for all the regression methods with cross-validation. 
-    * with N = 500, N_bootstraps = 100, k = 10, N_lambdas = 20, polynomials up to order 10. 
+  * the MSE and R2-score when using OLS without resampling,
+  * the MSE, bias and variance for OLS regression with Bootstrap as resampling technique, 
+  * the MSE for all the regression methods with cross-validation, 
+    * with N = 500, N_bootstraps = 100, k = 10, N_lambdas = 20, polynomials up to order 31, 
+    * and produces all assosiated plots provided in the pdf.
     
-    
-### Plotting for excercise 1 - 5)
-#### Produces all results provided in pdf 
-```
-python3 main.py
-```
-
-### Plotting for excercise 6)
-#### Produces all results provided in pdf 
-
-```
-python3 terrain.py
-```
