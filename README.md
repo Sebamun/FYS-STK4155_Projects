@@ -42,4 +42,5 @@ Here;
   * the MSE for all the regression methods with cross-validation, 
     * with N = 500, N_bootstraps = 100, k = 10, N_lambdas = 20, polynomials up to order 31, 
     * and produces all assosiated plots provided in the pdf.
-    
+
+If one wantes to change the initial contitions, this is done in main.py for exercise 1-5 and terrain.py for exercise 6.
