@@ -5,7 +5,7 @@ from plot import (MSE_R2, bias_variance_error, error_of_polydeg, owncode_vs_skle
 error_of_lambda, model_terrain, confidence_intervall, bias_variance_compare, error_of_polydeg_compare)
 
 # Generate the data and set initial conditions.
-N = 20
+N = 10
 poly_degrees = np.arange(1, 10)
 N_boostraps = 20
 k = 10 # Initialize a KFold instance, number of splitted parts
@@ -54,7 +54,7 @@ def produce_results_OLS():
     model = OLSReg(poly_degrees)
 
     # Without resampling
-    error, r2, bias, variance, X_array, beta_array = model.simple_regression(x, y, z, 0, True)
+    error, r2, X_array, beta_array = model.simple_regression(x, y, z, 0, True)
     deg_idx = 4
     confidence_intervall(
         X_array[deg_idx], beta_array[deg_idx], N,
@@ -88,7 +88,7 @@ def produce_results_OLS():
         fname=f'plots/OLS/OLS_k-fold_sklearn_{k}_{N}.pdf'
     )
 
-""" RIDGE; SIMPLE, BOOTSTRAP, K-FOLD """
+""" RIDGE; BOOTSTRAP, K-FOLD """
 def produce_results_ridge():
     model = RidgeReg(poly_degrees)
 
@@ -151,7 +151,9 @@ def produce_results_ridge():
 """ LASSO; SIMPLE, BOOTSTRAP, K-FOLD """
 def produce_results_lasso():
     model = LassoReg(poly_degrees)
-    error, r2, bias, variance, X_array, beta_array = model.simple_regression(x, y, z, 0, True)
+
+    # Without resampling
+    error, r2, X_array, beta_array = model.simple_regression(x, y, z, 0, True)
     lmb_idx = 10
     # The following function call gives ConvergenceWarning which might be due to noice in the FrankeFunction
     error_of_polydeg(
@@ -219,7 +221,7 @@ def produce_results_lasso():
         fname=f'plots/Lasso/Lasso_k-fold_{k}_lambda_deg_{poly_degrees[deg_idx]:.2e}_{N}.pdf'
     )
 
-# produce_terrain()
-# produce_results_OLS()
-# produce_results_ridge()
-# produce_results_lasso()
+produce_terrain()
+produce_results_OLS()
+produce_results_ridge()
+produce_results_lasso()

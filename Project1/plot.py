@@ -58,7 +58,7 @@ def MSE_R2(poly_degrees, MSE, R2, title, fname):
     plt.close(fig)
 
 def bias_variance_error(poly_degrees, MSE, bias, variance, N, title, fname):
-    poly_degrees_new = np.arange(0, len(poly_degrees), 2)
+    poly_degrees_new = np.arange(1, len(poly_degrees), 2)
     fig, ax = plt.subplots()
     ax.set_title(title, fontsize=20)
     ax.set_xticks(poly_degrees_new)
@@ -225,14 +225,5 @@ def model_terrain(X, x, y, beta, N, title, fname):
     ax.zaxis.set_major_locator(LinearLocator(10))
     plt.savefig(fname, bbox_inches='tight')
 
-def plot_terrain(terrain):
-    fig, ax = plt.subplots()
-    ax.set_title('Terrain over Norway 1', fontsize=20)
-    plt.imshow(terrain, cmap='gray')
-    ax.set_xlabel('X', fontsize=18)
-    ax.set_ylabel('Y', fontsize=18)
-    ax.tick_params(axis='both', which='major', labelsize=18)
-    fig.savefig('plot/OLS/exercise6_terrain.pdf')
-    plt.close(fig)
 
 

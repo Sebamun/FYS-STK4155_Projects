@@ -15,8 +15,6 @@ class Regression:
         beta_array = np.zeros(len(self.poly_degrees), dtype = object)
         error = np.zeros((2, len(self.poly_degrees)))
         r2 = np.zeros_like(error)
-        bias = np.zeros_like(error)
-        variance = np.zeros_like(error)
 
         for idx, degree in enumerate(self.poly_degrees):
             X, X_train, X_test, z_train, z_test = prepare_data_set(
@@ -39,12 +37,9 @@ class Regression:
             error[1, idx] = MSE(z_test, z_pred_test)
             r2[0, idx] = R2(z_train, z_pred_train)
             r2[1, idx] = R2(z_test, z_pred_test)
-            bias[0, idx] = bias_(z_train, z_pred_train)
-            bias[1, idx] = bias_(z_test, z_pred_test)
-            variance[0, idx] = variance_(z_pred_train)
-            variance[1, idx] = variance_(z_pred_test)
 
-        return error, r2, bias, variance, X_array, beta_array
+        return error, r2, X_array, beta_array
+
 
     def bootstrap(self, x, y, z, lambdas, N_bootstraps):
         n_lambdas = len(lambdas)
