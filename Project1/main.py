@@ -112,14 +112,39 @@ def produce_results_ridge():
         title=f'Ridge regression with k-foldning for polynomial degree {poly_degrees[deg_idx]}',
         fname=f'plots/Ridge/Ridge_k-fold_lambda_deg_{poly_degrees[deg_idx]:.2e}_{N}.pdf'
     )
+
+    l_idx0 = 0
     l_idx1 = 5 # This gives the low lambda value.
-    l_idx2 = 19 # This gives the high lambda value.
+    l_idx2 = 10
+    l_idx3 = 19 # This gives the high lambda value.
+    l0 = lambdas[l_idx0]
     l1 = lambdas[l_idx1] # Low lambda value.
     l2 = lambdas[l_idx2] # High lambda value.
+    l3 = lambdas[l_idx3] # High lambda value.
     bias_variance_comp(
-        poly_degrees, bias[:, :, l_idx1], variance[:, :, l_idx1], bias[:, :, l_idx2], variance[:, :, l_idx2], l1, l2,
+        poly_degrees,
+        bias[:, :, l_idx0], variance[:, :, l_idx0],
+        bias[:, :, l_idx1], variance[:, :, l_idx1],
+        bias[:, :, l_idx2], variance[:, :, l_idx2],
+        bias[:, :, l_idx3], variance[:, :, l_idx3],
+        l0, l1, l2, l3,
         fname=f'plots/Ridge/Ridge_comp_lambda.pdf'
     )
+
+    #l_idx1 = 0
+    #l_idx2 = 5 # This gives the low lambda value.
+    #l_idx3 = 10
+    #l_idx4 = 19 # This gives the high lambda value.
+    #l1 = lambdas[l_idx1] # Low lambda value.
+    #l2 = lambdas[l_idx2] # High lambda value.
+    #l3 = lambdas[l_idx3]
+    #l4 = lambdas[l_idx4]
+    #bias_variance_comp(
+    #    poly_degrees, bias[:, :, l_idx1], variance[:, :, l_idx1], bias[:, :, l_idx2], variance[:, :, l_idx2],
+    #    bias[:, :, l_idx3], variance[:, :, l_idx3], bias[:, :, l_idx4], variance[:, :, l_idx4],l1,l2,l3,l4,
+    #    fname=f'plots/Ridge/Ridge_comp_lambda.pdf'
+
+    #)
 
 """ LASSO; SIMPLE, BOOTSTRAP, K-FOLD """
 def produce_results_lasso():
@@ -164,7 +189,19 @@ def produce_results_lasso():
         title=f'Lasso regression with k-foldning for polynomial degree {poly_degrees[deg_idx]}',
         fname=f'plots/Lasso/Lasso_k-fold_lambda_deg_{poly_degrees[deg_idx]:.2e}_{N}.pdf'
     )
-
+    l_idx1 = 0
+    l_idx2 = 5 # This gives the low lambda value.
+    l_idx3 = 10
+    l_idx4 = 19 # This gives the high lambda value.
+    l1 = lambdas[l_idx1] # Low lambda value.
+    l2 = lambdas[l_idx2] # High lambda value.
+    l3 = lambdas[l_idx3]
+    l4 = lambdas[l_idx4]
+    bias_variance_comp(
+        poly_degrees, bias[:, :, l_idx1], variance[:, :, l_idx1], bias[:, :, l_idx2], variance[:, :, l_idx2],
+        bias[:, :, l_idx3], variance[:, :, l_idx3], bias[:, :, l_idx4], variance[:, :, l_idx4],l1, l2,l3,l4,
+        fname=f'plots/Lasso/Lasso_comp_lambda.pdf'
+    )
 #produce_results_OLS()
 produce_results_ridge()
 #produce_results_lasso()

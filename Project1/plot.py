@@ -175,27 +175,56 @@ def CI(beta):
     plt.legend()
     plt.savefig(f'conf_plot_p{degree}_N{N}.png')
 
-def bias_variance_comp(poly_degrees, bias_1, variance_1, bias_2, variance_2,l_idx1,l_idx2,fname):
+def bias_variance_comp(poly_degrees, bias_0, variance_0, bias_1, variance_1, bias_2, variance_2, bias_3, variance_3, l_idx0, l_idx1, l_idx2, l_idx3, fname):
+    poly_degrees_new = np.arange(0, len(poly_degrees), 2)
+    fig, axes = plt.subplots(1, 2)
+    fig.suptitle('Bias and variance given $\lambda$', fontsize=20)
+    ax = axes[0]
+    ax.set_xticks(poly_degrees_new)
+    ax.tick_params(axis='both', which='major', labelsize=18)
+    ax.set_title("Variance", fontsize=18)
+    ax.plot(poly_degrees, variance_0[1], label=f'$\lambda$={l_idx0:.2e}')
+    ax.plot(poly_degrees, variance_1[1], label=f'$\lambda$={l_idx1:.2e}')
+    ax.plot(poly_degrees, variance_2[1], label=f'$\lambda$={l_idx2:.2e}')
+    ax.plot(poly_degrees, variance_3[1], color='orange', label=f'$\lambda$={l_idx3:.2e}')
+    ax.set_xlabel('Polynomial Degree', fontsize=18)
+    ax.legend(fontsize=15)
+
+    ax = axes[1]
+    ax.set_xticks(poly_degrees_new)
+    ax.tick_params(axis='both', which='major', labelsize=18)
+    ax.set_title("Bias", fontsize=18)
+    ax.plot(poly_degrees, bias_0[1]) #, label=f'$\lambda$={l_idx0:.2e}')
+    ax.plot(poly_degrees, bias_1[1]) #, label=f'$\lambda$={l_idx1:.2e}')
+    ax.plot(poly_degrees, bias_2[1]) #, label=f'$\lambda$={l_idx2:.2e}')
+    ax.plot(poly_degrees, bias_3[1], color='orange') #, label=f'$\lambda$={l_idx3:.2e}')
+    ax.set_xlabel('Polynomial Degree', fontsize=18)
+    #ax.legend(fontsize=18)
+    fname=f'plots/Ridge/Ridge_comp_lambda.pdf'
+    plt.savefig(fname)
+'''
+def bias_variance_comp(poly_degrees, bias_1, variance_1, bias_2, variance_2, bias_3, variance_3, bias_4, variance_4, l_idx1,l_idx2,l_idx3,l_idx4,fname):
     fig, axes = plt.subplots(1, 2)
     fig.suptitle('Bias and variance given $\lambda$', fontsize=20)
     ax = axes[0]
     ax.set_title("Variance")
-    ax.plot(poly_degrees, variance_1[1], label=f'$\lambda$={l_idx1:.2e}')
-    ax.plot(poly_degrees, variance_2[1], label=f'$\lambda$={l_idx2:.2e}')
+    ax.plot(poly_degrees, variance_1[1], color='red', label=f'$\lambda$={l_idx1:.2e}')
+    ax.plot(poly_degrees, variance_2[1], color='blue', label=f'$\lambda$={l_idx2:.2e}')
+    ax.plot(poly_degrees, variance_3[1], color='green', label=f'$\lambda$={l_idx3:.2e}')
+    ax.plot(poly_degrees, variance_4[1], color='orange', label=f'$\lambda$={l_idx4:.2e}')
     ax.set_xlabel('Polynomial Degree', fontsize=15)
     ax.legend(fontsize=15)
 
     ax = axes[1]
     ax.set_title("Bias")
-    ax.plot(poly_degrees, bias_1[1], label=f'$\lambda$={l_idx1:.2e}')
-    ax.plot(poly_degrees, bias_2[1], label=f'$\lambda$={l_idx2:.2e}')
+    ax.plot(poly_degrees, bias_1[1], color='red', label=f'$\lambda$={l_idx1:.2e}')
+    ax.plot(poly_degrees, bias_2[1], color='blue', label=f'$\lambda$={l_idx2:.2e}')
+    ax.plot(poly_degrees, bias_3[1], color='green', label=f'$\lambda$={l_idx3:.2e}')
+    ax.plot(poly_degrees, bias_4[1], color='orange', label=f'$\lambda$={l_idx4:.2e}')
     ax.set_xlabel('Polynomial Degree', fontsize=15)
     ax.legend(fontsize=15)
     plt.savefig(fname)
-    #if i ==1:
-    #    plt.show()
-    #plt.close(fig)
-
+'''
 
 
 
