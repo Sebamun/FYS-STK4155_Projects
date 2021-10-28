@@ -59,4 +59,5 @@ def scale(X):
     return X
 
 def learning_schedule(t,t0,t1):
+    """Learning rate used in SGD"""
     return t0/(t+t1)
