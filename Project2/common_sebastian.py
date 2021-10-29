@@ -46,7 +46,7 @@ def model_terrain(X, x, y, beta, N, title,z_data):
     surf = ax.plot_surface(x, y, z_model, cmap='binary',
     linewidth=0, antialiased=False)
     surf2 = ax.plot_surface(x, y, z_data, cmap=cm.coolwarm,
-    linewidth=0, antialiased=False)
+    linewidth=0, antialiased=False, alpha = 0.5)
     ax.set_title(title, fontsize=25)
     ax.zaxis.set_major_locator(LinearLocator(10))
     plt.show()

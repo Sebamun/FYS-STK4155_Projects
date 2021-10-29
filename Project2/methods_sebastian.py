@@ -37,7 +37,6 @@ class GradientDecent:
     def GDM(self, x, y, z_data, n_epochs, M, t0, t1, v, gamma, tol):
         # The momentum stochastic gradient descent.
         m = int(len(self.X)/M) #number of minibatches
-        v = 0 # Initial velocity for stochastic gradient descent with momentum.
         mean_squared_error_2 = np.zeros(n_epochs) # Here we store our MSE values.
         beta = np.random.randn(np.shape(self.X)[1],1) # Generate random initial beta values.
 

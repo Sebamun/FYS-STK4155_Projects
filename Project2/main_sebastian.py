@@ -28,19 +28,21 @@ def main():
     t0, t1 = 5, 50 # Paramters used in learning rate.
     gamma = 0.9 # Paramter used in momentum SGD.
     tol = 0.0001 # Tolerance for sum between analytical and numerical gradient.
+    v = 0 # Initial velocity for stochastic gradient descent with momentum.
 
     model = OLS(z, X, 0) # Initialize our OLS model.
-    MSE1, beta1 = model.SGD(x, y, z_data, n_epochs, M, t0, t1, tol)
-    MS2, beta2 = model.GDM(x, y, z_data, n_epochs, M, t0, t1, v, gamma, tol)
+    MSE1_OLS, beta1 = model.SGD(x, y, z_data, n_epochs, M, t0, t1, tol)
+    MSE2_OLS, beta2 = model.GDM(x, y, z_data, n_epochs, M, t0, t1, v, gamma, tol)
     # Plots for OLS:
     model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for OLS', z_data)
     model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for OLS', z_data)
 
     model = Ridge(z,X, 4.28*10**(-2)) # Initialize our Ridge model.
-    MSE1, beta1 = model.SGD(x, y, z_data, n_epochs, M, t0, t1, tol)
-    MS2, beta2 = model.GDM(x, y, z_data, n_epochs, M, t0, t1, v, gamma, tol)
+    MSE1_Ridge, beta1 = model.SGD(x, y, z_data, n_epochs, M, t0, t1, tol)
+    MSE2_Ridge, beta2 = model.GDM(x, y, z_data, n_epochs, M, t0, t1, v, gamma, tol)
+    print(MSE1_OLS[-1],MSE2_OLS[-1], MSE1_Ridge[-1], MSE2_Ridge[-1])
     # Plots for Ridge:
     model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for Ridge', z_data)
     model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for Ridge', z_data)
 
-main() 
+main()
