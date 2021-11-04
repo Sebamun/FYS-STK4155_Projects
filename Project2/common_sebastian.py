@@ -7,6 +7,7 @@ from sklearn.preprocessing import StandardScaler
 
 def MSE(y_data, y_model):
     """Calculate MSE"""
+    #sum = np.where(sum > 1, 1, sum)
     return np.mean((y_data - y_model)**2)
 
 def FrankeFunction(x, y):
@@ -15,7 +16,6 @@ def FrankeFunction(x, y):
     term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
     term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
     return term1 + term2 + term3 + term4
-    #return 0.2*x + 0.7*y - 0.3*x*y
 
 def create_X(x, y, n):
     """Create design Matrix"""
@@ -31,7 +31,6 @@ def create_X(x, y, n):
         q = int((i)*(i+1)/2)
         for k in range(i+1):
             X[:,q+k] = (x**(i-k))*(y**k)
-
     return X
 
 def scale(X):

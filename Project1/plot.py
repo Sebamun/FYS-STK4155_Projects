@@ -181,7 +181,7 @@ def bias_variance_comp(poly_degrees, bias_0, variance_0, bias_1, variance_1, bia
     fig.suptitle('Bias and variance given $\lambda$', fontsize=20)
     ax = axes[0]
     ax.set_xticks(poly_degrees_new)
-    ax.tick_params(axis='both', which='major', labelsize=18)
+    ax.tick_params(axis='all', which='major', labelsize=18)
     ax.set_title("Variance", fontsize=18)
     ax.plot(poly_degrees, variance_0[1], label=f'$\lambda$={l_idx0:.2e}')
     ax.plot(poly_degrees, variance_1[1], label=f'$\lambda$={l_idx1:.2e}')
