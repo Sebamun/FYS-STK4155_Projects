@@ -45,7 +45,7 @@ def main():
     model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for OLS', z_data, alph_solid, alph_transparent)
     model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for OLS', z_data, alph_transparent, alph_solid)
     # Compare with scikit: (we only have loss model for OLS).
-    model.compare_MSE(n_epochs, t0, MSE1_OLS)
+    model.compare_MSE(n_epochs, t0, MSE1_OLS, eta0)
 
     model = Ridge(z, X, m, M, lamb = 4.28*10**(-2)) # Initialize our Ridge model with specific lambda value.
     # This was the optimal lambda value from the last project.

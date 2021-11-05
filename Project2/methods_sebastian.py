@@ -57,19 +57,34 @@ class GradientDecent:
 
         return mean_squared_error_2, beta
 
-    def compare_MSE(self, n_epochs, t0, MSE_own):
-        sgdreg = SGDRegressor(loss = 'squared_loss', max_iter = n_epochs, penalty=None, alpha = 1/t0, learning_rate='optimal')
+    def compare_MSE(self, n_epochs, t0, MSE_own, eta0):
+        sgdreg = SGDRegressor(loss='squared_loss', max_iter = n_epochs, penalty = None , eta0 = eta0)
+        #sgdreg = SGDRegressor(loss = 'squared_loss', max_iter = n_epochs, penalty=None, alpha = 1/t0, learning_rate='optimal')
         sgdreg.fit(self.X, self.z.ravel())
         beta_scikit = sgdreg.coef_
         z_pred = self.X@beta_scikit
         MSE_sci = MSE(self.z, z_pred)
+
+        beta = np.random.randn(np.shape(self.X)[1],1) # Generate random initial beta values.
+        for epoch in range(n_epochs):
+            for i in range(self.m):
+                gradients = elementwise_grad(self.cost_func) # Use autograd to calculate the gradient of the cost function.
+                eta = eta0 # Change the learning rate.
+                # Stochastic gradient descent:
+                beta = beta - eta * gradients(beta)
+                #if np.linalg.norm(gradients(beta))<0.01: # If less than tolarance we stop our gradient descent.
+                        #break
+
+        z_pred = self.X@beta # Our model prediction.
+        MSE_own = MSE(self.z, z_pred) # Collect the mean square error.
+
         # Write to file:
         f = open("Textfiles/MSE_comparison.txt", "w")
         f.write('Mean squared error from scikit and our model for OLS\n')
         f.write(f' Scikit SGD: {MSE_sci}\n')
         f.write(f' Own SGD: {MSE_own}\n')
         f.close()
-        
+
 class OLS(GradientDecent):
     def cost_func(self, beta):
         # The cost function for OLS.
