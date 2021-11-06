@@ -57,7 +57,7 @@ class GradientDecent:
 
         return mean_squared_error_2, beta
 
-    def compare_MSE(self, n_epochs, t0, MSE_own, eta0):
+    def compare_MSE(self, n_epochs, t0, eta0):
         sgdreg = SGDRegressor(loss='squared_loss', max_iter = n_epochs, penalty = None , eta0 = eta0)
         #sgdreg = SGDRegressor(loss = 'squared_loss', max_iter = n_epochs, penalty=None, alpha = 1/t0, learning_rate='optimal')
         sgdreg.fit(self.X, self.z.ravel())

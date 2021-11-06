@@ -41,6 +41,8 @@ def MSE_lamb(MSE, lamb):
     # Plots the MSE as a function of lambda.
     fig = plt.figure(figsize=(10,8))
     ax = fig.add_subplot()
+    ax.tick_params(axis='x', which='major', labelsize=18)
+    ax.tick_params(axis='y', which='major', labelsize=18)
     ax.set_title('MSE as a function of lambda', fontsize=25)
     ax.plot(np.log(lamb), MSE, label='SGD with momentum')
     ax.set_xlabel(r'$\log_{10}(\lambda)$', fontsize=18)

@@ -37,31 +37,39 @@ def main():
     alph_solid = 1.0 # The alph values are used for which transparency to use in plotting of model and data.
     alph_transparent = 0.5
 
-    model = OLS(z, X, m, M, lamb = 0) # Initialize our OLS model.
+
+
+    model = OLS(z, X, m, M, 0) # Initialize our OLS model.
     # Calculate methods for OLS:
     MSE1_OLS, beta1 = model.SGD(x, y, z_data, n_epochs, M, t0, t1, tol)
     MSE2_OLS, beta2 = model.GDM(x, y, z_data, n_epochs, M, t0, t1, v, gamma, tol)
     # Plots for OLS:
-    model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for OLS', z_data, alph_solid, alph_transparent)
-    model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for OLS', z_data, alph_transparent, alph_solid)
+    model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for OLS', z_data, alph_transparent, alph_solid)
+    model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for OLS', z_data, alph_solid, alph_transparent)
     # Compare with scikit: (we only have loss model for OLS).
-    model.compare_MSE(n_epochs, t0, MSE1_OLS, eta0)
+    model.compare_MSE(n_epochs, t0, eta0)
 
-    model = Ridge(z, X, m, M, lamb = 4.28*10**(-2)) # Initialize our Ridge model with specific lambda value.
+    model = Ridge(z, X, m, M, 4.28*10**(-2)) # Initialize our Ridge model with specific lambda value.
     # This was the optimal lambda value from the last project.
     # Calculate methods for Ridge:
     MSE1_Ridge, beta1 = model.SGD(x, y, z_data, n_epochs, M, t0, t1, tol)
     MSE2_Ridge, beta2 = model.GDM(x, y, z_data, n_epochs, M, t0, t1, v, gamma, tol)
     # Plots for Ridge:
-    model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for Ridge', z_data, alph_transparent, alph_solid)
-    model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for Ridge', z_data, alph_solid, alph_transparent)
+    model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for Ridge', z_data, alph_solid, alph_transparent)
+    model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for Ridge', z_data, alph_transparent, alph_solid)
 
     MSE_Ridge_plot = np.zeros(len(lambdas)) # Collect the MSE after n_epochs iterations.
     for l in range(len(lambdas)): # Run through our lambda values.
-        model = Ridge(z, X ,m ,M, lambdas[l]) # Initialize our Ridge model.
-        MSE2_Ridge, beta2 = model.GDM(x, y, z_data, n_epochs, M, t0, t1, v, gamma, tol)
+        model_ = Ridge(z, X ,m ,M, lambdas[l]) # Initialize our Ridge model.
+        MSE2_Ridge, beta2 = model_.GDM(x, y, z_data, n_epochs, M, t0, t1, v, gamma, tol)
         MSE_Ridge_plot[l] = MSE2_Ridge # Collect MSE at last n for momentum SGD.
 
-    MSE_lamb(MSE_Ridge_plot, lambdas)
+    print(MSE_Ridge_plot)
+    ind = np.argmin(MSE_Ridge_plot)
+    print(ind)
+    print(lambdas[ind])
+    #MSE_lamb(MSE_Ridge_plot, lambdas)
+
+
 
 main()
