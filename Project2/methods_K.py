@@ -1,17 +1,27 @@
 import numpy as np
 
 class NeuralNetwork:
-    def __init__(self, eta, n_layers, n_hidden_neurons, input_weights, hidden_weights,
-                    output_weights, hidden_bias, output_bias):
+    def __init__(self, eta, n_layers, n_hidden_neurons, n_features):
 
         self.eta = eta
         self.n_layers = n_layers
         self.n_hidden_neurons = n_hidden_neurons
-        self.input_weights = input_weights
-        self.hidden_weights = hidden_weights
-        self.output_weights = output_weights
-        self.hidden_bias = hidden_bias
-        self.output_bias = output_bias
+        self.input_weights, self.hidden_weights, self.output_weights,\
+        self.hidden_bias, self.output_bias = self.initialize(n_layers, n_hidden_neurons, n_features)
+
+    def initialize(self, n_layers, n_hidden_neurons, n_features):
+        #Define weight and-bias arrays for hidden and-output layers
+        input_weights = np.random.randn(n_features, n_hidden_neurons)
+        hidden_weights = np.empty((n_layers - 1, n_hidden_neurons, n_hidden_neurons))
+        hidden_bias = np.empty((n_layers, n_hidden_neurons))
+
+        for i in range(n_layers - 1):
+            hidden_weights[i] = np.random.randn(n_hidden_neurons, n_hidden_neurons)
+            hidden_bias[i] = np.zeros(n_hidden_neurons) + 0.1
+        hidden_bias[-1] = np.zeros(n_hidden_neurons) + 0.1
+        output_weights = np.random.randn(n_hidden_neurons, 1)
+        output_bias = np.zeros((1 , 1)) + 0.1
+        return input_weights, hidden_weights, output_weights, hidden_bias, output_bias
 
     def feed_forward(self, input):
         z_h = np.empty((self.n_layers, input.shape[0], self.n_hidden_neurons))
@@ -37,7 +47,6 @@ class NeuralNetwork:
         w_h_gradient = np.empty((self.n_layers - 1, self.n_hidden_neurons, self.n_hidden_neurons))
         b_h_gradient = np.empty((self.n_layers, self.n_hidden_neurons))
 
-
         hidden_error = output_error @ self.output_weights.T * self.der_act_func(z_h[-1])#a_h[-1]*(1-a_h[-1])#self.activation_func(z_h[-1])*(1-self.activation_func(z_h[-1]))#a_h[-1]*(1-a_h[-1])
 
         for i in reversed(range(1, self.n_layers - 1)):
@@ -51,7 +60,6 @@ class NeuralNetwork:
         w_i_gradient = X.T @ input_error
         b_h_gradient[0] = np.sum(input_error, axis = 0)
 
-
         #Update weights and biases
         self.output_weights -= self.eta*w_o_gradient
         self.output_bias -= self.eta*b_o_gradient
@@ -59,6 +67,16 @@ class NeuralNetwork:
         self.hidden_bias -= self.eta * b_h_gradient
         self.input_weights -= self.eta * w_i_gradient
 
+    '''
+    def train(self, X, epochs, M):
+        N = len(x.shape[0])
+        for i in range(epochs):
+            rng = np.random.default_rng()
+            indices = np.arange(N)
+            rng.shuffle(indices)
+            batch_size = M
+            for i in range(0, N, batch_size):
+    '''
 
 class Sigmoid(NeuralNetwork):
     def activation_func(self, x):

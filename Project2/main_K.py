@@ -32,18 +32,16 @@ n_layers = 1
 n_hidden_neurons = 20
 n_inputs = X.shape[0]
 n_outputs = n_inputs
-
+n_features = X.shape[1]
 
 
 X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2, random_state=1)
 
 
-iterations = 80000
+iterations = 100000
 eta = 0.001
 
-input_weights, hidden_weights, output_weights, hidden_bias, output_bias = initialize(n_layers, n_hidden_neurons, X, N)
-sigmoid_model = Sigmoid(eta, n_layers, n_hidden_neurons, input_weights, hidden_weights,
-                output_weights, hidden_bias, output_bias)
+sigmoid_model = Sigmoid(eta, n_layers, n_hidden_neurons, n_features)
 for i in range(iterations):
     sigmoid_model.back_propagation(X_train, z_train)
 z_h, a_h, z_o_sigmoid = sigmoid_model.feed_forward(X_test)
@@ -51,6 +49,8 @@ time_sigmoid = time.time()
 MSE_sigmoid = np.mean((z_test - z_o_sigmoid)**2)
 print(f'MSE = {MSE_sigmoid}, Sigmoid')
 print(f'It took {(time_sigmoid-start):.1f} seconds.')
+
+quit()
 
 z_h, a_h, z_o_sigmoid = sigmoid_model.feed_forward(X)
 z_o_sigmoid = np.reshape(z_o_sigmoid, (n,n))

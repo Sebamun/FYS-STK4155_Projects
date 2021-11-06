@@ -10,11 +10,7 @@ def FrankeFunction(x,y):
     term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
     return term1 + term2 + term3 + term4 + np.random.normal(0,0.1,(N,N))
 
-def initialize(n_layers, n_hidden_neurons, X, N):
-    #Define number of neurons in hidden and ouput layer
-    n_features = X.shape[1]
-    n_outputs = 1
-
+def initialize(n_layers, n_hidden_neurons, n_features):
     #Define weight and-bias arrays for hidden and-output layers
     input_weights = np.random.randn(n_features, n_hidden_neurons)
     hidden_weights = np.empty((n_layers - 1, n_hidden_neurons, n_hidden_neurons))
@@ -24,9 +20,8 @@ def initialize(n_layers, n_hidden_neurons, X, N):
         hidden_weights[i] = np.random.randn(n_hidden_neurons, n_hidden_neurons)
         hidden_bias[i] = np.zeros(n_hidden_neurons) + 0.1
     hidden_bias[-1] = np.zeros(n_hidden_neurons) + 0.1
-    output_weights = np.random.randn(n_hidden_neurons, n_outputs)
+    output_weights = np.random.randn(n_hidden_neurons, 1)
     output_bias = np.zeros((1 , 1)) + 0.1
-
     return input_weights, hidden_weights, output_weights, hidden_bias, output_bias
 
 
