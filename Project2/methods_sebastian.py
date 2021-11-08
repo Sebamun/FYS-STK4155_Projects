@@ -2,6 +2,7 @@ import autograd.numpy as np
 from autograd import elementwise_grad
 from common_sebastian import (MSE, learning_schedule)
 from sklearn.linear_model import SGDRegressor, LinearRegression, Ridge
+import time
 
 class GradientDecent:
     def __init__(self, z, X, m, M, lamb):
@@ -11,14 +12,14 @@ class GradientDecent:
         self.M = M
         self.m = m
 
-    def SGD(self, x, y, z_data, n_epochs, M, t0, t1, tol):
+    def SGD(self, x, y, z_data, n_epochs, t0, t1, tol, timer):
         # The stochastic gradient descent.
-        m = int(len(self.X)/M) #number of minibatches
+        start = time.time() # Start timer.
         beta = np.random.randn(np.shape(self.X)[1],1) # Generate random initial beta values.
         for epoch in range(n_epochs):
-            for i in range(m):
+            for i in range(self.m):
                 gradients = elementwise_grad(self.cost_func) # Use autograd to calculate the gradient of the cost function.
-                eta = learning_schedule(epoch*m+i,t0,t1) # Change the learning rate.
+                eta = learning_schedule(epoch*self.m+i,t0,t1) # Change the learning rate.
                 # Stochastic gradient descent:
                 beta = beta - eta * gradients(beta)
                 if np.linalg.norm(gradients(beta))<0.01: # If less than tolarance we stop our gradient descent.
@@ -31,20 +32,26 @@ class GradientDecent:
         assert np.all(np.squeeze(self.gradient_analytical(beta))[:] \
         - np.squeeze(gradient_num(beta))[:] < tol)
 
+        end = time.time() # End timer.
+        if timer == True:
+            print(end - start)
+
         return mean_squared_error_1, beta
 
 
-    def GDM(self, x, y, z_data, n_epochs, M, t0, t1, v, gamma, tol):
+    def GDM(self, x, y, z_data, n_epochs, t0, t1, v, gamma, tol, timer):
         # The momentum stochastic gradient descent.
-        m = int(len(self.X)/M) #number of minibatches
+        start = time.time() # Start timer.
         beta = np.random.randn(np.shape(self.X)[1],1) # Generate random initial beta values.
         for epoch in range(n_epochs):
-            for i in range(m):
+            for i in range(self.m):
                 gradients = elementwise_grad(self.cost_func) # Use autograd to calculate the gradient of the cost function.
-                eta = learning_schedule(epoch*m+i,t0,t1) # Change the learning rate.
+                eta = learning_schedule(epoch*self.m+i,t0,t1) # Change the learning rate.
                 # Stochastic gradient descent with momentum:
                 v = gamma*v + eta*gradients(beta)
                 beta = beta - v
+
+                #print(np.linalg.norm(gradients(beta)))
                 if np.linalg.norm(gradients(beta))<0.01: # If less than tolarance we stop our gradient descent.
                     break
 
@@ -55,6 +62,9 @@ class GradientDecent:
         assert np.all(np.squeeze(self.gradient_analytical(beta))[:] \
         - np.squeeze(gradient_num(beta))[:] < tol)
 
+        end = time.time() # End timer.
+        if timer == True:
+            print(end - start)
         return mean_squared_error_2, beta
 
     def compare_MSE(self, n_epochs, t0, eta0):

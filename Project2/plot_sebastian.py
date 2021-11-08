@@ -37,7 +37,7 @@ def model_terrain(X, x, y, beta, N, title, z_data, a, b):
     #ax.zaxis.set_major_locator(LinearLocator(10))
     plt.savefig(f'Plots/{title}')
 
-def MSE_lamb(MSE, lamb):
+def MSE_lamb(MSE, lamb, ind, optimal_lambda):
     # Plots the MSE as a function of lambda.
     fig = plt.figure(figsize=(10,8))
     ax = fig.add_subplot()
@@ -45,6 +45,9 @@ def MSE_lamb(MSE, lamb):
     ax.tick_params(axis='y', which='major', labelsize=18)
     ax.set_title('MSE as a function of lambda', fontsize=25)
     ax.plot(np.log(lamb), MSE, label='SGD with momentum')
+    ax.plot(np.log(lamb[ind]), MSE[ind], markersize=20, marker = 'o', label=f'$\lambda$={lamb[ind]:.4f}')
+    ax.plot(np.log(lamb[5]), MSE[5], markersize=20, marker= 'o', label=f'$\lambda$={optimal_lambda:.4f}')
+    #ax.plot(np.log(optimal_lambda), optimal_MSE, markersize=20, marker= 'o', label=f'$\lambda$={optimal_lambda:.4f}')
     ax.set_xlabel(r'$\log_{10}(\lambda)$', fontsize=18)
     ax.set_ylabel('MSE', fontsize=18)
     ax.legend(fontsize=18)
