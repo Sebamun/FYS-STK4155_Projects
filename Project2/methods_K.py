@@ -67,16 +67,22 @@ class NeuralNetwork:
         self.hidden_bias -= self.eta * b_h_gradient
         self.input_weights -= self.eta * w_i_gradient
 
-    '''
-    def train(self, X, epochs, M):
-        N = len(x.shape[0])
+
+    def train(self, X, z, epochs, M):
+        N = int(X.shape[0])
+        rng = np.random.default_rng()
+        indices = np.arange(N)
+        batch_size = M
         for i in range(epochs):
-            rng = np.random.default_rng()
-            indices = np.arange(N)
             rng.shuffle(indices)
-            batch_size = M
+            X_s = X[indices]
+            z_s = z[indices]
             for i in range(0, N, batch_size):
-    '''
+                self.back_propagation(X_s[i:i+batch_size], z_s[i:i+batch_size])
+
+
+
+
 
 class Sigmoid(NeuralNetwork):
     def activation_func(self, x):

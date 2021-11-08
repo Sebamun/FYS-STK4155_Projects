@@ -12,7 +12,7 @@ start = time.time()
 np.random.seed(1235)
 
 #define the initial conditions for generating data
-n = 20
+n = 100
 
 #Create 1-d input array with all linear combinations of x's and y's
 x = np.linspace(0,1,n)
@@ -38,19 +38,25 @@ n_features = X.shape[1]
 X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2, random_state=1)
 
 
-iterations = 100000
+iterations = 10000
 eta = 0.001
 
 sigmoid_model = Sigmoid(eta, n_layers, n_hidden_neurons, n_features)
-for i in range(iterations):
-    sigmoid_model.back_propagation(X_train, z_train)
+sigmoid_model.train(X_train, z_train, 10000, 100)
 z_h, a_h, z_o_sigmoid = sigmoid_model.feed_forward(X_test)
 time_sigmoid = time.time()
 MSE_sigmoid = np.mean((z_test - z_o_sigmoid)**2)
 print(f'MSE = {MSE_sigmoid}, Sigmoid')
 print(f'It took {(time_sigmoid-start):.1f} seconds.')
 
-quit()
+# for i in range(iterations):
+#     sigmoid_model.back_propagation(X_train, z_train)
+# z_h, a_h, z_o_sigmoid = sigmoid_model.feed_forward(X_test)
+# time_sigmoid2 = time.time()
+# MSE_sigmoid = np.mean((z_test - z_o_sigmoid)**2)
+# print(f'MSE = {MSE_sigmoid}, Sigmoid')
+# print(f'It took {(time_sigmoid2 - time_sigmoid):.1f} seconds.')
+
 
 z_h, a_h, z_o_sigmoid = sigmoid_model.feed_forward(X)
 z_o_sigmoid = np.reshape(z_o_sigmoid, (n,n))
@@ -67,7 +73,7 @@ bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
 bbox_inches=bbox
 plt.savefig(f'Sigmoid_model_N{N}_it{iterations:.1e}_{n_layers}L.png', bbox_inches='tight')
 plt.show()
-
+quit()
 
 eta = 0.0001 #Learning rate
 iterations = 80000
