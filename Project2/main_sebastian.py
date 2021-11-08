@@ -41,7 +41,7 @@ def main_1():
     MSE2_OLS, beta2 = model.GDM(x, y, z_data, n_epochs, t0, t1, v, gamma, tol, True)
     # Plots for OLS:
     model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for OLS', z_data, alph_2, alph_1)
-    model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for OLS', z_data, alph_1, alph_2)
+    model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for OLS', z_data, alph_2, alph_1)
     # Compare with scikit: (we only have loss model for OLS).
     eta0 = 0.001 # When we compare with scikitlearn we use a constant learning rate.
     model.compare_MSE(n_epochs, t0, eta0)
@@ -52,7 +52,7 @@ def main_1():
     MSE1_Ridge, beta1 = model.SGD(x, y, z_data, n_epochs, t0, t1, tol, False)
     MSE2_Ridge, beta2 = model.GDM(x, y, z_data, n_epochs, t0, t1, v, gamma, tol, False)
     # Plots for Ridge:
-    model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for Ridge', z_data, alph_2, alph_1)
+    model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for Ridge', z_data, alph_1, alph_2)
     model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for Ridge', z_data, alph_2, alph_1)
 
     return MSE2_Ridge

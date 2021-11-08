@@ -3,6 +3,7 @@ from autograd import elementwise_grad
 from common_sebastian import (MSE, learning_schedule)
 from sklearn.linear_model import SGDRegressor, LinearRegression, Ridge
 import time
+from sklearn.utils import shuffle
 
 class GradientDecent:
     def __init__(self, z, X, m, M, lamb):
@@ -17,13 +18,15 @@ class GradientDecent:
         start = time.time() # Start timer.
         beta = np.random.randn(np.shape(self.X)[1],1) # Generate random initial beta values.
         for epoch in range(n_epochs):
+            self.X_, self.z_ = shuffle(self.X, self.z) # Shuffle the data for each epoch.
             for i in range(self.m):
+                self.i = i # Index used when splitting in minibatces.
                 gradients = elementwise_grad(self.cost_func) # Use autograd to calculate the gradient of the cost function.
                 eta = learning_schedule(epoch*self.m+i,t0,t1) # Change the learning rate.
                 # Stochastic gradient descent:
                 beta = beta - eta * gradients(beta)
-                if np.linalg.norm(gradients(beta))<0.01: # If less than tolarance we stop our gradient descent.
-                        break
+                if np.linalg.norm(gradients(beta))<0.1: # If less than tolarance we stop our gradient descent.
+                    break
 
         z_pred = self.X@beta # Our model prediction.
         mean_squared_error_1 = MSE(self.z, z_pred) # Collect the mean square error.
@@ -44,15 +47,16 @@ class GradientDecent:
         start = time.time() # Start timer.
         beta = np.random.randn(np.shape(self.X)[1],1) # Generate random initial beta values.
         for epoch in range(n_epochs):
+            self.X_, self.z_ = shuffle(self.X, self.z) # Shuffle the data for each epoch.
             for i in range(self.m):
+                self.i = i # Index used when splitting in minibatces.
                 gradients = elementwise_grad(self.cost_func) # Use autograd to calculate the gradient of the cost function.
                 eta = learning_schedule(epoch*self.m+i,t0,t1) # Change the learning rate.
                 # Stochastic gradient descent with momentum:
                 v = gamma*v + eta*gradients(beta)
                 beta = beta - v
 
-                #print(np.linalg.norm(gradients(beta)))
-                if np.linalg.norm(gradients(beta))<0.01: # If less than tolarance we stop our gradient descent.
+                if np.linalg.norm(gradients(beta))<0.1: # If less than tolarance we stop our gradient descent.
                     break
 
         z_pred = self.X@beta # Our model prediction.
@@ -98,9 +102,8 @@ class GradientDecent:
 class OLS(GradientDecent):
     def cost_func(self, beta):
         # The cost function for OLS.
-        random_index = np.random.randint(self.m) # Generate random index used in distribution of batches.
-        xi = self.X[random_index*self.M:(random_index+1)*self.M]
-        zi = self.z[random_index*self.M:(random_index+1)*self.M]
+        xi = self.X_[self.i*self.M:(self.i+1)*self.M]
+        zi = self.z_[self.i*self.M:(self.i+1)*self.M]
         return 1/(len(xi)) * np.sum( (zi - (xi @ beta))**2 )
 
     def gradient_numerical(self, beta):
@@ -113,9 +116,10 @@ class OLS(GradientDecent):
 
 class Ridge(GradientDecent):
     def cost_func(self, beta):
-        random_index = np.random.randint(self.m) # Generate random index used in distribution of batches.
-        xi = self.X[random_index*self.M:(random_index+1)*self.M]
-        zi = self.z[random_index*self.M:(random_index+1)*self.M]
+        # The cost function for Ridge.
+        #random_index = np.random.randint(self.m) # Generate random index used in distribution of batches.
+        xi = self.X_[self.i*self.M:(self.i+1)*self.M]
+        zi = self.z_[self.i*self.M:(self.i+1)*self.M]
         # The cost function for Ridge.
         return 1/ len(xi) * np.sum( (zi - (xi @ beta))**2 ) + np.sum(beta.T@beta) * self.lamb
 
