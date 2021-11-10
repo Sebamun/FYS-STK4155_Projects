@@ -37,7 +37,12 @@ class GradientDecent:
 
         end = time.time() # End timer.
         if timer == True:
-            print(end - start)
+            f = open("Textfiles/time.txt", "a")
+            if self.lamb == 0:
+                f.write(f'Time for SGD with OLS: {end-start} s. \n')
+            else:
+                f.write(f'Time for SGD with Ridge: {end-start} s. \n')
+            f.close()
 
         return mean_squared_error_1, beta
 
@@ -68,7 +73,12 @@ class GradientDecent:
 
         end = time.time() # End timer.
         if timer == True:
-            print(end - start)
+            f = open("Textfiles/time.txt", "a")
+            if self.lamb == 0:
+                f.write(f'Time for momentum SGD with OLS: {end-start} s. \n')
+            else:
+                f.write(f'Time for momentum SGD with Ridge: {end-start} s. \n')
+            f.close()
         return mean_squared_error_2, beta
 
     def compare_MSE(self, n_epochs, t0, eta0):
