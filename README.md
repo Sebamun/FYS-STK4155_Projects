@@ -1,4 +1,4 @@
-# FYS3150_Projects
+# FYS-STK4155_Projects
 
 Projects by Sebastian Amundsen, Marcus Berget and Andreas Wetzel in FYS3150.
 
