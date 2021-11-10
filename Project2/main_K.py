@@ -38,179 +38,81 @@ n_features = X.shape[1]
 X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2, random_state=1)
 
 
-iterations = 10000
+epochs = 10000
 eta = 0.001
 
 sigmoid_model = Sigmoid(eta, n_layers, n_hidden_neurons, n_features)
-sigmoid_model.train(X_train, z_train, 10000, 100)
-z_h, a_h, z_o_sigmoid = sigmoid_model.feed_forward(X_test)
+sigmoid_model.train(X_train, z_train, epochs, 100)
 time_sigmoid = time.time()
+print(f'{epochs} Epochs took {(time_sigmoid-start):.1f} seconds.')
+z_h, a_h, z_o_sigmoid = sigmoid_model.feed_forward(X_test)
 MSE_sigmoid = np.mean((z_test - z_o_sigmoid)**2)
 print(f'MSE = {MSE_sigmoid}, Sigmoid')
-print(f'It took {(time_sigmoid-start):.1f} seconds.')
 
-# for i in range(iterations):
-#     sigmoid_model.back_propagation(X_train, z_train)
-# z_h, a_h, z_o_sigmoid = sigmoid_model.feed_forward(X_test)
-# time_sigmoid2 = time.time()
-# MSE_sigmoid = np.mean((z_test - z_o_sigmoid)**2)
-# print(f'MSE = {MSE_sigmoid}, Sigmoid')
-# print(f'It took {(time_sigmoid2 - time_sigmoid):.1f} seconds.')
+TANH_model = Tang_hyp(eta, n_layers, n_hidden_neurons, n_features)
+TANH_model.train(X_train, z_train, epochs, 100)
+z_h, a_h, z_o_tanh = TANH_model.feed_forward(X_test)
+time_tanh = time.time()
+print(f'{epochs} Epochs took {(time_sigmoid - time_tanh):.1f} seconds.')
+MSE_tanh = np.mean((z_test - z_o_tanh)**2)
+print(f'MSE = {MSE_tanh}, tanh')
 
-
-z_h, a_h, z_o_sigmoid = sigmoid_model.feed_forward(X)
-z_o_sigmoid = np.reshape(z_o_sigmoid, (n,n))
-fig = plt.figure(figsize=(10,8))
-ax = fig.add_subplot(111, projection='3d')
-ax.set_title(f'Surface plot of model using Sigmoid, {iterations:.1e} iterations', fontsize=25)
-ax.set_zticklabels([])
-ax.set_xticklabels([])
-ax.set_yticklabels([])
-surf = ax.plot_surface(xx, yy, z_o_sigmoid, cmap=cm.coolwarm,
-linewidth=0, antialiased=False)
-ax.set_zlim(-0.10, 1.40)
-bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
-bbox_inches=bbox
-plt.savefig(f'Sigmoid_model_N{N}_it{iterations:.1e}_{n_layers}L.png', bbox_inches='tight')
-plt.show()
-quit()
-
-eta = 0.0001 #Learning rate
-iterations = 80000
-input_weights, hidden_weights, output_weights, hidden_bias, output_bias = initialize(n_layers, n_hidden_neurons, X, N)
-RELU_model = RELU(eta, n_layers, n_hidden_neurons, input_weights, hidden_weights,
-                output_weights, hidden_bias, output_bias)
-for i in range(iterations):
-    RELU_model.back_propagation(X_train, z_train)
+eta = 0.001 #Learning rate
+RELU_model = RELU(eta, n_layers, n_hidden_neurons, n_features)
+RELU_model.train(X_train, z_train, epochs, 100)
+time_relu = time.time()
+print(f'{epochs} Epochs took {(time_tanh - time_relu):.1f} seconds.')
 z_h, a_h, z_o_relu = RELU_model.feed_forward(X_test)
 time_relu = time.time()
 MSE_relu = np.mean((z_test - z_o_relu)**2)
 print(f'MSE = {MSE_relu}, RELU')
-print(f'It took {(time_relu - time_sigmoid):.1f} seconds.')
 
-z_h, a_h, z_o_relu = RELU_model.feed_forward(X)
-z_o_relu = np.reshape(z_o_relu, (n,n))
-fig = plt.figure(figsize=(10,8))
-ax = fig.add_subplot(111, projection='3d')
-ax.set_title(f'Surface plot of model using RELU, {iterations:.1e} iterations', fontsize=25)
-ax.set_zticklabels([])
-ax.set_xticklabels([])
-ax.set_yticklabels([])
-surf = ax.plot_surface(xx, yy, z_o_relu, cmap=cm.coolwarm,
-linewidth=0, antialiased=False)
-ax.set_zlim(-0.10, 1.40)
-bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
-bbox_inches=bbox
-plt.savefig(f'RELU_model_N{N}_it{iterations:.1e}_{n_layers}L.png', bbox_inches='tight')
-plt.show()
-
-
-input_weights, hidden_weights, output_weights, hidden_bias, output_bias = initialize(n_layers, n_hidden_neurons, X, N)
-TANH_model = Tang_hyp(eta, n_layers, n_hidden_neurons, input_weights, hidden_weights,
-                output_weights, hidden_bias, output_bias)
-for i in range(iterations):
-    TANH_model.back_propagation(X_train, z_train)
-z_h, a_h, z_o_tanh = TANH_model.feed_forward(X_test)
-time_tanh = time.time()
-MSE_tanh = np.mean((z_test - z_o_tanh)**2)
-print(f'MSE = {MSE_tanh}, tanh')
-print(f'It took {(time_tanh - time_relu):.1f} seconds.')
-
-z_h, a_h, z_o_tanh = TANH_model.feed_forward(X)
-z_o_tanh = np.reshape(z_o_tanh, (n,n))
-fig = plt.figure(figsize=(10,8))
-ax = fig.add_subplot(111, projection='3d')
-ax.set_title(f'Surface plot of model using tanh, {iterations:.1e} iterations', fontsize=25)
-ax.set_zticklabels([])
-ax.set_xticklabels([])
-ax.set_yticklabels([])
-surf = ax.plot_surface(xx, yy, z_o_tanh, cmap=cm.coolwarm,
-linewidth=0, antialiased=False)
-ax.set_zlim(-0.10, 1.40)
-bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
-bbox_inches=bbox
-plt.savefig(f'tanh_model_N{N}_it{iterations:.1e}_{n_layers}L.png', bbox_inches='tight')
-plt.show()
-
-
-input_weights, hidden_weights, output_weights, hidden_bias, output_bias = initialize(n_layers, n_hidden_neurons, X, N)
-ELU_model = ELU(eta, n_layers, n_hidden_neurons, input_weights, hidden_weights,
-                output_weights, hidden_bias, output_bias)
-for i in range(iterations):
-    ELU_model.back_propagation(X_train, z_train)
+ELU_model = ELU(eta, n_layers, n_hidden_neurons, n_features)
+ELU_model.train(X_train, z_train, epochs, 100)
 z_h, a_h, z_o_elu = ELU_model.feed_forward(X_test)
 time_elu = time.time()
+print(f'{epochs} Epochs took {(time_elu - time_tanh):.1f} seconds.')
 MSE_elu = np.mean((z_test - z_o_elu)**2)
 print(f'MSE = {MSE_elu}, ELU')
-print(f'It took {(time_elu - time_tanh):.1f} seconds.')
 
-z_h, a_h, z_o_elu = ELU_model.feed_forward(X)
-z_o_elu = np.reshape(z_o_elu, (n,n))
-fig = plt.figure(figsize=(10,8))
-ax = fig.add_subplot(111, projection='3d')
-ax.set_title(f'Surface plot of model using elu, {iterations:.1e} iterations', fontsize=25)
-ax.set_zticklabels([])
-ax.set_xticklabels([])
-ax.set_yticklabels([])
-surf = ax.plot_surface(xx, yy, z_o_elu, cmap=cm.coolwarm,
-linewidth=0, antialiased=False)
-ax.set_zlim(-0.10, 1.40)
-bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
-bbox_inches=bbox
-plt.savefig(f'ELU_model_N{N}_it{iterations:.1e}_{n_layers}L.png', bbox_inches='tight')
-plt.show()
-
-
-input_weights, hidden_weights, output_weights, hidden_bias, output_bias = initialize(n_layers, n_hidden_neurons, X, N)
-HS_model = Heaviside(eta, n_layers, n_hidden_neurons, input_weights, hidden_weights,
-                output_weights, hidden_bias, output_bias)
-for i in range(iterations):
-    HS_model.back_propagation(X_train, z_train)
+HS_model = Heaviside(eta, n_layers, n_hidden_neurons, n_features)
+HS_model.train(X_train, z_train, epochs, 100)
 z_h, a_h, z_o_HS = HS_model.feed_forward(X_test)
 time_HS = time.time()
+print(f'{epochs} Epochs took {(time_HS - time_elu):.1f} seconds.')
 MSE_HS = np.mean((z_test - z_o_HS)**2)
 print(f'MSE = {MSE_HS}, Heaviside')
-print(f'It took {(time_HS - time_elu):.1f} seconds.')
 
-z_h, a_h, z_o_HS = HS_model.feed_forward(X)
-z_o_HS = np.reshape(z_o_HS, (n,n))
-fig = plt.figure(figsize=(10,8))
-ax = fig.add_subplot(111, projection='3d')
-ax.set_title(f'Surface plot of model using heaviside, {iterations:.1e} iterations', fontsize=25)
-ax.set_zticklabels([])
-ax.set_xticklabels([])
-ax.set_yticklabels([])
-surf = ax.plot_surface(xx, yy, z_o_HS, cmap=cm.coolwarm,
-linewidth=0, antialiased=False)
-ax.set_zlim(-0.10, 1.40)
-bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
-bbox_inches=bbox
-plt.savefig(f'HS_model_N{N}_it{iterations:.1e}_{n_layers}L.png', bbox_inches='tight')
-plt.show()
-
-input_weights, hidden_weights, output_weights, hidden_bias, output_bias = initialize(n_layers, n_hidden_neurons, X, N)
-Leaky_model = Leaky(eta, n_layers, n_hidden_neurons, input_weights, hidden_weights,
-                output_weights, hidden_bias, output_bias)
-for i in range(iterations):
-    Leaky_model.back_propagation(X_train, z_train)
+Leaky_model = Leaky(eta, n_layers, n_hidden_neurons, n_features)
+Leaky_model.train(X_train, z_train, epochs, 100)
 z_h, a_h, z_o_leaky = Leaky_model.feed_forward(X_test)
 time_leaky = time.time()
+print(f'{epochs} Epochs took {(time_leaky - time_HS):.1f} seconds.')
 MSE_leaky = np.mean((z_test - z_o_leaky)**2)
 print(f'MSE = {MSE_leaky}, Leaky')
-print(f'It took {(time_leaky - time_HS):.1f} seconds.')
 
-z_h, a_h, z_o_leaky = Leaky_model.feed_forward(X)
-z_o_leaky = np.reshape(z_o_leaky, (n,n))
-fig = plt.figure(figsize=(10,8))
-ax = fig.add_subplot(111, projection='3d')
-ax.set_title(f'Surface plot of model using Leaky RELU, {iterations:.1e} iterations', fontsize=25)
-ax.set_zticklabels([])
-ax.set_xticklabels([])
-ax.set_yticklabels([])
-surf = ax.plot_surface(xx, yy, z_o_leaky, cmap=cm.coolwarm,
-linewidth=0, antialiased=False)
-ax.set_zlim(-0.10, 1.40)
-bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
-bbox_inches=bbox
-plt.savefig(f'Leaky_model_N{N}_it{iterations:.1e}_{n_layers}L.png', bbox_inches='tight')
-plt.show()
+def plot_surface(X, model, model_name, epochs, n_layers):
+    z_h, a_h, z_o = model.feed_forward(X)
+    n = int(np.sqrt(X.shape[0]))
+    z_o = np.reshape(z_o, (n,n))
+    fig = plt.figure(figsize=(10,8))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_title(f'Surface plot of model using {model_name}, {epochs:.1e} iterations', fontsize=25)
+    ax.set_zticklabels([])
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    surf = ax.plot_surface(xx, yy, z_o, cmap=cm.coolwarm,
+    linewidth=0, antialiased=False)
+    ax.set_zlim(-0.10, 1.40)
+    bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
+    bbox_inches=bbox
+    plt.savefig(f'{model_name}_model_N{N}_it{epochs:.1e}_{n_layers}L.png', bbox_inches='tight')
+    plt.show()
+
+
+plot_surface(X, sigmoid_model, 'Sigmoid', epochs, n_layers)
+plot_surface(X, TANH_model, 'tanh', epochs, n_layers)
+plot_surface(X, RELU_model, 'RELU', epochs, n_layers)
+plot_surface(X, ELU_model, 'ELU', epochs, n_layers)
+plot_surface(X, Leaky_model, 'Leaky', epochs, n_layers)
+plot_surface(X, HS_model, 'Heaviside', epochs, n_layers)

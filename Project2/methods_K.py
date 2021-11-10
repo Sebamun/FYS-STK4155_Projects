@@ -81,9 +81,6 @@ class NeuralNetwork:
                 self.back_propagation(X_s[i:i+batch_size], z_s[i:i+batch_size])
 
 
-
-
-
 class Sigmoid(NeuralNetwork):
     def activation_func(self, x):
         return 1/(1 + np.exp(-x))
