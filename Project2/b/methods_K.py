@@ -1,13 +1,15 @@
 import numpy as np
 
 class NeuralNetwork:
-    def __init__(self, eta, n_layers, n_hidden_neurons, n_features):
+    def __init__(self, eta, n_layers, n_hidden_neurons, n_features, gamma):
 
         self.eta = eta
         self.n_layers = n_layers
         self.n_hidden_neurons = n_hidden_neurons
         self.input_weights, self.hidden_weights, self.output_weights,\
         self.hidden_bias, self.output_bias = self.initialize(n_layers, n_hidden_neurons, n_features)
+        self.v = np.zeros(5, dtype=object)
+        self.gamma = gamma
 
     def initialize(self, n_layers, n_hidden_neurons, n_features):
         #Define weight and-bias arrays for hidden and-output layers
@@ -61,11 +63,21 @@ class NeuralNetwork:
         b_h_gradient[0] = np.sum(input_error, axis = 0)
 
         #Update weights and biases
-        self.output_weights -= self.eta*w_o_gradient
-        self.output_bias -= self.eta*b_o_gradient
-        self.hidden_weights -= self.eta * w_h_gradient
-        self.hidden_bias -= self.eta * b_h_gradient
-        self.input_weights -= self.eta * w_i_gradient
+
+        self.update_weight_bias(w_o_gradient, b_o_gradient, w_h_gradient, b_h_gradient, w_i_gradient)
+
+    def update_weight_bias(self, w_o_gradient, b_o_gradient, w_h_gradient, b_h_gradient, w_i_gradient):
+
+        self.v[0] = self.gamma*self.v[0] + self.eta * w_o_gradient
+        self.output_weights -= self.v[0]
+        self.v[1] = self.gamma*self.v[1] + self.eta * b_o_gradient
+        self.output_bias -= self.v[1]
+        self.v[2] = self.gamma*self.v[2] + self.eta * w_h_gradient
+        self.hidden_weights -= self.v[2]
+        self.v[3] = self.gamma*self.v[3] + self.eta * b_h_gradient
+        self.hidden_bias -= self.v[3]
+        self.v[4] = self.gamma*self.v[4] + self.eta * w_i_gradient
+        self.input_weights -= self.v[4]
 
 
     def train(self, X, z, epochs, M):
