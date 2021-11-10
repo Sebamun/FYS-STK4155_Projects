@@ -13,21 +13,14 @@ def FrankeFunction(x, y):
     term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
     return term1 + term2 + term3 + term4 + np.random.normal(0, 0.1, (N,N))
 
-def prepare_data_set(x, y, z, degree, scale_data):
-    z = np.ravel(z)
-    X = create_X(x, y, n=degree)
-    X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2, random_state=2018)
-    if scale_data:
-        X_train, X_test = scale(X_train, X_test)
-    return X_train, X_test, z_train, z_test
-
 def create_X(x, y, n):
+    """Create design Matrix"""
     if len(x.shape) > 1:
         x = np.ravel(x)
         y = np.ravel(y)
 
     N = len(x)
-    l = int((n+1)*(n+2)/2)        # Number of elements in beta
+    l = int((n+1)*(n+2)/2) # Number of elements in beta
     X = np.ones((N,l))
 
     for i in range(1,n+1):
@@ -36,6 +29,15 @@ def create_X(x, y, n):
             X[:,q+k] = (x**(i-k))*(y**k)
 
     return X
+
+def prepare_data_set(x, y, z, degree, scale_data):
+    """Creates X, splits data set into training/testing and scales the data"""
+    z = np.ravel(z)
+    X = create_X(x, y, n=degree)
+    X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2)
+    if scale_data:
+        X_train, X_test = scale(X_train, X_test)
+    return X, X_train, X_test, z_train, z_test
 
 def scale(X_train, X_test=None):
     """Scale all columns except the first (which is all ones)"""
@@ -48,24 +50,29 @@ def scale(X_train, X_test=None):
 
 
 def MSE(y_data, y_model):
+    """Calculate MSE"""
     return np.mean((y_data - y_model)**2)
 
 def R2(y_data, y_model):
+    """Calculate R2 score"""
     return 1 - np.sum((y_data - y_model) ** 2) / np.sum((y_data - np.mean(y_data)) ** 2)
 
 def bias_(y_data, y_model):
+    """Calculate bias"""
     if y_model.ndim == 1:
         return np.mean((y_data - np.mean(y_model))**2)
     else:
         return np.mean((y_data - np.mean(y_model, axis = 1, keepdims=True))**2)
 
 def variance_(y):
+    """Calculate variance"""
     if y.ndim == 1:
         return np.mean(np.var(y))
     else:
         return np.mean(np.var(y, axis = 1, keepdims=True))
 
 def compute_means_over_lambda(bias, variance, N_lambdas):
+    """Calculate mean bias and variance over all lambdas"""
     mean_bias = np.zeros_like(bias[:, :, 0])
     mean_variance = np.zeros_like(variance[:, :, 0])
     for i in range(0, N_lambdas):
