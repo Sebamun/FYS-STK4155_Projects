@@ -140,7 +140,3 @@ model_terrain_Norway()
 produce_results_OLS()
 produce_results_Ridge()
 produce_results_lasso()
-
-
-
-

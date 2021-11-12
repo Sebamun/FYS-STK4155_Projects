@@ -224,6 +224,3 @@ def model_terrain(X, x, y, beta, N, title, fname):
     ax.set_title(title, fontsize=25)
     ax.zaxis.set_major_locator(LinearLocator(10))
     plt.savefig(fname, bbox_inches='tight')
-
-
-

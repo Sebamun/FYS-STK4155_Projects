@@ -69,6 +69,7 @@ z_h, a_h, z_o_sigmoid = sigmoid_model.feed_forward(X_test)
 MSE_sigmoid = np.mean((z_test - z_o_sigmoid)**2)
 print(f'MSE = {MSE_sigmoid}, Sigmoid')
 plot_surface(X, sigmoid_model, 'Sigmoid', epochs, n_layers)
+quit()
 
 TANH_model = Tang_hyp(eta, n_layers, n_hidden_neurons, n_features)
 TANH_model.train(X_train, z_train, epochs, 100)
