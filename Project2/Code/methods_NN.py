@@ -9,11 +9,7 @@ def der_crossEntropy(y, y_o, x):
 
 
 class NeuralNetwork:
-<<<<<<< HEAD
-    def __init__(self, eta, n_layers, n_hidden_neurons, n_features, gamma):
-=======
     def __init__(self, eta, lmbd, gamma, n_layers, n_hidden_neurons, n_features, mode):
->>>>>>> de1bdd5050b011a74bcf65b52ed3989a8b49ce1f
 
         self.eta = eta
         self.lmbd = lmbd
@@ -23,14 +19,11 @@ class NeuralNetwork:
         self.hidden_bias, self.output_bias = self.initialize(n_layers, n_hidden_neurons, n_features)
         self.v = np.zeros(5, dtype=object)
         self.gamma = gamma
-<<<<<<< HEAD
-=======
         self.mode = mode
         if mode == 'regression':
             self.der_cost_func = der_MSE
         elif mode == 'classification':
             self.der_cost_func = der_crossEntropy
->>>>>>> de1bdd5050b011a74bcf65b52ed3989a8b49ce1f
 
     def initialize(self, n_layers, n_hidden_neurons, n_features):
         #Define weight and-bias arrays for hidden and-output layers
@@ -89,15 +82,9 @@ class NeuralNetwork:
         b_h_gradient[0] = np.sum(input_error, axis = 0)
 
         #Update weights and biases
-<<<<<<< HEAD
-
-        self.update_weight_bias(w_o_gradient, b_o_gradient, w_h_gradient, b_h_gradient, w_i_gradient)
-
-=======
         self.update_weight_bias(w_o_gradient, b_o_gradient, w_h_gradient, b_h_gradient, w_i_gradient)
 
 
->>>>>>> de1bdd5050b011a74bcf65b52ed3989a8b49ce1f
     def update_weight_bias(self, w_o_gradient, b_o_gradient, w_h_gradient, b_h_gradient, w_i_gradient):
 
         self.v[0] = self.gamma*self.v[0] + self.eta * w_o_gradient

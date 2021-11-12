@@ -6,9 +6,9 @@ from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.preprocessing import StandardScaler
-from common_sebastian import (FrankeFunction, create_X, scale, MSE)
-from methods_sebastian import OLS, Ridge
-from plot_sebastian import model_terrain, MSE_lamb
+from common_GD import (FrankeFunction, create_X, scale, MSE)
+from methods_GD import OLS, Ridge
+from plot_GD import model_terrain, MSE_lamb
 
 def main_1():
     np.random.seed(2018) # Generate random values from seed.

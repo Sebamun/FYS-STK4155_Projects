@@ -4,7 +4,7 @@ from matplotlib import cm
 import numpy as np
 
 def plot_surface(X, model, model_name, epochs, n_layers, xx, yy, N):
-    z_h, a_h, z_o = model.feed_forward(X)
+    z_h, a_h, z_o, a_L = model.feed_forward(X)
     n = int(np.sqrt(X.shape[0]))
     z_o = np.reshape(z_o, (n,n))
     fig = plt.figure(figsize=(10,8))
@@ -18,5 +18,4 @@ def plot_surface(X, model, model_name, epochs, n_layers, xx, yy, N):
     ax.set_zlim(-0.10, 1.40)
     bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
     bbox_inches=bbox
-    plt.savefig(f'Plots/{model_name}_model_N{N}_it{epochs:.1e}_{n_layers}L.png', bbox_inches='tight')
-    plt.show()
+    plt.savefig(f'../Plots/{model_name}_model_N{N}_it{epochs:.1e}_{n_layers}L.png', bbox_inches='tight')

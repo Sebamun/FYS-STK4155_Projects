@@ -1,6 +1,6 @@
 import autograd.numpy as np
 from autograd import elementwise_grad
-from common_sebastian import (MSE, learning_schedule)
+from common_GD import (MSE, learning_schedule)
 from sklearn.linear_model import SGDRegressor, LinearRegression, Ridge
 import time
 from sklearn.utils import shuffle
@@ -37,7 +37,7 @@ class GradientDecent:
 
         end = time.time() # End timer.
         if timer == True:
-            f = open("Textfiles/time.txt", "a")
+            f = open("../Textfiles/time_GD.txt", "a")
             if self.lamb == 0:
                 f.write(f'Time for SGD with OLS: {end-start} s. \n')
             else:
@@ -73,7 +73,7 @@ class GradientDecent:
 
         end = time.time() # End timer.
         if timer == True:
-            f = open("Textfiles/time.txt", "a")
+            f = open("../Textfiles/time_GD.txt", "a")
             if self.lamb == 0:
                 f.write(f'Time for momentum SGD with OLS: {end-start} s. \n')
             else:
@@ -103,7 +103,7 @@ class GradientDecent:
         MSE_own = MSE(self.z, z_pred) # Collect the mean square error.
 
         # Write to file:
-        f = open("Textfiles/MSE_comparison.txt", "w")
+        f = open("../Textfiles/MSE_comparison.txt", "w")
         f.write('Mean squared error from scikit and our model for OLS\n')
         f.write(f' Scikit SGD: {MSE_sci}\n')
         f.write(f' Own SGD: {MSE_own}\n')

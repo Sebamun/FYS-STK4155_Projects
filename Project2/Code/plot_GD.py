@@ -35,7 +35,7 @@ def model_terrain(X, x, y, beta, N, title, z_data, a, b):
     linewidth=0, antialiased=False, alpha = b)
     ax.set_title(title, fontsize=25)
     #ax.zaxis.set_major_locator(LinearLocator(10))
-    plt.savefig(f'Plots/{title}')
+    plt.savefig(f'../Plots/{title}')
 
 def MSE_lamb(MSE, lamb, ind, optimal_lambda):
     # Plots the MSE as a function of lambda.
@@ -51,4 +51,4 @@ def MSE_lamb(MSE, lamb, ind, optimal_lambda):
     ax.set_xlabel(r'$\log_{10}(\lambda)$', fontsize=18)
     ax.set_ylabel('MSE', fontsize=18)
     ax.legend(fontsize=18)
-    plt.savefig('plots/MSE_function_of_lambda')
+    plt.savefig('../plots/MSE_function_of_lambda')
