@@ -7,6 +7,24 @@ import time
 from methods_K import Sigmoid, Tang_hyp, RELU, ELU, Leaky, Heaviside
 from common_K import FrankeFunction, initialize
 
+def plot_surface(X, model, model_name, epochs, n_layers):
+    z_h, a_h, z_o = model.feed_forward(X)
+    n = int(np.sqrt(X.shape[0]))
+    z_o = np.reshape(z_o, (n,n))
+    fig = plt.figure(figsize=(10,8))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_title(f'Surface plot of model using {model_name}, {epochs:.1e} iterations', fontsize=25)
+    ax.set_zticklabels([])
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    surf = ax.plot_surface(xx, yy, z_o, cmap=cm.coolwarm,
+    linewidth=0, antialiased=False)
+    ax.set_zlim(-0.10, 1.40)
+    bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
+    bbox_inches=bbox
+    plt.savefig(f'{model_name}_model_N{N}_it{epochs:.1e}_{n_layers}L.png', bbox_inches='tight')
+    plt.show()
+
 
 start = time.time()
 np.random.seed(1235)
@@ -38,16 +56,20 @@ n_features = X.shape[1]
 X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2, random_state=1)
 
 
-epochs = 10000
+epochs = 5000
 eta = 0.001
+lmbd = 0.01
+gamma = 0.9
 
-sigmoid_model = Sigmoid(eta, n_layers, n_hidden_neurons, n_features)
+sigmoid_model = Sigmoid(eta, lmbd, gamma, n_layers, n_hidden_neurons, n_features)
 sigmoid_model.train(X_train, z_train, epochs, 100)
 time_sigmoid = time.time()
 print(f'{epochs} Epochs took {(time_sigmoid-start):.1f} seconds.')
 z_h, a_h, z_o_sigmoid = sigmoid_model.feed_forward(X_test)
 MSE_sigmoid = np.mean((z_test - z_o_sigmoid)**2)
 print(f'MSE = {MSE_sigmoid}, Sigmoid')
+plot_surface(X, sigmoid_model, 'Sigmoid', epochs, n_layers)
+quit()
 
 TANH_model = Tang_hyp(eta, n_layers, n_hidden_neurons, n_features)
 TANH_model.train(X_train, z_train, epochs, 100)
@@ -90,24 +112,6 @@ time_leaky = time.time()
 print(f'{epochs} Epochs took {(time_leaky - time_HS):.1f} seconds.')
 MSE_leaky = np.mean((z_test - z_o_leaky)**2)
 print(f'MSE = {MSE_leaky}, Leaky')
-
-def plot_surface(X, model, model_name, epochs, n_layers):
-    z_h, a_h, z_o = model.feed_forward(X)
-    n = int(np.sqrt(X.shape[0]))
-    z_o = np.reshape(z_o, (n,n))
-    fig = plt.figure(figsize=(10,8))
-    ax = fig.add_subplot(111, projection='3d')
-    ax.set_title(f'Surface plot of model using {model_name}, {epochs:.1e} iterations', fontsize=25)
-    ax.set_zticklabels([])
-    ax.set_xticklabels([])
-    ax.set_yticklabels([])
-    surf = ax.plot_surface(xx, yy, z_o, cmap=cm.coolwarm,
-    linewidth=0, antialiased=False)
-    ax.set_zlim(-0.10, 1.40)
-    bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
-    bbox_inches=bbox
-    plt.savefig(f'{model_name}_model_N{N}_it{epochs:.1e}_{n_layers}L.png', bbox_inches='tight')
-    plt.show()
 
 
 plot_surface(X, sigmoid_model, 'Sigmoid', epochs, n_layers)
