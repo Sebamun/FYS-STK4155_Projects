@@ -1,4 +1,5 @@
 import numpy as np
+np.random.seed(1235)
 
 def der_MSE(y, y_o, _):
     return (y_o - y)
@@ -6,31 +7,20 @@ def der_MSE(y, y_o, _):
 def der_crossEntropy(y, y_o, x):
     val = np.mean((y_o - y)*x, axis = 1)
     return(val.reshape(-1,1))
+    # return (y_o - y)/(y_o*(1 - y_o))
 
-
-class NeuralNetwork:
-<<<<<<< HEAD
-    def __init__(self, eta, n_layers, n_hidden_neurons, n_features, gamma):
-=======
-    def __init__(self, eta, lmbd, gamma, n_layers, n_hidden_neurons, n_features, mode):
->>>>>>> de1bdd5050b011a74bcf65b52ed3989a8b49ce1f
-
+class NeuralNetwork():
+    def __init__(self, eta, n_layers, n_hidden_neurons, n_features, mode):
         self.eta = eta
-        self.lmbd = lmbd
         self.n_layers = n_layers
         self.n_hidden_neurons = n_hidden_neurons
         self.input_weights, self.hidden_weights, self.output_weights,\
         self.hidden_bias, self.output_bias = self.initialize(n_layers, n_hidden_neurons, n_features)
-        self.v = np.zeros(5, dtype=object)
-        self.gamma = gamma
-<<<<<<< HEAD
-=======
         self.mode = mode
         if mode == 'regression':
             self.der_cost_func = der_MSE
         elif mode == 'classification':
             self.der_cost_func = der_crossEntropy
->>>>>>> de1bdd5050b011a74bcf65b52ed3989a8b49ce1f
 
     def initialize(self, n_layers, n_hidden_neurons, n_features):
         #Define weight and-bias arrays for hidden and-output layers
@@ -43,14 +33,16 @@ class NeuralNetwork:
             hidden_bias[i] = np.zeros(n_hidden_neurons) + 0.1
         hidden_bias[-1] = np.zeros(n_hidden_neurons) + 0.1
         output_weights = np.random.randn(n_hidden_neurons, 1)
-        output_bias = np.zeros((1 , 1)) + 0.1
+        output_bias = np.zeros((1 , 1)) + 0.01
         return input_weights, hidden_weights, output_weights, hidden_bias, output_bias
 
-    def feed_forward(self, input):
-        z_h = np.empty((self.n_layers, input.shape[0], self.n_hidden_neurons))
-        a_h = np.empty((self.n_layers, input.shape[0], self.n_hidden_neurons))
+    def feed_forward(self, x):
+        z_h = np.empty((self.n_layers, x.shape[0], self.n_hidden_neurons))
+        a_h = np.empty((self.n_layers, x.shape[0], self.n_hidden_neurons))
 
-        z_h[0] = input @ self.input_weights + self.hidden_bias[0]
+
+        z_h[0] = x @ self.input_weights + self.hidden_bias[0]
+
         a_h[0] = self.activation_func(z_h[0])
 
         for i in range(1, self.n_layers):
@@ -65,58 +57,53 @@ class NeuralNetwork:
         return z_h, a_h, z_o, a_L
 
     def back_propagation(self, X, z):
+        # z_h, a_h, z_o = self.feed_forward(X)
         z_h, a_h, z_o, a_L = self.feed_forward(X)
         #Calculate weight and bias gradients for output layer
+        # if self.mode == "regression":
+        #     output_error = a_L - z
+        # elif self.mode == "classification":
+        #     output_error = self.der_act_func(z_o) * self.der_CE(a_L, z_o)
+
         output_error = self.der_cost_func(z, a_L, a_h[-1])
-        w_o_gradient = a_h[-1].T @ output_error + self.lmbd*self.output_weights
+        # print(a_h[-1])
+        # input()
+
+        w_o_gradient = a_h[-1].T @ output_error
         b_o_gradient = np.sum(output_error, axis=0)
 
-        w_h_gradient = np.empty((self.n_layers - 1, self.n_hidden_neurons, self.n_hidden_neurons))\
-         + self.lmbd*self.hidden_weights
+
+        w_h_gradient = np.empty((self.n_layers - 1, self.n_hidden_neurons, self.n_hidden_neurons))
         b_h_gradient = np.empty((self.n_layers, self.n_hidden_neurons))
 
         hidden_error = output_error @ self.output_weights.T * self.der_act_func(z_h[-1])#a_h[-1]*(1-a_h[-1])#self.activation_func(z_h[-1])*(1-self.activation_func(z_h[-1]))#a_h[-1]*(1-a_h[-1])
 
         for i in reversed(range(1, self.n_layers - 1)):
             hidden_error = hidden_error @ self.hidden_weights[i].T * self.der_act_func(z_h[i])#a_h[-1]*(1-a_h[-1]) #self.activation_func(z_h[-1])*(1-self.activation_func(z_h[-1]))#a_h[i]*(1-a_h[i])
-            w_h_gradient[i] = a_h[i-1].T @ hidden_error + self.lmbd*self.hidden_weights[i]
+            w_h_gradient[i] = a_h[i-1].T @ hidden_error
             b_h_gradient[i] = np.sum(hidden_error, axis = 0)
         if self.n_layers > 1:
             input_error = hidden_error @ self.hidden_weights[0].T * self.der_act_func(z_h[0])#a_h[0]*(1-a_h[0])
         else:
             input_error = hidden_error
-        w_i_gradient = X.T @ input_error + self.lmbd*self.input_weights
+        w_i_gradient = X.T @ input_error
         b_h_gradient[0] = np.sum(input_error, axis = 0)
 
         #Update weights and biases
-<<<<<<< HEAD
+        self.output_weights -= self.eta*w_o_gradient
+        self.output_bias -= self.eta*b_o_gradient
+        self.hidden_weights -= self.eta * w_h_gradient
+        self.hidden_bias -= self.eta * b_h_gradient
+        self.input_weights -= self.eta * w_i_gradient
 
-        self.update_weight_bias(w_o_gradient, b_o_gradient, w_h_gradient, b_h_gradient, w_i_gradient)
+    def der_CE(self, a_L, z_o):
+        return(-(z_o/a_L) + (1-z_o)/(1-a_L))
 
-=======
-        self.update_weight_bias(w_o_gradient, b_o_gradient, w_h_gradient, b_h_gradient, w_i_gradient)
-
-
->>>>>>> de1bdd5050b011a74bcf65b52ed3989a8b49ce1f
-    def update_weight_bias(self, w_o_gradient, b_o_gradient, w_h_gradient, b_h_gradient, w_i_gradient):
-
-        self.v[0] = self.gamma*self.v[0] + self.eta * w_o_gradient
-        self.output_weights -= self.v[0]
-        self.v[1] = self.gamma*self.v[1] + self.eta * b_o_gradient
-        self.output_bias -= self.v[1]
-        self.v[2] = self.gamma*self.v[2] + self.eta * w_h_gradient
-        self.hidden_weights -= self.v[2]
-        self.v[3] = self.gamma*self.v[3] + self.eta * b_h_gradient
-        self.hidden_bias -= self.v[3]
-        self.v[4] = self.gamma*self.v[4] + self.eta * w_i_gradient
-        self.input_weights -= self.v[4]
-
-
-    def train(self, X, z, epochs, M):
+    # SGD
+    def train(self, X, z, epochs, batch_size):
         N = int(X.shape[0])
-        rng = np.random.default_rng(1234)
+        rng = np.random.default_rng()
         indices = np.arange(N)
-        batch_size = M
         for i in range(epochs):
             rng.shuffle(indices)
             X_s = X[indices]
