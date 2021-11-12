@@ -13,7 +13,7 @@ class GradientDecent:
         self.M = M
         self.m = m
 
-    def SGD(self, x, y, z_data, n_epochs, t0, t1, tol, timer):
+    def SGD(self, n_epochs, t0, t1, tol, timer):
         # The stochastic gradient descent.
         start = time.time() # Start timer.
         beta = np.random.randn(np.shape(self.X)[1],1) # Generate random initial beta values.
@@ -47,7 +47,7 @@ class GradientDecent:
         return mean_squared_error_1, beta
 
 
-    def GDM(self, x, y, z_data, n_epochs, t0, t1, v, gamma, tol, timer):
+    def GDM(self, n_epochs, t0, t1, v, gamma, tol, timer):
         # The momentum stochastic gradient descent.
         start = time.time() # Start timer.
         beta = np.random.randn(np.shape(self.X)[1],1) # Generate random initial beta values.
@@ -121,7 +121,7 @@ class OLS(GradientDecent):
         return 1/(len(self.X)) * np.sum( (self.z - (self.X @ beta))**2 )
 
     def gradient_analytical(self, beta):
-        # Analytical expression for gradient of cost function for OLS.
+        # Analtical expression for gradient of cost function for OLS.
         return 2.0/len(self.X)*self.X.T @ ((self.X @ beta)-self.z)
 
 class Ridge(GradientDecent):

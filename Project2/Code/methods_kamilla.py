@@ -102,7 +102,7 @@ class NeuralNetwork():
     # SGD
     def train(self, X, z, epochs, batch_size):
         N = int(X.shape[0])
-        rng = np.random.default_rng()
+        rng = np.random.default_rng(1235)
         indices = np.arange(N)
         for i in range(epochs):
             rng.shuffle(indices)

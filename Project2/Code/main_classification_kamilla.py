@@ -5,7 +5,6 @@ from matplotlib import cm
 from sklearn.model_selection import train_test_split
 import time
 from methods_kamilla import Sigmoid, Tang_hyp, RELU, ELU, Leaky, Heaviside
-from common_K import FrankeFunction, initialize
 from sklearn.datasets import load_breast_cancer
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
@@ -88,7 +87,7 @@ n_hidden_neurons = 20
 n_features = X.shape[1]
 
 sigmoid_model = Sigmoid(eta, n_layers, n_hidden_neurons, n_features, 'classification')
-sigmoid_model.train(X_train, y_train, iterations, batch_size)
+sigmoid_model.train(X_train_scaled, y_train, iterations, batch_size)
 
 y_h, a_h, y_o_sigmoid, a_L = sigmoid_model.feed_forward(X_test)
 time_sigmoid = time.time()
@@ -108,6 +107,8 @@ print(f'Accuracy = {accuracy}, Sigmoid, own code')
 
 # Now with Sklearn
 clf = MLPClassifier(random_state=1, max_iter = iterations).fit(X_train, y_train.ravel())
+#clf = MLPClassifier(hidden_layer_sizes=(n_hidden_neurons), activation='logistic',alpha=lmbd, learning_rate_init=eta, max_iter=epochs)
+
 #print(clf.predict_proba(X_test[:1]))
 #print(clf.predict(X_test[:5, :]))
 
