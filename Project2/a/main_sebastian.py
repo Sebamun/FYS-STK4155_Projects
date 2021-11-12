@@ -97,6 +97,5 @@ def main_2(optimal_MSE):
 
     return lambdas[ind]
 
-
 optimal_MSE = main_1()
 main_2(optimal_MSE)
