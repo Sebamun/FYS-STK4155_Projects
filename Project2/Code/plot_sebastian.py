@@ -52,3 +52,16 @@ def MSE_lamb(MSE, lamb, ind, optimal_lambda):
     ax.set_ylabel('MSE', fontsize=18)
     ax.legend(fontsize=18)
     plt.savefig('plots/MSE_function_of_lambda')
+
+
+def accuracy_epoch(n_epochs, accuracy, title, fname, labl):
+    fig, ax = plt.subplots()
+    ax.set_title(title, fontsize=20)
+    ax.plot(np.log10(n_epochs), accuracy, label=labl)
+    ax.set_ylim(0.86, 1.0)
+    ax.set_xlabel(r'$\log_{10}(\text{Number of epochs})$', fontsize=18)
+    ax.set_ylabel('Accuracy score', fontsize=18)
+    ax.tick_params(axis='both', which='major', labelsize=18)
+    ax.legend(fontsize=18)
+    fig.savefig(fname)
+    plt.close(fig)
