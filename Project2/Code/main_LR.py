@@ -1,6 +1,3 @@
-from methods_LR import LR
-from plot_sebastian import accuracy_epoch
-
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import  train_test_split
@@ -8,6 +5,10 @@ from sklearn.datasets import load_breast_cancer
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import shuffle
+
+from methods_LR import LR
+from plots import accuracy_epoch
+
 
 plt.style.use('seaborn')
 plt.rc('text', usetex=True)
@@ -57,7 +58,7 @@ for i, epoch in enumerate(n_epochs):
     print(f"Train set accuracy LR with own code: {accuracy_train[i]:.5f} for {epoch} epochs.")
 
     # Logistic Regression with sklearn
-    logreg = LogisticRegression(solver='lbfgs', max_iter=epoch) 
+    logreg = LogisticRegression(solver='lbfgs', max_iter=epoch)
     logreg.fit(X_train_scaled, y_train.ravel())
     print(f"Test set accuracy LR with sklearn is {logreg.score(X_test_scaled,y_test):.5f} for {epoch} epochs.")
     print(f"Train set accuracy LR with sklearn is {logreg.score(X_train_scaled,y_train):.5f} for {epoch} epochs.")

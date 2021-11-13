@@ -4,6 +4,7 @@ from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.preprocessing import StandardScaler
+from mpl_toolkits import mplot3d
 
 plt.style.use('seaborn')
 plt.rc('text', usetex=True)
@@ -35,7 +36,7 @@ def model_terrain(X, x, y, beta, N, title, z_data, a, b):
     linewidth=0, antialiased=False, alpha = b)
     ax.set_title(title, fontsize=25)
     #ax.zaxis.set_major_locator(LinearLocator(10))
-    plt.savefig(f'Plots/{title}')
+    plt.savefig(f'../Plots/{title}')
 
 def MSE_lamb(MSE, lamb, ind, optimal_lambda):
     # Plots the MSE as a function of lambda.
@@ -51,7 +52,26 @@ def MSE_lamb(MSE, lamb, ind, optimal_lambda):
     ax.set_xlabel(r'$\log_{10}(\lambda)$', fontsize=18)
     ax.set_ylabel('MSE', fontsize=18)
     ax.legend(fontsize=18)
-    plt.savefig('plots/MSE_function_of_lambda')
+    plt.savefig('../Plots/MSE_function_of_lambda')
+
+
+def plot_surface(X, model, model_name, epochs, n_layers, xx, yy, N):
+    z_h, a_h, z_o, a_L = model.feed_forward(X)
+    n = int(np.sqrt(X.shape[0]))
+    z_o = np.reshape(z_o, (n,n))
+    fig = plt.figure(figsize=(10,8))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_title(f'Surface plot of model using {model_name}, {epochs:.1e} iterations', fontsize=25)
+    ax.set_zticklabels([])
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    surf = ax.plot_surface(xx, yy, z_o, cmap=cm.coolwarm,
+    linewidth=0, antialiased=False)
+    ax.set_zlim(-0.10, 1.40)
+    bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
+    bbox_inches=bbox
+    plt.savefig(f'../Plots/{model_name}_model_N{N}_it{epochs:.1e}_{n_layers}L.png', bbox_inches='tight')
+
 
 
 def accuracy_epoch(n_epochs, accuracy, title, fname, labl):
@@ -63,5 +83,5 @@ def accuracy_epoch(n_epochs, accuracy, title, fname, labl):
     ax.set_ylabel('Accuracy score', fontsize=18)
     ax.tick_params(axis='both', which='major', labelsize=18)
     ax.legend(fontsize=18)
-    fig.savefig(fname)
+    fig.savefig(f'../Plots/{fname}')
     plt.close(fig)

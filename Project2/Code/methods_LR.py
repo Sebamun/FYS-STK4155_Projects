@@ -1,8 +1,10 @@
 import autograd.numpy as np
 from autograd import elementwise_grad
-from common_sebastian import (MSE, learning_schedule)
 from sklearn.linear_model import SGDRegressor, LinearRegression, Ridge
 from sklearn.utils import shuffle
+
+from common import (MSE, learning_schedule)
+
 
 np.random.seed(1235)
 

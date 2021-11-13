@@ -6,9 +6,11 @@ from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.preprocessing import StandardScaler
-from common_sebastian import (FrankeFunction, create_X, scale, MSE)
-from methods_sebastian import OLS, Ridge
-from plot_sebastian import model_terrain, MSE_lamb
+
+from methods_GD import OLS, Ridge
+from common import (FrankeFunction, create_X, scale)
+from plots import model_terrain, MSE_lamb
+
 
 def main_1():
     np.random.seed(2018) # Generate random values from seed.
@@ -37,8 +39,8 @@ def main_1():
 
     model = OLS(z, X, m, M, 0) # Initialize our OLS model.
     # Calculate methods for OLS:
-    MSE1_OLS, beta1 = model.SGD(x, y, z_data, n_epochs, t0, t1, tol, True)
-    MSE2_OLS, beta2 = model.GDM(x, y, z_data, n_epochs, t0, t1, v, gamma, tol, True)
+    MSE1_OLS, beta1 = model.SGD(n_epochs, t0, t1, tol, True)
+    MSE2_OLS, beta2 = model.GDM(n_epochs, t0, t1, v, gamma, tol, True)
     # Plots for OLS:
     model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for OLS', z_data, alph_2, alph_1)
     model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for OLS', z_data, alph_2, alph_1)
@@ -49,8 +51,8 @@ def main_1():
     model = Ridge(z, X, m, M, optimal_lambda) # Initialize our Ridge model with specific lambda value.
     # This was the optimal lambda value from the last project.
     # Calculate methods for Ridge:
-    MSE1_Ridge, beta1 = model.SGD(x, y, z_data, n_epochs, t0, t1, tol, True)
-    MSE2_Ridge, beta2 = model.GDM(x, y, z_data, n_epochs, t0, t1, v, gamma, tol, True)
+    MSE1_Ridge, beta1 = model.SGD(n_epochs, t0, t1, tol, True)
+    MSE2_Ridge, beta2 = model.GDM(n_epochs, t0, t1, v, gamma, tol, True)
     # Plots for Ridge:
     model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for Ridge', z_data, alph_1, alph_2)
     model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for Ridge', z_data, alph_2, alph_1)
@@ -89,14 +91,13 @@ def main_2(optimal_MSE):
     MSE_Ridge_plot = np.zeros(len(lambdas)) # Collect the MSE after n_epochs iterations.
     for l in range(len(lambdas)): # Run through our lambda values.
         model_ = Ridge(z, X ,m ,M, lambdas[l]) # Initialize our Ridge model.
-        MSE_Ridge, beta2_ = model_.GDM(x, y, z_data, n_epochs, t0, t1, v, gamma, tol, False)
+        MSE_Ridge, beta2_ = model_.GDM(n_epochs, t0, t1, v, gamma, tol, False)
         MSE_Ridge_plot[l] = MSE_Ridge # Collect MSE at last n for momentum SGD.
 
     ind = np.argmin(MSE_Ridge_plot)
     MSE_lamb(MSE_Ridge_plot, lambdas, ind, optimal_lambda)
 
     return lambdas[ind]
-
 
 optimal_MSE = main_1()
 main_2(optimal_MSE)

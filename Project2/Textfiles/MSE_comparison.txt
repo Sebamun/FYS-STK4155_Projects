@@ -1,0 +1,3 @@
+Mean squared error from scikit and our model for OLS
+ Scikit SGD: 0.19093953586948817
+ Own SGD: 0.099221177890626
