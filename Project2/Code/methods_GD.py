@@ -7,14 +7,16 @@ from sklearn.utils import shuffle
 from common import (MSE, learning_schedule)
 
 class GradientDecent:
-    def __init__(self, z, X, m, M, lamb):
+    def __init__(self, z, X, m, M, lamb, tol_1, tol_2):
         self.z = z # Data.
         self.X = X # Design matrix.
         self.lamb = lamb # Parameter used in ridge.
         self.M = M
         self.m = m
+        self.tol_1 = tol_1
+        self.tol_2 = tol_2
 
-    def SGD(self, n_epochs, t0, t1, tol, timer):
+    def SGD(self, n_epochs, t0, t1, timer):
         # The stochastic gradient descent.
         start = time.time() # Start timer.
         beta = np.random.randn(np.shape(self.X)[1],1) # Generate random initial beta values.
@@ -26,7 +28,8 @@ class GradientDecent:
                 eta = learning_schedule(epoch*self.m+i,t0,t1) # Change the learning rate.
                 # Stochastic gradient descent:
                 beta = beta - eta * gradients(beta)
-                if np.linalg.norm(gradients(beta))<0.1: # If less than tolarance we stop our gradient descent.
+                if np.linalg.norm(gradients(beta))<self.tol_2: # If less than tolarance we stop our gradient descent.
+                    print('blah')
                     break
 
         z_pred = self.X@beta # Our model prediction.
@@ -34,7 +37,7 @@ class GradientDecent:
         # Check for autograd function for gradient:
         gradient_num = elementwise_grad(self.gradient_numerical)
         assert np.all(np.squeeze(self.gradient_analytical(beta))[:] \
-        - np.squeeze(gradient_num(beta))[:] < tol)
+        - np.squeeze(gradient_num(beta))[:] < self.tol_1)
 
         end = time.time() # End timer.
         if timer == True:
@@ -48,7 +51,7 @@ class GradientDecent:
         return mean_squared_error_1, beta
 
 
-    def GDM(self, n_epochs, t0, t1, v, gamma, tol, timer):
+    def GDM(self, n_epochs, t0, t1, v, gamma, timer):
         # The momentum stochastic gradient descent.
         start = time.time() # Start timer.
         beta = np.random.randn(np.shape(self.X)[1],1) # Generate random initial beta values.
@@ -62,7 +65,8 @@ class GradientDecent:
                 v = gamma*v + eta*gradients(beta)
                 beta = beta - v
 
-                if np.linalg.norm(gradients(beta))<0.1: # If less than tolarance we stop our gradient descent.
+                if np.linalg.norm(gradients(beta))<self.tol_2: # If less than tolarance we stop our gradient descent.
+                    print('blah2')
                     break
 
         z_pred = self.X@beta # Our model prediction.
@@ -70,7 +74,7 @@ class GradientDecent:
         # Check for autograd function for gradient:
         gradient_num = elementwise_grad(self.gradient_numerical)
         assert np.all(np.squeeze(self.gradient_analytical(beta))[:] \
-        - np.squeeze(gradient_num(beta))[:] < tol)
+        - np.squeeze(gradient_num(beta))[:] < self.tol_1)
 
         end = time.time() # End timer.
         if timer == True:
