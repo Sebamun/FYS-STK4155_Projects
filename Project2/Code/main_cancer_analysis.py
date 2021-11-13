@@ -24,12 +24,12 @@ labels = cancer.feature_names[0:30]
 X = inputs
 Y = outputs
 
-print('The content of the breast cancer dataset is:')      #Print information about the datasets
-print(labels)
-print('-------------------------')
-print("inputs =  " + str(inputs.shape))
-print("outputs =  " + str(outputs.shape))
-print("labels =  "+ str(labels.shape))
+# print('The content of the breast cancer dataset is:')      #Print information about the datasets
+# print(labels)
+# print('-------------------------')
+# print("inputs =  " + str(inputs.shape))
+# print("outputs =  " + str(outputs.shape))
+# print("labels =  "+ str(labels.shape))
 
 plt.style.use('seaborn')
 plt.rc('text', usetex=True)
@@ -48,8 +48,8 @@ scaler.fit(X_train)
 X_train_scaled = scaler.transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-epochs = 100000
-eta = 0.0005
+epochs = 1000
+# eta = 0.0005
 t0, t1 = 0.5, 100 # Paramters used in learning rate. # 50
 lmbd = 0.00001
 gamma = 0.9
@@ -59,7 +59,7 @@ n_hidden_neurons = 20
 n_features = X.shape[1]
 
 
-sigmoid_model = Sigmoid(eta, lmbd, gamma, n_layers, n_hidden_neurons, n_features, 'classification')
+sigmoid_model = Sigmoid(t0, t1, lmbd, gamma, n_layers, n_hidden_neurons, n_features, 'classification')
 sigmoid_model.train(X_train_scaled, y_train, epochs, batch_size)
 
 y_h, a_h, y_o_sigmoid, a_L = sigmoid_model.feed_forward(X_test_scaled)
