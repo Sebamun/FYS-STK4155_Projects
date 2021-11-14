@@ -1,9 +1,7 @@
 import autograd.numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import cm
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
-from mpl_toolkits.mplot3d import Axes3D
 from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
 
 def MSE(y_data, y_model):
     """Calculate MSE"""
@@ -32,6 +30,24 @@ def create_X(x, y, n):
         for k in range(i+1):
             X[:,q+k] = (x**(i-k))*(y**k)
     return X
+
+def prepare_cancer_data():
+    cancer = load_breast_cancer()
+    # Feature matrix of 569 rows (samples) and 30 columns (parameters)
+    X = cancer.data
+    # Label array of 569 rows (0 for benign and 1 for malignant)
+    Y = cancer.target.reshape(-1, 1)
+
+    # Generate training and testing datasets
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2,
+                                                        random_state=1)
+
+    # scaling the data
+    scaler = StandardScaler()
+    scaler.fit(X_train)
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
+    return X_train, X_test, y_train, y_test
 
 def scale(X):
     """Scale all columns except the first (which is all ones)"""
