@@ -5,7 +5,7 @@ def der_MSE(y, y_o, _):
     return (y_o - y)
 
 def der_crossEntropy(y, y_o, x):
-    val = np.mean((y_o - y)*x, axis = 1)
+    val = np.sum((y_o - y)*x, axis = 1)
     return val.reshape(-1,1)
 
 class NeuralNetwork:
