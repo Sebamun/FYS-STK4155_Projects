@@ -102,75 +102,64 @@ class NeuralNetwork:
                 self.back_propagation(X_s[i:i+batch_size], z_s[i:i+batch_size], eta)
 
 class Sigmoid(NeuralNetwork):
-    def activation_func(self, x):
-        return 1/(1 + np.exp(-x))
+    def activation_func(self, z):
+        return 1/(1 + np.exp(-z))
 
     def der_act_func(self, z):
         a = self.activation_func(z)
         return a*(1-a)
 
 class Tang_hyp(NeuralNetwork):
-    def activation_func(self, x):
-        return np.tanh(x)
+    def activation_func(self, z):
+        return np.tanh(z)
 
-    def der_act_func(self, x):
-        return -np.tanh(x)**2 + 1
+    def der_act_func(self, z):
+        return -np.tanh(z)**2 + 1
 
 class RELU(NeuralNetwork):
-    def activation_func(self, x):
-        # x should not be changed by the activation function!!!
-        # maybe we should test the new return to check if it is faster :)
-        x = x.copy()
-        x[x<0] = 0
-        return x
-        # return np.where(x > 0, x, 0)
+    def activation_func(self, z):
+        a = z.copy()
+        a[a<0] = 0
+        return a
 
-    def der_act_func(self, x):
-        x = x.copy()
-        x[x>0] = 1
-        x[x<0] = 0
-        return x
-        # return np.where(x > 0, 1, 0)
+    def der_act_func(self, z):
+        a = z.copy()
+        a[a>0] = 1
+        a[a<0] = 0
+        return a
 
 class ELU(NeuralNetwork):
-    def activation_func(self, x):
-        x = x.copy()
-        x[x<0] = np.exp(x[x<0])-1
-        return x
-        # return np.where(x > 0, x, np.exp(x)-1)
+    def activation_func(self, z):
+        a = z.copy()
+        a[a<0] = np.exp(a[a<0])-1
+        return a
 
-    def der_act_func(self, x):
-        x = x.copy()
-        x[x>0] = 1
-        x[x<0] = np.exp(x[x<0])
-        return x
-        # return np.where(x > 0, 1, np.exp(x))
+    def der_act_func(self, z):
+        a = z.copy()
+        a[a>0] = 1
+        a[a<0] = np.exp(x[x<0])
+        return a
 
 class Leaky(NeuralNetwork):
-    def activation_func(self, x):
-        x = x.copy()
-        x[x<0] = 0.1*x[x<0]
-        return x
-        # return np.where(x > 0, x, 0.1*x)
+    def activation_func(self, z):
+        a = z.copy()
+        a[a<0] = 0.1*a[a<0]
+        return a
 
-    def der_act_func(self, x):
-        x = x.copy()
-        x[x>0] = 1
-        x[x<0] = 0.1
-        return x
-        # return np.where(x > 0, 1, 0.1)
+    def der_act_func(self, z):
+        a = z.copy()
+        a[a>0] = 1
+        a[a<0] = 0.1
+        return a
 
 class Heaviside(NeuralNetwork):
-    def activation_func(self, x):
-        x = x.copy()
-        x[x>0] = 1
-        x[x<0] = 0
-        return x
-        # return np.where(x > 0, 1, 0)
+    def activation_func(self, z):
+        a = z.copy()
+        a[a>0] = 1
+        a[a<0] = 0
+        return a
 
-
-    def der_act_func(self, x):
-        x = x.copy()
-        x[:] = 0
-        return x
-        # return np.zeros_like(x)
+    def der_act_func(self, z):
+        a = z.copy()
+        a[:] = 0
+        return a
