@@ -29,7 +29,6 @@ class GradientDecent:
                 # Stochastic gradient descent:
                 beta = beta - eta * gradients(beta)
                 if np.linalg.norm(gradients(beta))<self.tol_2: # If less than tolarance we stop our gradient descent.
-                    print('blah')
                     break
 
         z_pred = self.X@beta # Our model prediction.
@@ -66,7 +65,6 @@ class GradientDecent:
                 beta = beta - v
 
                 if np.linalg.norm(gradients(beta))<self.tol_2: # If less than tolarance we stop our gradient descent.
-                    print('blah2')
                     break
 
         z_pred = self.X@beta # Our model prediction.

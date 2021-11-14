@@ -72,3 +72,11 @@ Time for SGD with OLS: 5.295971155166626 s.
 Time for momentum SGD with OLS: 4.999598979949951 s. 
 Time for SGD with Ridge: 8.91727900505066 s. 
 Time for momentum SGD with Ridge: 9.65515685081482 s. 
+Time for SGD with OLS: 4.987878799438477 s. 
+Time for momentum SGD with OLS: 4.565532922744751 s. 
+Time for SGD with Ridge: 8.457021951675415 s. 
+Time for momentum SGD with Ridge: 9.213563919067383 s. 
+Time for SGD with OLS: 4.401197910308838 s. 
+Time for momentum SGD with OLS: 4.536084175109863 s. 
+Time for SGD with Ridge: 8.33024787902832 s. 
+Time for momentum SGD with Ridge: 8.427386999130249 s. 
