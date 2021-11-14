@@ -11,11 +11,12 @@ def MSE(y_data, y_model):
     return np.mean((y_data - y_model)**2)
 
 def FrankeFunction(x, y):
+    N = x.shape[0]
     term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
     term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
     term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
     term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
-    return term1 + term2 + term3 + term4
+    return term1 + term2 + term3 + term4 + np.random.normal(0,0.1,(N,N))
 
 def create_X(x, y, n):
     """Create design Matrix"""
@@ -42,4 +43,5 @@ def scale(X):
 
 def learning_schedule(t,t0,t1):
     """Learning rate used in SGD"""
-    return t0/(t+t1)
+    return 0.0005
+    # return t0/(t+t1)
