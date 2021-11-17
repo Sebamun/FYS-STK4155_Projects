@@ -1,13 +1,14 @@
 import numpy as np
-from common import learning_schedule
 
 def der_MSE(y, y_o, _):
     return (y_o - y)
 
+def crossEntropy(y, a):
+    return np.mean(-y*np.log(a)-(1-y)*np.log(1-a))
+
 def der_crossEntropy(y, y_o, x):
     val = np.sum((y_o - y)*x, axis = 1)
     return val.reshape(-1,1)
-
 
 class NeuralNetwork:
     def __init__(self, t0, t1, lmbd, gamma, n_layers, n_hidden_neurons, X_train, mode):
@@ -69,7 +70,7 @@ class NeuralNetwork:
         if self.mode == "regression":
             a_L = z_o
         elif self.mode == "classification":
-            a_L = self.activation_func(z_o)
+            a_L = Sigmoid.activation_func(self, z_o)
 
         return z_h, a_h, z_o, a_L
 
@@ -113,7 +114,20 @@ class NeuralNetwork:
         self.v[4] = self.gamma*self.v[4] + eta * w_i_gradient
         self.input_weights -= self.v[4]
 
-    def train(self, X, z, epochs, batch_size):
+    def train(self, X, z, epochs, batch_size, learning_schedule):
+        """
+        Train the neural network using SGD with momentum.
+
+        input:
+            X (array, shape=(N, number of features)): The input training data
+            z (array, shape=(N, 1)): The target values for the training data
+            epochs (int): The number of iterations
+            batch_size (int): The number of inputs to use in each iteration
+            learning_schedule (function(t, t0, t1)): How to calculate the learning rate during the SGD
+
+        returns:
+            None
+        """
         N = int(X.shape[0])
         rng = np.random.default_rng(1234)
         indices = np.arange(N)
@@ -149,6 +163,7 @@ class Tang_hyp(NeuralNetwork):
 class RELU(NeuralNetwork):
     def init_method(self):
         return "He"
+
     def activation_func(self, z):
         a = z.copy()
         a[a<0] = 0

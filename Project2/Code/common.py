@@ -57,7 +57,10 @@ def scale(X):
     X[:, 1:] = scaler.transform(X[:, 1:])
     return X
 
-def learning_schedule(t,t0,t1):
+def learning_schedule(t, t0, t1):
     """Learning rate used in SGD"""
-    # return 0.0001
     return t0/(t+t1)
+
+def accuracy(pred, target):
+    return np.mean(abs(pred - target) < 0.5)
+
