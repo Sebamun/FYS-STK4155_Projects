@@ -16,13 +16,13 @@ n_hidden_neurons = 20
 n_features = X_train_scaled.shape[1]
 
 n_epochs = [1, 10, 100, 1000, 10000, 100000, 1000000] # Number of epochs.
-n_epochs = [1000] # Number of epochs.
+# n_epochs = [100] # Number of epochs.
 
 
 M = 50
 t0, t1 = 0.5, 100 # Paramters used in learning rate. # 50
 
-lmbd = 0.01
+lmbd = 0.12
 gamma = 0.8
 
 accuracy_test = np.zeros(len(n_epochs))
@@ -32,58 +32,41 @@ model = Sigmoid(t0, t1, lmbd, gamma, n_layers,
                 n_hidden_neurons, n_features, 'classification')
 for i, epoch in enumerate(n_epochs):
     print(f'Iteration {i+1}/{len(n_epochs)}, with {n_layers} hidden layers.')
+    print('---------------------------------------')
 
     model.train(X_train_scaled, y_train, epoch, M)
 
-    *_, a_L_test = model.feed_forward(X_test_scaled)
-    *_, a_L_train = model.feed_forward(X_train_scaled)
+    *_, a_L_test = model.feed_forward(X_test_scaled, y_test)
+    *_, a_L_train = model.feed_forward(X_train_scaled, y_train)
 
     accuracy_test[i] = np.mean(abs(a_L_test - y_test) < 0.5)
     print(f"Test set accuracy NN with own code is {accuracy_test[i]:.5f} for {epoch} epochs.")
     accuracy_train[i] = np.mean(abs(a_L_train - y_train) < 0.5)
     print(f"Train set accuracy NN with own code: {accuracy_train[i]:.5f} for {epoch} epochs.")
+    print(" ")
+
+    clf = MLPClassifier(hidden_layer_sizes=n_layers, activation='logistic',
+                        batch_size=M, solver='sgd', alpha=lmbd, learning_rate='invscaling',
+                        power_t=0.0005, max_iter=epoch, shuffle=True, random_state=1,
+                        momentum=0.8).fit(X_train_scaled, y_train.ravel())
+
+    accuracy_sklearn_test = clf.score(X_test_scaled, y_test)
+    print(f"Test set accuracy NN with sklearn is {accuracy_sklearn_test:.5f} for {epoch} epochs.")
+    accuracy_sklearn_train = clf.score(X_train_scaled, y_train)
+    print(f"Train set accuracy NN with sklearn is {accuracy_sklearn_train:.5f} for {epoch} epochs.")
+
+    cost_test = np.mean(-y_test*np.log(a_L_test)-(1-y_test)*np.log(1-a_L_test))
+    cost_train = np.mean(-y_train*np.log(a_L_train)-(1-y_train)*np.log(1-a_L_train))
+    print(" ")
+
+    print(f"Cost for test set is {cost_test:.5f} for lambda = {lmbd}.")
+    print(f"Cost for train set is {cost_train:.5f} for lambda = {lmbd}.")
+    print(" ")
 
 if len(n_epochs) > 2:
     print('Plotting')
     accuracy_epoch(n_epochs, accuracy_test, accuracy_train,
-        "Fit to cancer data using Neural Network ",
-        "../Plots/NN_cancer.pdf")
-
-# # Now with Sklearn
-# clf = MLPClassifier(hidden_layer_sizes = n_layers,random_state = 1,\
-# activation = 'logistic', batch_size = M, learning_rate = 'invscaling',\
-# learning_rate_init = 0.001, max_iter = epochs,shuffle = True).fit(X_train, y_train.ravel())
-#
-#  # clf = MLPClassifier(hidden_layer_sizes=n_layers,random_state=1,\
-#  #  solver='sgd', alpha=lmbd, activation='logistic', batch_size=batch_size, learning_rate='constant',\
-#  #  learning_rate_init=0.001, power_t=0.5, max_iter=epochs, shuffle = True).fit(X_train, y_train.ravel())
-#
-# accuracy_sklearn = clf.score(X_test, y_test)
-# print(f'Accuracy = {accuracy_sklearn}, sigmoid, sklearn')
+        r"Fit to cancer data using Neural Network, with $\lambda$ = " + f"{lmbd}",
+        f"../Plots/NN_cancer_{lmbd}.pdf")
 
 
-#Visualisation of dataset (for correlation analysis)
-# plt.figure()
-# plt.scatter(X[:,0], X[:,2], s=40, c=Y, cmap=plt.cm.Spectral)
-# plt.xlabel('Mean radius', fontweight='bold')
-# plt.ylabel('Mean perimeter', fontweight='bold')
-# plt.show()
-#
-# plt.figure()
-# plt.scatter(X[:,5], X[:,6], s=40, c=Y, cmap=plt.cm.Spectral)
-# plt.xlabel('Mean compactness', fontweight='bold')
-# plt.ylabel('Mean concavity', fontweight='bold')
-# plt.show()
-#
-#
-# plt.figure()
-# plt.scatter(X[:,0], X[:,1], s=40, c=Y, cmap=plt.cm.Spectral)
-# plt.xlabel('Mean radius', fontweight='bold')
-# plt.ylabel('Mean texture', fontweight='bold')
-# plt.show()
-#
-# plt.figure()
-# plt.scatter(X[:,2], X[:,1], s=40, c=Y, cmap=plt.cm.Spectral)
-# plt.xlabel('Mean perimeter', fontweight='bold')
-# plt.ylabel('Mean compactness', fontweight='bold')
-# plt.show()

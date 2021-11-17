@@ -7,7 +7,10 @@ from common import prepare_cancer_data
 
 X_train_scaled, X_test_scaled, y_train, y_test = prepare_cancer_data()
 
+# We don't get the same results when just looking at f.ex. 100 alone
+# What is happening??
 n_epochs = [1, 10, 100, 1000, 10000, 100000, 1000000] # Number of epochs.
+
 M = 50                  # Size of each minibatch (10 gave good results)
 t0, t1 = 0.5, 100       # Paramters used in learning rate. # 50
 m = int(len(X_train_scaled)/M) # Used when we split into minibatches.
@@ -24,6 +27,7 @@ accuracy_train = np.zeros_like(accuracy_test)
 
 for i, epoch in enumerate(n_epochs):
     print(f'Iteration {i+1}/{len(n_epochs)}')
+    print('---------------------------------------')
     # Calculate methods for OLS:
     weights = model.SGD(epoch, lmbd, gamma, v, t0, t1)
 
@@ -34,14 +38,24 @@ for i, epoch in enumerate(n_epochs):
     print(f"Test set accuracy LR with own code is {accuracy_test[i]:.5f} for {epoch} epochs.")
     accuracy_train[i] = np.mean(abs(prediction_train - y_train) < 0.5)
     print(f"Train set accuracy LR with own code: {accuracy_train[i]:.5f} for {epoch} epochs.")
+    print(" ")
+
+    cost_test = np.mean(-y_test*np.log(prediction_test)-(1-y_test)*np.log(1-prediction_test))
+    cost_train = np.mean(-y_train*np.log(prediction_train)-(1-y_train)*np.log(1-prediction_train))
+
+    print(f"Cost for test set is {cost_test:.5f} for lambda = {lmbd}.")
+    print(f"Cost for train set is {cost_train:.5f} for lambda = {lmbd}.")
+    print(" ")
 
     # Logistic Regression with sklearn
     logreg = LogisticRegression(solver='lbfgs', max_iter=epoch)
     logreg.fit(X_train_scaled, y_train.ravel())
     print(f"Test set accuracy LR with sklearn is {logreg.score(X_test_scaled,y_test):.5f} for {epoch} epochs.")
     print(f"Train set accuracy LR with sklearn is {logreg.score(X_train_scaled,y_train):.5f} for {epoch} epochs.")
+    print(" ")
 
-print('Plotting')
-accuracy_epoch(n_epochs, accuracy_test, accuracy_train,
-                "Fit to cancer data with Logistic Regression",
-                "../Plots/LG_cancer.pdf")
+if len(n_epochs) > 2:
+    print('Plotting')
+    accuracy_epoch(n_epochs, accuracy_test, accuracy_train,
+            "Fit to cancer data with Logistic Regression",
+            f"../Plots/LG_cancer_lmb_{lmbd}.pdf")
