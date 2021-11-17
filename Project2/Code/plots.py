@@ -54,7 +54,6 @@ def MSE_lamb(MSE, lamb, ind, optimal_lambda):
     ax.legend(fontsize=18)
     plt.savefig('../Plots/MSE_function_of_lambda')
 
-
 def plot_surface(X, model, model_name, epochs, n_layers, xx, yy, N):
     z_h, a_h, z_o, a_L = model.feed_forward(X)
     n = int(np.sqrt(X.shape[0]))
@@ -71,8 +70,6 @@ def plot_surface(X, model, model_name, epochs, n_layers, xx, yy, N):
     bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
     bbox_inches=bbox
     plt.savefig(f'../Plots/{model_name}_model_N{N}_it{epochs:.1e}_{n_layers}L.png', bbox_inches='tight')
-
-
 
 def accuracy_epoch(n_epochs, test, train, title, fname):
     fig, ax = plt.subplots()

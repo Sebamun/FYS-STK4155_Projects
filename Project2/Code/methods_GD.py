@@ -84,26 +84,29 @@ class GradientDecent:
             f.close()
         return mean_squared_error_2, beta
 
-    def compare_MSE(self, n_epochs, t0, eta0):
-        sgdreg = SGDRegressor(loss='squared_loss', max_iter = n_epochs, penalty = None , eta0 = eta0)
+    def compare_MSE(self, n_epochs, t0, t1, v, gamma):
+        sgdreg = SGDRegressor(loss='squared_loss', max_iter = n_epochs, penalty = None , alpha = 1/t0, learning_rate='optimal')
         #sgdreg = SGDRegressor(loss = 'squared_loss', max_iter = n_epochs, penalty=None, alpha = 1/t0, learning_rate='optimal')
-        sgdreg.fit(self.X, self.z.ravel())
-        beta_scikit = sgdreg.coef_
-        z_pred = self.X@beta_scikit
-        MSE_sci = MSE(self.z, z_pred)
+        #sgdreg.fit(self.X, self.z.ravel())
 
         beta = np.random.randn(np.shape(self.X)[1],1) # Generate random initial beta values.
         for epoch in range(n_epochs):
+            self.X_, self.z_ = shuffle(self.X, self.z) # Shuffle the data for each epoch.
             for i in range(self.m):
+                sgdreg.partial_fit(self.X_, self.z_.ravel())
+                self.i = i # Index used when splitting in minibatces.
                 gradients = elementwise_grad(self.cost_func) # Use autograd to calculate the gradient of the cost function.
-                eta = eta0 # Change the learning rate.
+                eta = learning_schedule(epoch*self.m+i,t0,t1) # Change the learning rate.
                 # Stochastic gradient descent:
                 beta = beta - eta * gradients(beta)
-                #if np.linalg.norm(gradients(beta))<0.01: # If less than tolarance we stop our gradient descent.
-                        #break
+                #if np.linalg.norm(gradients(beta))<self.tol_2: # If less than tolarance we stop our gradient descent.
+                    #break
+        beta_scikit = sgdreg.coef_
+        z_pred_sci = self.X@beta_scikit
+        MSE_sci = MSE(self.z, z_pred_sci)
 
         z_pred = self.X@beta # Our model prediction.
-        MSE_own = MSE(self.z, z_pred) # Collect the mean square error.
+        MSE_own = MSE(self.z, z_pred) # Collect the mean squared error.
 
         # Write to file:
         f = open("../Textfiles/MSE_comparison.txt", "w")
