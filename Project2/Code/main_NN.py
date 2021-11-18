@@ -42,21 +42,24 @@ epochs = 3000
 eta = 5e-4
 lmbd_list = [5e-4] #[1e1, 1e0, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6]
 gamma = 0.9
-tol = 0.011
+tol = 0.014
 batch_size_list = [500]
-t0, t1 = 0.1, 100 # Paramters used in learning rate.
+t0, t1 = 5e-4, 100 # Paramters used in learning rate.
 
 start = time.time()
 X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2, random_state=1)
+for lmbd in lmbd_list:
+    for batch_size in batch_size_list:
+        for n_layers in n_layers_list:
+            for n_hidden_neurons in n_hidden_neurons_list:
+                sigmoid_model = Sigmoid(t0, t1, lmbd, gamma, tol, n_layers, n_hidden_neurons, X_train, 'regression')
+                sigmoid_model.train(X_train, z_train, epochs, batch_size, learning_schedule=lambda t,t0,t1: t0)
+                time_sigmoid = time.time()
+                z_h, a_h, z_o_sigmoid, a_L = sigmoid_model.feed_forward(X_test)
+                MSE_sigmoid = np.mean((z_test - z_o_sigmoid)**2)
+                f.write(f'Sigmoid   |  {(time_sigmoid-start):.1f} | {MSE_sigmoid:.3f}|  {lmbd}  |     {eta}     |   {n_layers}    |        {n_hidden_neurons}         |   {epochs}   | \n')
 
-sigmoid_model = Sigmoid(t0, t1, lmbd, gamma, n_layers, n_hidden_neurons, X_train, 'regression')
-sigmoid_model.train(X_train, z_train, epochs, batch_size, learning_schedule=lambda t,t0,t1: t0)
-time_sigmoid = time.time()
-z_h, a_h, z_o_sigmoid, a_L = sigmoid_model.feed_forward(X_test)
-MSE_sigmoid = np.mean((z_test - z_o_sigmoid)**2)
-f.write(f'Sigmoid   |  {(time_sigmoid-start):.1f} | {MSE_sigmoid:.3f}|  {lmbd}  |     {eta}     |   {n_layers}    |        {n_hidden_neurons}         |   {epochs}   | \n')
-
-plot_surface(X, sigmoid_model, 'Sigmoid', epochs, n_layers, xx, yy, N)
+                plot_surface(X, sigmoid_model, 'Sigmoid', epochs, n_layers, xx, yy, N)
 # plot_surface(X, TANH_model, 'tanh', epochs, n_layers, xx, yy, N)
 f.close()
 quit()
