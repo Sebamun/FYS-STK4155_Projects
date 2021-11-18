@@ -11,25 +11,25 @@ np.random.seed(1235)
 
 X_train_scaled, X_test_scaled, y_train, y_test = prepare_cancer_data()
 
-n_layers = 2
-n_hidden_neurons = 20
+n_layers = 1
+n_hidden_neurons = 10
 n_features = X_train_scaled.shape[1]
 
 n_epochs = [1, 10, 100, 1000, 10000, 100000, 1000000] # Number of epochs.
-n_epochs = [1000] # Number of epochs.
+# n_epochs = [1000] # Number of epochs.
+eta = 0.00001
 
-
-M = 50
+M = 20
 t0, t1 = 0.5, 100 # Paramters used in learning rate. # 50
 
-lmbd = 0.01
-gamma = 0.8
-
+lmbd = 0.0001
+gamma = 0.9
+tol = 0.0001
 accuracy_test = np.zeros(len(n_epochs))
 accuracy_train = np.zeros_like(accuracy_test)
 
-model = Sigmoid(t0, t1, lmbd, gamma, n_layers,
-                n_hidden_neurons, n_features, 'classification')
+model = Tang_hyp(eta, t1, lmbd, gamma, tol, n_layers,
+                n_hidden_neurons, X_train_scaled, 'classification')
 for i, epoch in enumerate(n_epochs):
     print(f'Iteration {i+1}/{len(n_epochs)}, with {n_layers} hidden layers.')
 

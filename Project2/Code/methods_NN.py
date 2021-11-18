@@ -9,7 +9,7 @@ def der_crossEntropy(y, y_o, x):
     return val.reshape(-1,1)
 
 class NeuralNetwork:
-    def __init__(self, t0, t1, lmbd, gamma, n_layers, n_hidden_neurons, X_train, mode):
+    def __init__(self, t0, t1, lmbd, gamma, tol, n_layers, n_hidden_neurons, X_train, mode):
         self.t0, self.t1 = t0, t1
         self.lmbd = lmbd
         self.n_layers = n_layers
@@ -20,6 +20,8 @@ class NeuralNetwork:
         self.v = np.zeros(5, dtype=object)
         self.gamma = gamma
         self.mode = mode
+        self.MSE = 1
+        self.tol = tol
         if mode == 'regression':
             self.der_cost_func = der_MSE
         elif mode == 'classification':
@@ -73,6 +75,7 @@ class NeuralNetwork:
 
     def back_propagation(self, X, z, eta):
         z_h, a_h, z_o, a_L = self.feed_forward(X)
+        self.MSE = 1e30#np.mean((z - a_L)**2)
         #Calculate weight and bias gradients for output layer
         output_error = self.der_cost_func(z, a_L, a_h[-1])
         w_o_gradient = a_h[-1].T @ output_error + self.lmbd*self.output_weights
@@ -119,6 +122,9 @@ class NeuralNetwork:
             rng.shuffle(indices)
             X_s = X[indices]
             z_s = z[indices]
+            if self.MSE < self.tol:
+                print(f'Tolerance of {self.tol} reached at epoch={epoch}')
+                break
             for i in range(0, N, batch_size):
                 eta = learning_schedule(epoch*(N/batch_size)+i, self.t0, self.t1)
                 self.back_propagation(X_s[i:i+batch_size], z_s[i:i+batch_size], eta)
