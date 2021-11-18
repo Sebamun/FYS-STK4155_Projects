@@ -18,13 +18,14 @@ M = 50
 t1 = 100
 lmbd = 0.01
 gamma = 0.8
+tol = 0.00001
 
 def run_model_and_plot_results(model_class, t0, sklearn_activation,
         sklearn_learning_rate, plot_title, plot_fname):
     accuracy_test = np.zeros(len(n_epochs))
     accuracy_train = np.zeros_like(accuracy_test)
 
-    model = model_class(t0, t1, lmbd, gamma, n_layers,
+    model = model_class(t0, t1, lmbd, gamma, tol, n_layers,
                     n_hidden_neurons, X_train, 'classification')
 
     for i, epoch in enumerate(n_epochs):
@@ -33,8 +34,8 @@ def run_model_and_plot_results(model_class, t0, sklearn_activation,
 
         model.train(X_train, y_train, epoch, M, learning_schedule)
 
-        *_, a_L_test = model.feed_forward(X_test, y_test)
-        *_, a_L_train = model.feed_forward(X_train, y_train)
+        *_, a_L_test = model.feed_forward(X_test)
+        *_, a_L_train = model.feed_forward(X_train)
 
         accuracy_test[i] = accuracy(a_L_test, y_test)
         print(f"Test set accuracy NN with own code is {accuracy_test[i]:.5f} for {epoch} epochs.")
@@ -59,15 +60,15 @@ def run_model_and_plot_results(model_class, t0, sklearn_activation,
         print('Plotting')
         accuracy_epoch(n_epochs, accuracy_test, accuracy_train, plot_title, plot_fname)
 
-# # Sigmoid
-# run_model_and_plot_results(
-#     model_class=Sigmoid,
-#     t0=0.5,
-#     sklearn_activation='logistic',
-#     sklearn_learning_rate='invscaling',
-#     plot_title=r"Fit to cancer data using Neural Network, with $\lambda$ = " + f"{lmbd}",
-#     plot_fname=f"../Plots/NN_cancer_Sigmoid_lmb_{lmbd}.pdf"
-# )
+# Sigmoid
+run_model_and_plot_results(
+    model_class=Sigmoid,
+    t0=0.5,
+    sklearn_activation='logistic',
+    sklearn_learning_rate='invscaling',
+    plot_title=r"Fit to cancer data using Neural Network, with $\lambda$ = " + f"{lmbd}",
+    plot_fname=f"../Plots/NN_cancer_Sigmoid_lmb_{lmbd}.pdf"
+)
 
 # # RELU
 # run_model_and_plot_results(
@@ -79,12 +80,12 @@ def run_model_and_plot_results(model_class, t0, sklearn_activation,
 #     plot_fname=f"../Plots/NN_cancer_Sigmoid_lmb_{lmbd}.pdf"
 # )
 
-# Tanh
-run_model_and_plot_results(
-    model_class=Sigmoid,
-    t0=0.5,
-    sklearn_activation='tanh',
-    sklearn_learning_rate='constant',
-    plot_title=r"Fit to cancer data using Neural Network, with $\lambda$ = " + f"{lmbd}",
-    plot_fname=f"../Plots/NN_cancer_Sigmoid_lmb_{lmbd}.pdf"
-)
+# # Tanh
+# run_model_and_plot_results(
+#     model_class=Sigmoid,
+#     t0=0.5,
+#     sklearn_activation='tanh',
+#     sklearn_learning_rate='constant',
+#     plot_title=r"Fit to cancer data using Neural Network, with $\lambda$ = " + f"{lmbd}",
+#     plot_fname=f"../Plots/NN_cancer_Sigmoid_lmb_{lmbd}.pdf"
+# )

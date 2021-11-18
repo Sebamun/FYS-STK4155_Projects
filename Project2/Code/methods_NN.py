@@ -137,7 +137,7 @@ class NeuralNetwork:
             X_s = X[indices]
             z_s = z[indices]
             if self.MSE < self.tol:
-                print(f'Tolerance of {self.tol} reached at epoch={epoch}')
+                print(f'Tolerance of {self.tol} reached at epoch={epoch}   | {self} | lmbd= {self.lmbd} | eta= {eta} | layers = {self.n_layers} | neurons = {self.n_hidden_neurons} |')
                 break
             for i in range(0, N, batch_size):
                 eta = learning_schedule(epoch*(N/batch_size)+i, self.t0, self.t1)
@@ -146,6 +146,9 @@ class NeuralNetwork:
 class Sigmoid(NeuralNetwork):
     def init_method(self):
         return "Xavier"
+
+    def __str__(self):
+        return 'Sigmoid'
 
     def activation_func(self, z):
         return 1/(1 + np.exp(-z))
@@ -158,6 +161,9 @@ class Tang_hyp(NeuralNetwork):
     def init_method(self):
         return "Xavier"
 
+    def __str__(self):
+        return 'tanh'
+
     def activation_func(self, z):
         return np.tanh(z)
 
@@ -167,6 +173,9 @@ class Tang_hyp(NeuralNetwork):
 class RELU(NeuralNetwork):
     def init_method(self):
         return "He"
+
+    def __str__(self):
+        return 'ReLU'
 
     def activation_func(self, z):
         a = z.copy()
