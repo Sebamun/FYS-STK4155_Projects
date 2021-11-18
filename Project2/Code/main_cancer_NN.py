@@ -50,9 +50,9 @@ if len(n_epochs) > 2:
         "../Plots/NN_cancer.pdf")
 
 # # Now with Sklearn
-# clf = MLPClassifier(hidden_layer_sizes = n_layers,random_state = 1,\
-# activation = 'logistic', batch_size = M, learning_rate = 'invscaling',\
-# learning_rate_init = 0.001, max_iter = epochs,shuffle = True).fit(X_train, y_train.ravel())
+clf = MLPClassifier(hidden_layer_sizes = n_layers,random_state = 1,\
+activation = 'logistic', batch_size = M, learning_rate = 'invscaling',\
+learning_rate_init = 0.001, max_iter = epochs,shuffle = True).fit(X_train, y_train.ravel())
 #
 #  # clf = MLPClassifier(hidden_layer_sizes=n_layers,random_state=1,\
 #  #  solver='sgd', alpha=lmbd, activation='logistic', batch_size=batch_size, learning_rate='constant',\

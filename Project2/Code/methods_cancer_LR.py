@@ -32,7 +32,6 @@ class GradientDecent:
                 v = gamma*v + eta * gradient
                 w = w - v
 
-
         return w
 
 class LR(GradientDecent):

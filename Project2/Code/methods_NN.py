@@ -8,6 +8,7 @@ def der_crossEntropy(y, y_o, x):
     val = np.sum((y_o - y)*x, axis = 1)
     return val.reshape(-1,1)
 
+
 class NeuralNetwork:
     def __init__(self, t0, t1, lmbd, gamma, tol, n_layers, n_hidden_neurons, X_train, mode):
         self.t0, self.t1 = t0, t1
@@ -55,7 +56,7 @@ class NeuralNetwork:
 
 
 
-    def feed_forward(self, x):
+    def feed_forward(self, x, z):
         z_h = np.empty((self.n_layers, x.shape[0], self.n_hidden_neurons))
         a_h = np.empty((self.n_layers, x.shape[0], self.n_hidden_neurons))
 
@@ -71,11 +72,16 @@ class NeuralNetwork:
             a_L = z_o
         elif self.mode == "classification":
             a_L = self.activation_func(z_o)
+
         return z_h, a_h, z_o, a_L
 
     def back_propagation(self, X, z, eta):
+<<<<<<< HEAD
         z_h, a_h, z_o, a_L = self.feed_forward(X)
         self.MSE = 1e30#np.mean((z - a_L)**2)
+=======
+        z_h, a_h, z_o, a_L = self.feed_forward(X, z)
+>>>>>>> 6c339072c1515ba266f7f353db3f5135caba3713
         #Calculate weight and bias gradients for output layer
         output_error = self.der_cost_func(z, a_L, a_h[-1])
         w_o_gradient = a_h[-1].T @ output_error + self.lmbd*self.output_weights

@@ -1,3 +1,6 @@
 Model name| time | MSE  | lambda | learning rate | layers | number of neurons | epochs   | 
 ------------------------------------------------------------------------------------------- 
+<<<<<<< HEAD
+=======
 Sigmoid   |  20.9 | 0.013|  0.0001  |     0.0001     |   2    |        15         |   3000   | 
+>>>>>>> 10856deeb3531e0fd3d5adeecadf60914a3d2136
