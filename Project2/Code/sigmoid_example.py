@@ -5,6 +5,10 @@ plt.style.use('seaborn')
 plt.rc('text', usetex=True)
 plt.rc('text.latex', preamble=r'\usepackage{amsmath}')
 
+if self.MSE < self.tol:
+    print(f'Tolerance of {self.tol} reached at epoch={epoch}')
+    break
+
 def activation_func(x):
     return 1/(1 + np.exp(-x))
 
