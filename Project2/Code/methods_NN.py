@@ -4,7 +4,20 @@ def der_MSE(y, y_o, _):
     return (y_o - y)
 
 def crossEntropy(y, a):
-    return np.mean(-y*np.log(a)-(1-y)*np.log(1-a))
+    """
+    Calculate the cross entropy: np.mean(-y*np.log(a)-(1-y)*np.log(1-a))
+    Where a is 0 or 1, we get numerical errors.
+    Since we know that y is either 0 or 1 we treat 0*log(0) as 0, when we have
+    perfect predictions.
+    There can only be numerical error when we have y = 0 and a = 1 / a = 0 and y = 1
+    (but this is the least accurate prediction we could get).
+    """
+    o = a.copy()
+    np.log(a, where=(y==1), out=o)
+    np.log(1-o, where=(y==0), out=o)
+    return np.mean(-o)
+
+
 
 def der_crossEntropy(y, y_o, x):
     val = np.sum((y_o - y)*x, axis = 1)
@@ -55,7 +68,7 @@ class NeuralNetwork:
 
 
 
-    def feed_forward(self, x, z):
+    def feed_forward(self, x):
         z_h = np.empty((self.n_layers, x.shape[0], self.n_hidden_neurons))
         a_h = np.empty((self.n_layers, x.shape[0], self.n_hidden_neurons))
 
@@ -75,7 +88,7 @@ class NeuralNetwork:
         return z_h, a_h, z_o, a_L
 
     def back_propagation(self, X, z, eta):
-        z_h, a_h, z_o, a_L = self.feed_forward(X, z)
+        z_h, a_h, z_o, a_L = self.feed_forward(X)
         #Calculate weight and bias gradients for output layer
         output_error = self.der_cost_func(z, a_L, a_h[-1])
         w_o_gradient = a_h[-1].T @ output_error + self.lmbd*self.output_weights

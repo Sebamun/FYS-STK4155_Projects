@@ -15,10 +15,10 @@ f.write('Model name| time | MSE  | lambda | learning rate | layers | number of n
 f.write('------------------------------------------------------------------------------------------- \n')
 np.random.seed(1235)
 
-#define the initial conditions for generating data
+# Define the initial conditions for generating data
 n = 100
 
-#Create 1-d input array with all linear combinations of x's and y's
+# Create 1-d input array with all linear combinations of x's and y's
 x = np.linspace(0,1,n)
 y = np.linspace(0,1,n)
 N = int(n*n)
@@ -29,7 +29,7 @@ X = np.zeros((len(x), 2))
 X[:,0] = x
 X[:,1] = y
 
-#Produce target data
+# Produce target data
 z = np.ravel(FrankeFunction(xx, yy))
 z = np.reshape(z, (len(z), 1))
 n_layers = 2
@@ -69,7 +69,7 @@ f.write(f'Tanh      | {(time_tanh-start):.1f} | {MSE_tanh:.3f}|  {lmbd}  |     {
 
 
 
-eta = 0.001 #Learning rate
+eta = 0.001 # Learning rate
 RELU_model = RELU(t0, t1, lmbd, gamma, n_layers, n_hidden_neurons, X_train, 'regression')
 RELU_model.train(X_train, z_train, epochs, batch_size, learning_schedule=lambda t,t0,t1: t0)
 time_relu = time.time()

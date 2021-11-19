@@ -73,13 +73,12 @@ def plot_surface(X, model, model_name, epochs, n_layers, xx, yy, N):
     plt.savefig(f'../Plots/{model_name}_model_N{N}_it{epochs:.1e}_{n_layers}L.png', bbox_inches='tight')
 
 
-
 def accuracy_epoch(n_epochs, test, train, title, fname):
     fig, ax = plt.subplots()
     ax.set_title(title, fontsize=20)
     ax.plot(np.log10(n_epochs), test, label= "test data")
     ax.plot(np.log10(n_epochs), train, label= "train data")
-    ax.set_ylim(0.90, 1.2)
+    ax.set_ylim(0.3, 1.1)
     ax.set_xlabel(r'$\log_{10}(\text{Number of epochs})$', fontsize=18)
     ax.set_ylabel('Accuracy score', fontsize=18)
     ax.tick_params(axis='both', which='major', labelsize=18)
