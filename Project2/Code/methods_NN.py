@@ -38,6 +38,15 @@ class NeuralNetwork:
             self.output_bias = np.zeros((1 , 1)) + 0.01
 
         elif self.init_method() == "Xavier":
+            lim1 = np.sqrt(1/(n_inputs))
+            self.input_weights = np.random.uniform(low = -lim1, high = lim1, size = (n_features, n_hidden_neurons))
+            lim2 = np.sqrt(1/(n_hidden_neurons))
+            self.hidden_weights = np.random.uniform(low = -lim2, high = lim2, size = (n_layers - 1, n_hidden_neurons, n_hidden_neurons))
+            self.hidden_bias = np.zeros((n_layers, n_hidden_neurons)) #+ 0.01
+            self.output_weights = np.random.uniform(low = -lim1, high = lim1, size = (n_hidden_neurons, 1))
+            self.output_bias = np.zeros((1 , 1)) #+ 0.01
+
+        elif self.init_method() == "Xavier_norm":
             lim1 = np.sqrt(1/(n_inputs+n_hidden_neurons))
             self.input_weights = np.random.uniform(low = -lim1, high = lim1, size = (n_features, n_hidden_neurons))
             lim2 = np.sqrt(6/(2*n_hidden_neurons))
@@ -132,20 +141,22 @@ class NeuralNetwork:
         N = int(X.shape[0])
         rng = np.random.default_rng(1234)
         indices = np.arange(N)
-        for epoch in range(epochs):
+        for epoch in range(epochs+1):
             rng.shuffle(indices)
             X_s = X[indices]
             z_s = z[indices]
             if self.MSE < self.tol:
                 print(f'Tolerance of {self.tol} reached at epoch={epoch}   | {self} | lmbd= {self.lmbd} | eta= {eta} | layers = {self.n_layers} | neurons = {self.n_hidden_neurons} |')
                 break
+            elif epoch == epochs:
+                print(f'Tolerance not reached, stopped training at epoch={epoch}')
             for i in range(0, N, batch_size):
                 eta = learning_schedule(epoch*(N/batch_size)+i, self.t0, self.t1)
                 self.back_propagation(X_s[i:i+batch_size], z_s[i:i+batch_size], eta)
 
 class Sigmoid(NeuralNetwork):
     def init_method(self):
-        return "Xavier"
+        return "He"
 
     def __str__(self):
         return 'Sigmoid'
@@ -159,7 +170,7 @@ class Sigmoid(NeuralNetwork):
 
 class Tang_hyp(NeuralNetwork):
     def init_method(self):
-        return "Xavier"
+        return "Random"
 
     def __str__(self):
         return 'tanh'
@@ -190,7 +201,7 @@ class RELU(NeuralNetwork):
 
 class ELU(NeuralNetwork):
     def init_method(self):
-        return "Random"
+        return "He"
 
     def activation_func(self, z):
         a = z.copy()
@@ -205,7 +216,7 @@ class ELU(NeuralNetwork):
 
 class Leaky(NeuralNetwork):
     def init_method(self):
-        return "Random"
+        return "He"
 
     def activation_func(self, z):
         a = z.copy()
