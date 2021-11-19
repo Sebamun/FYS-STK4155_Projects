@@ -14,7 +14,7 @@ X_train, X_test, y_train, y_test = prepare_cancer_data()
 n_layers = 2
 n_hidden_neurons = 20
 n_epochs = [1, 10, 100, 1000, 10000, 100000, 1000000]
-M = 50              # Size of each minibatch (10 gave good results)
+M = 50              # Size of each minibatch
 t0, t1 = 0.5, 100   # Paramters used in learning rate.
 lmbd = 0.001
 gamma = 0.8         # Paramter used in momentum SGD.
@@ -24,7 +24,7 @@ def run_model_and_plot_results(model_class, sklearn_activation,
     accuracy_test = np.zeros(len(n_epochs))
     accuracy_train = np.zeros_like(accuracy_test)
 
-    model = model_class(t0, t1, lmbd, gamma, n_layers,
+    model = model_class(t0, t1, lmbd, gamma, tol, n_layers,
                     n_hidden_neurons, X_train, 'classification')
 
     for i, epoch in enumerate(n_epochs):
@@ -33,8 +33,8 @@ def run_model_and_plot_results(model_class, sklearn_activation,
 
         model.train(X_train, y_train, epoch, M, learning_schedule)
 
-        *_, z_o_test, a_L_test = model.feed_forward(X_test)
-        *_, z_o_train, a_L_train = model.feed_forward(X_train)
+        *_, a_L_test = model.feed_forward(X_test)
+        *_, a_L_train = model.feed_forward(X_train)
 
         accuracy_test[i] = accuracy(a_L_test, y_test)
         print(f"Test set accuracy NN with own code is {accuracy_test[i]:.5f} for {epoch} epochs.")

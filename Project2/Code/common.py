@@ -68,4 +68,3 @@ def learning_schedule(t, t0, t1):
 def accuracy(pred, target):
     """Calculates the accuracy for classification problmes"""
     return np.mean(abs(pred - target) < 0.5)
-

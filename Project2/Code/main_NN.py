@@ -68,7 +68,6 @@ MSE_tanh = np.mean((z_test - z_o_tanh)**2)
 f.write(f'Tanh      | {(time_tanh-start):.1f} | {MSE_tanh:.3f}|  {lmbd}  |     {eta}     |   {n_layers}    |        {n_hidden_neurons}         |   {epochs}   | \n')
 
 
-
 eta = 0.001 # Learning rate
 RELU_model = RELU(t0, t1, lmbd, gamma, n_layers, n_hidden_neurons, X_train, 'regression')
 RELU_model.train(X_train, z_train, epochs, batch_size, learning_schedule=lambda t,t0,t1: t0)

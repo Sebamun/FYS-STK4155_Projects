@@ -1,2 +1,5 @@
-Model name| time | MSE  | lambda | learning rate | layers | number of neurons | epochs   | 
+Model name| time | MSE  | lambda | learning rate | layers | number of neurons | batch-size | epochs   | 
 ------------------------------------------------------------------------------------------- 
+Sigmoid   |  2.6 | 0.015|  0.0001  |     0.0005     |   2    |        5         |   3000   | 
+Sigmoid   |  3.4 | 0.016|  0.0001  |     0.0005     |   3    |        5         |   3000   | 
+Sigmoid   |  4.6 | 0.017|  0.0001  |     0.0005     |   4    |        5         |   3000   | 
