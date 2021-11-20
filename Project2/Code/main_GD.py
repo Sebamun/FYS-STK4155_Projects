@@ -10,7 +10,7 @@ from methods_GD import OLS, Ridge
 from common import (FrankeFunction, create_X, scale)
 from plots import model_terrain, MSE_lamb
 
-def main_1():
+def run_OLS_and_Ridge():
     np.random.seed(2018) # Generate random values from seed.
     N = 10 # Number of datapoints. 10
     polydegree = 5 # Degree for polynomial.
@@ -25,7 +25,7 @@ def main_1():
 
     n_epochs = 1000 # Number of epochs. 10000
     M = 10 # Size of each minibatch (10 gave good results)
-    t0 = 0.5 # Paramters used in learning rate. # 50
+    t0 = 0.5 # Parameters used in learning rate. # 50
     t1 = 1/(0.01*t0) # This is the definition also used in the scikit SGD method.
     gamma = 0.9 # Paramter used in momentum SGD.
     tol_1 = 0.0001 # Tolerance for sum between analytical and numerical gradient.
@@ -56,7 +56,7 @@ def main_1():
 
     return MSE2_Ridge
 
-def main_2(optimal_MSE):
+def compare_Ridge(optimal_MSE):
 
     np.random.seed(2018) # Generate random values from seed.
     N = 10 # Number of datapoints.
@@ -69,6 +69,7 @@ def main_2(optimal_MSE):
     z = np.ravel(z)[:, np.newaxis] # Removes one dimension and add axis to each element.
     X = create_X(x, y, polydegree) # Creates design matix.
     X = scale(X) # Scale our matrix.
+    print(X)
 
     n_epochs = 1000 # Number of epochs. 10000
     M = 10 #size of each minibatch (10 gave good results)
@@ -96,5 +97,5 @@ def main_2(optimal_MSE):
 
     return lambdas[ind]
 
-optimal_MSE = main_1()
-main_2(optimal_MSE)
+optimal_MSE = run_OLS_and_Ridge()
+compare_Ridge(optimal_MSE)
