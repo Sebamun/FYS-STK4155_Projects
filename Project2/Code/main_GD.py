@@ -4,7 +4,7 @@ from common import (FrankeFunction, create_X, scale)
 from plots import model_terrain, MSE_lamb
 
 
-def main_1():
+def run_OLS_and_Ridge():
     np.random.seed(2018)           # Generate random values from seed.
 
     N = 10                         # Number of datapoints.
@@ -53,7 +53,7 @@ def main_1():
     return MSE2_Ridge
 
 
-def main_2(optimal_MSE):
+def compare_lambdas(optimal_MSE):
 
     np.random.seed(2018)            # Generate random values from seed.
 
@@ -93,5 +93,5 @@ def main_2(optimal_MSE):
 
     return lambdas[ind]
 
-optimal_MSE = main_1()
-#main_2(optimal_MSE)
+optimal_MSE = run_OLS_and_Ridge()
+#compare_lambdas(optimal_MSE)
