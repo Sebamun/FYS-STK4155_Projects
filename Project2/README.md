@@ -38,6 +38,10 @@ Here;
     * with batch size of 10 samples, gamma = 0.9, lambda = 4.28*10^(-2) and 1000 epochs.
 
 * python3 main_NN.py fits terrain data using FFNN and calculates:
+  * Trains a neural network to fit the Franke Function terrain data. 
+  * prints the MSE, run-time etc. to text-file. 
+  * plots the surface of the results produced by each model
+  * Prints when tolerance is reached in the terminal. 
 
 * python3 main_cancer_NN.py fits the cancer data using FFNN and:  
   * calculates and prints the accuracy and cost of the fit
