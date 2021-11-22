@@ -35,19 +35,19 @@ Here;
 * python3 main_GD.py fits the terrain data using gradient descent and calculates:
   * Provide plots given the Ridge and OLS regression methods with both ordinary and momentum SGD.
   * Provide plot over MSE given by lambda parameter in Ridge.
-    * with batchsize M=10, gamma = 0.9, lambda = 4.28*10^(-2), 1000 number of epochs and learning schedule function.
+    * with batch size of 10 samples, gamma = 0.9, lambda = 4.28*10^(-2) and 1000 epochs.
 
 * python3 main_NN.py fits terrain data using FFNN and calculates:
 
 * python3 main_cancer_NN.py fits the cancer data using FFNN and:  
   * calculates and prints the accuracy and cost of the fit
   * provide plots of the accuracy as function of epochs
-    * with 2 hidden layers, 20 hidden neurons, batch size of 50 samples, lambda = 0.001 and the learning schedule function for the value of the step length.
+    * with 2 hidden layers, 20 hidden neurons, batch size of 50 samples, lambda = 0.001 and gamma = 0.8.
 
 * python3 main_cancer_NN.py fits the cancer data using Logistic Regression and:  
   * calculates and prints the accuracy and cost of the fit
   * provide plots of the accuracy as function of epochs
-    * with 2 hidden layers, 20 hidden neurons, batch size of 50 samples, lambda = 0.05 and the learning schedule function for the value of the step length.
+    * with 2 hidden layers, 20 hidden neurons, batch size of 50 samples, lambda = 0.05 and gamma = 0.8.
 
 If one wantes to change the initial contitions, this is done in the different main files.
 
