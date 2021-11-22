@@ -1,4 +1,4 @@
-# Applied Data Analysis and Machine Learning, Project 1
+# Applied Data Analysis and Machine Learning, Project 2
 ## Classification and Regression, from linear and logistic regression to neural networks
 
 Kamilla Ida Julie Sulebakk, Marcus Berget and Sebastian Amundsen
@@ -33,6 +33,8 @@ python3 main_cancer_LR.py
 ```
 Here;
 * python3 main_GD.py fits the terrain data using gradient descent and calculates:
+  * Provide plots given the Ridge and OLS regression methods with both ordinary and momentum SGD.
+  * Provide plot over MSE given by lambda parameter in Ridge.
 
 * python3 main_NN.py fits terrain data using FFNN and calculates:
 
