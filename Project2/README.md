@@ -35,6 +35,7 @@ Here;
 * python3 main_GD.py fits the terrain data using gradient descent and calculates:
   * Provide plots given the Ridge and OLS regression methods with both ordinary and momentum SGD.
   * Provide plot over MSE given by lambda parameter in Ridge.
+    * with batchsize M=10, gamma = 0.9, lambda = 4.28*10^(-2), 1000 number of epochs and learning schedule function.
 
 * python3 main_NN.py fits terrain data using FFNN and calculates:
 
