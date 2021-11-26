@@ -5,7 +5,7 @@ from lfpykit import CellGeometry, CurrentDipoleMoment
 from sklearn.preprocessing import StandardScaler
 from common import FrankeFunction
 
-
+np.random.seed(1234)
 
 # def prepare_data():
 #     nyhead = NYHeadModel()
@@ -22,16 +22,15 @@ from common import FrankeFunction
 #         eeg[i, :] = eeg_i.T
 #     return eeg, dipole_locations
 
-def prepare_data():
+def prepare_data(num_signals):
     nyhead = NYHeadModel()
-    dipole_locations = nyhead.cortex[:, 0:74381:10000] # 8 positions
+    step_length = nyhead.cortex.shape[1]//num_signals + 1
+    dipole_locations = nyhead.cortex[:, ::step_length] # 8 positions
     samples = 1000
     pos_list = np.zeros((3, samples))
     for i in range(samples):
         idx = np.random.randint(0,8)
         pos_list[:, i] = dipole_locations[:, idx]
-        #pos_list
-
     eeg = np.zeros((samples, 231))
 
     for i in range(samples):
@@ -43,8 +42,13 @@ def prepare_data():
         eeg[i, :] = eeg_i.T
     return eeg, pos_list
 
+for num in [8, 20, 50, 100]:
+    eeg, pos_list = prepare_data(num_signals=num)
+    np.save(f'data/eeg_{num}', eeg)
+    np.save(f'data/pos_list_{num}', pos_list)
+quit()
 
-eeg, pos_list = prepare_data()
+
 # Find which position has the best match
 # eeg_last = eeg[-1,:]
 # eeg_last = np.reshape(eeg_last, (1,231))
