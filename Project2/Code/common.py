@@ -5,10 +5,10 @@ from sklearn.model_selection import train_test_split
 
 def MSE(y_data, y_model):
     """Calculate MSE"""
-    #sum = np.where(sum > 1, 1, sum)
     return np.mean((y_data - y_model)**2)
 
 def FrankeFunction(x, y):
+    """Produce terrain data"""
     N = x.shape[0]
     term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
     term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
@@ -33,6 +33,11 @@ def create_X(x, y, n):
     return X
 
 def prepare_cancer_data():
+    """
+    - Create the design matrix for the data
+    - Split into test and train sets
+    - Scale the data
+    """
     cancer = load_breast_cancer()
     # Feature matrix of 569 rows (samples) and 30 columns (parameters)
     X = cancer.data
@@ -40,10 +45,9 @@ def prepare_cancer_data():
     Y = cancer.target.reshape(-1, 1)
 
     # Generate training and testing datasets
-    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2,
-                                                        random_state=1)
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=1)
 
-    # scaling the data
+    # Scaling the data
     scaler = StandardScaler()
     scaler.fit(X_train)
     X_train = scaler.transform(X_train)
@@ -62,4 +66,5 @@ def learning_schedule(t, t0, t1):
     return t0/(t+t1)
 
 def accuracy(pred, target):
+    """Calculates the accuracy for classification problmes"""
     return np.mean(abs(pred - target) < 0.5)

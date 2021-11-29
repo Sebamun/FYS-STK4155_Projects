@@ -54,13 +54,18 @@ def MSE_lamb(MSE, lamb, ind, optimal_lambda):
     ax.legend(fontsize=18)
     plt.savefig('../Plots/MSE_function_of_lambda')
 
+<<<<<<< HEAD
 def plot_surface(X, model, model_name, epochs, n_layers, xx, yy, N, lambd, eta):
+=======
+
+def plot_surface(X, model, model_name, epochs, n_layers, n_hidden_neurons, xx, yy, N):
+>>>>>>> efb540d17c9f458cc90a0a03598601b9ca89d6fb
     z_h, a_h, z_o, a_L = model.feed_forward(X)
     n = int(np.sqrt(X.shape[0]))
     z_o = np.reshape(z_o, (n,n))
     fig = plt.figure(figsize=(10,8))
     ax = fig.add_subplot(111, projection='3d')
-    ax.set_title(f'Surface plot of model using {model_name}, {epochs:.1e} iterations', fontsize=25)
+    ax.set_title(f'Surface plot of model using {model_name}', fontsize=25)
     ax.set_zticklabels([])
     ax.set_xticklabels([])
     ax.set_yticklabels([])
@@ -69,6 +74,7 @@ def plot_surface(X, model, model_name, epochs, n_layers, xx, yy, N, lambd, eta):
     ax.set_zlim(-0.10, 1.40)
     bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
     bbox_inches=bbox
+<<<<<<< HEAD
     plt.savefig(f'../Plots/{model_name}_model_N{N}_it{epochs:.1e}_{n_layers}L.png', bbox_inches='tight')
 
 def plot_surface_2(X, model, model_name, epochs, n_layers, xx, yy, N, lambd, eta):
@@ -87,13 +93,17 @@ def plot_surface_2(X, model, model_name, epochs, n_layers, xx, yy, N, lambd, eta
     bbox = fig.bbox_inches.from_bounds(1, 1, 8, 6)
     bbox_inches=bbox
     plt.savefig(f'../Plots/Sigmoid_MSE/ {model_name}: Lambda = {lambd} and eta = {eta}.png', bbox_inches='tight')
+=======
+    plt.savefig(f'../Plots/{model_name}_{n_layers}L_{n_hidden_neurons}N.png', bbox_inches='tight')
+
+>>>>>>> efb540d17c9f458cc90a0a03598601b9ca89d6fb
 
 def accuracy_epoch(n_epochs, test, train, title, fname):
     fig, ax = plt.subplots()
     ax.set_title(title, fontsize=20)
     ax.plot(np.log10(n_epochs), test, label= "test data")
     ax.plot(np.log10(n_epochs), train, label= "train data")
-    ax.set_ylim(0.90, 1.2)
+    ax.set_ylim(0.3, 1.1)
     ax.set_xlabel(r'$\log_{10}(\text{Number of epochs})$', fontsize=18)
     ax.set_ylabel('Accuracy score', fontsize=18)
     ax.tick_params(axis='both', which='major', labelsize=18)
