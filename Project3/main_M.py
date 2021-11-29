@@ -7,21 +7,18 @@ from common import FrankeFunction
 
 np.random.seed(1234)
 
-num_sensors = 231       
-num_samples = 1000
+num_sensors = 231
 
 def prepare_data(num_signals):
-
-
     nyhead = NYHeadModel()
-    step_length = nyhead.cortex.shape[1]//num_signals + 1   # X mulige posisjoner
-    dipole_locations = nyhead.cortex[:, ::step_length]      # Der svulsten kan plasseres
-    pos_list = np.zeros((3, num_samples))   # Posisjonene til svulstene
-    for i in range(num_samples): # 0 til 1000
-        idx = np.random.randint(0, num_signals) # Tilfeldig valgt posisjon blant X
-        pos_list[:, i] = dipole_locations[:, idx] # Legger til posisjonen til svulsten
-
-    eeg = np.zeros((num_samples, 231))
+    step_length = nyhead.cortex.shape[1]//num_signals + 1
+    dipole_locations = nyhead.cortex[:, ::step_length] # 8 positions
+    samples = 1000
+    pos_list = np.zeros((3, samples))
+    for i in range(samples):
+        idx = np.random.randint(0,8)
+        pos_list[:, i] = dipole_locations[:, idx]
+    eeg = np.zeros((samples, 231))
 
     for i in range(samples):
         nyhead.set_dipole_pos(pos_list[:,i])
@@ -37,7 +34,6 @@ for num in [8, 20, 50, 100]:
     np.save(f'data/eeg_{num}', eeg)
     np.save(f'data/pos_list_{num}', pos_list)
 quit()
-
 
 # Find which position has the best match
 # eeg_last = eeg[-1,:]
