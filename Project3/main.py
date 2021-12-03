@@ -34,13 +34,11 @@ def NN_model(inputsize, n_layers, n_neuron, eta, lamda):
 
 num_sensors = 231
 num_samples = 5000
-num_positions = 74382
 
-def prepare_data(num_positions):
+def prepare_data(num_samples):
 
     nyhead = NYHeadModel()
-    step_length = nyhead.cortex.shape[1]//num_positions #+ 1   # step_length som vi skal hente ut posisjoner fra
-    dipole_locations = nyhead.cortex[:, ::step_length]      # Der svulsten kan plasseres
+    dipole_locations = nyhead.cortex  # Der svulsten kan plasseres
     num_positions = dipole_locations.shape[1]
 
     pos_list = np.zeros((3, num_samples))   # Posisjonene til svulstene
@@ -61,7 +59,7 @@ def prepare_data(num_positions):
         eeg[i, :] = eeg_i.T
     return eeg, pos_list
 
-eeg, pos_list = prepare_data(num_positions)
+eeg, pos_list = prepare_data(num_samples)
 print(eeg.shape)
 print(pos_list.shape)
 pos_list = pos_list.T
@@ -90,7 +88,7 @@ print(y_test[0:5])
 
 
 from sklearn.decomposition import PCA
-pca = PCA(n_components=5)
+pca = PCA(n_components=50)
 pca.fit(eeg)
 xx = pca.transform(eeg)
 X_train, X_test, y_train, y_test = splitter(xx, pos_list, test_size=0.2)
