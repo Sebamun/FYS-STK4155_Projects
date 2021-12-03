@@ -7,22 +7,9 @@ from common import FrankeFunction
 
 np.random.seed(1234)
 
-# def prepare_data():
-#     nyhead = NYHeadModel()
-#     dipole_locations = nyhead.cortex[:, 0:74381:1000]
-#     samples = dipole_locations.shape[1]
-#     eeg = np.zeros((samples, 231))
-#
-#     for i in range(samples):
-#         nyhead.set_dipole_pos(dipole_locations[:,i])
-#         M = nyhead.get_transformation_matrix()
-#         p = np.array(([0.0], [0.0], [1.0]))
-#         p = nyhead.rotate_dipole_to_surface_normal(p)
-#         eeg_i = M @ p
-#         eeg[i, :] = eeg_i.T
-#     return eeg, dipole_locations
+num_sensors = 231
 
-def prepare_data():
+def prepare_data(num_signals):
     nyhead = NYHeadModel()
     dipole_locations = nyhead.cortex[:, 0:74381:30000] # 8 positions
     samples = 10
@@ -30,8 +17,6 @@ def prepare_data():
     for i in range(samples):
         idx = np.random.randint(0,dipole_locations.shape[1])
         pos_list[:, i] = dipole_locations[:, idx]
-        #pos_list
-
     eeg = np.zeros((samples, 231))
 
     for i in range(samples):
@@ -43,8 +28,12 @@ def prepare_data():
         eeg[i, :] = eeg_i.T
     return eeg, pos_list
 
+for num in [8, 20, 50, 100]:
+    eeg, pos_list = prepare_data(num_signals=num)
+    np.save(f'data/eeg_{num}', eeg)
+    np.save(f'data/pos_list_{num}', pos_list)
+quit()
 
-eeg, pos_list = prepare_data()
 # Find which position has the best match
 # eeg_last = eeg[-1,:]
 # eeg_last = np.reshape(eeg_last, (1,231))
