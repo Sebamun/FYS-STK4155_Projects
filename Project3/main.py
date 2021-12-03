@@ -68,7 +68,7 @@ pos_list = pos_list.T
 inputsize = eeg.shape[1]
 n_layers = 5
 n_neuron = 100
-eta = 0.0001
+eta = 0.0001 # 0.0001
 lamda = 1e-6
 
 scaler = StandardScaler()

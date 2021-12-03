@@ -28,8 +28,7 @@ def run_OLS_and_Ridge():
     m = int(len(X)/M)              # Used when we split into minibatches.
     alph_1= 0.5                    # The alph values are used for which transparency to use in plotting of model and data.
     alph_2 = 1.0
-    optimal_lambda = 4.28*10**(-2) # found this in last project.
-
+    optimal_lambda = 4.28*10**(-2) # Found this in last project.
     model = OLS(z, X, m, M, 0, tol_1, tol_2) # Initialize our OLS model.
     # Calculate methods for OLS:
     MSE1_OLS, beta1 = model.SGD(n_epochs, t0, t1, True)
@@ -38,8 +37,7 @@ def run_OLS_and_Ridge():
     model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for OLS', z_data, alph_2, alph_1)
     model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for OLS', z_data, alph_2, alph_1)
     # Compare with scikit: (we only have loss model for OLS).
-    eta0 = 0.001 # When we compare with scikitlearn we use a constant learning rate.
-    model.compare_MSE(n_epochs, t0, eta0)
+    model.compare_MSE(n_epochs, t0, t1, v, gamma)
 
     model = Ridge(z, X, m, M, optimal_lambda, tol_1, tol_2) # Initialize our Ridge model with specific lambda value.
     # This was the optimal lambda value from the last project.
@@ -47,13 +45,17 @@ def run_OLS_and_Ridge():
     MSE1_Ridge, beta1 = model.SGD(n_epochs, t0, t1, True)
     MSE2_Ridge, beta2 = model.GDM(n_epochs, t0, t1, v, gamma, True)
     # Plots for Ridge:
-    model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for Ridge', z_data, alph_1, alph_2)
+    model_terrain(X, x, y, beta1, N, 'Stochastic gradient descent for Ridge', z_data, alph_2, alph_1)
     model_terrain(X, x, y, beta2, N, 'Stochastic gradient descent with momentum for Ridge', z_data, alph_2, alph_1)
 
     return MSE2_Ridge
 
+<<<<<<< HEAD
+def compare_Ridge(optimal_MSE):
+=======
 
 def compare_lambdas(optimal_MSE):
+>>>>>>> ab2e4df2968c141740fdcff1b955c7797fd95652
 
     np.random.seed(2018)            # Generate random values from seed.
 
@@ -94,4 +96,8 @@ def compare_lambdas(optimal_MSE):
     return lambdas[ind]
 
 optimal_MSE = run_OLS_and_Ridge()
+<<<<<<< HEAD
+compare_Ridge(optimal_MSE)
+=======
 #compare_lambdas(optimal_MSE)
+>>>>>>> ab2e4df2968c141740fdcff1b955c7797fd95652
