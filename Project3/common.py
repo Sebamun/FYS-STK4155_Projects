@@ -1,70 +1,28 @@
-import autograd.numpy as np
-from sklearn.preprocessing import StandardScaler
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
+import numpy as np
+import LFPy
+from lfpykit.eegmegcalc import NYHeadModel
+from lfpykit import CellGeometry, CurrentDipoleMoment
 
-def MSE(y_data, y_model):
-    """Calculate MSE"""
-    return np.mean((y_data - y_model)**2)
+def prepare_data(num_samples):
 
-def FrankeFunction(x, y):
-    """Produce terrain data"""
-    N = x.shape[0]
-    term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
-    term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
-    term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
-    term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
-    return term1 + term2 + term3 + term4 + np.random.normal(0,0.1,(N,N))
+    nyhead = NYHeadModel()
+    dipole_locations = nyhead.cortex      # Der svulsten kan plasseres
+    num_positions = dipole_locations.shape[1]
 
-def create_X(x, y, n):
-    """Create design Matrix"""
-    if len(x.shape) > 1:
-        x = np.ravel(x)
-        y = np.ravel(y)
+    pos_list = np.zeros((3, num_samples))   # Posisjonene til svulstene
+    for i in range(num_samples): # 0 til 1000
+        idx = np.random.randint(0, num_positions) # Tilfeldig valgt posisjon blant X
+        pos_list[:, i] = dipole_locations[:, idx] # Legger til posisjonen til svulsten
 
-    N = len(x)
-    l = int((n+1)*(n+2)/2) # Number of elements in beta
-    X = np.ones((N,l))
+    eeg = np.zeros((num_samples, 231))
 
-    for i in range(1,n+1):
-        q = int((i)*(i+1)/2)
-        for k in range(i+1):
-            X[:,q+k] = (x**(i-k))*(y**k)
-    return X
-
-def prepare_cancer_data():
-    """
-    - Create the design matrix for the data
-    - Split into test and train sets
-    - Scale the data
-    """
-    cancer = load_breast_cancer()
-    # Feature matrix of 569 rows (samples) and 30 columns (parameters)
-    X = cancer.data
-    # Label array of 569 rows (0 for benign and 1 for malignant)
-    Y = cancer.target.reshape(-1, 1)
-
-    # Generate training and testing datasets
-    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=1)
-
-    # Scaling the data
-    scaler = StandardScaler()
-    scaler.fit(X_train)
-    X_train = scaler.transform(X_train)
-    X_test = scaler.transform(X_test)
-    return X_train, X_test, y_train, y_test
-
-def scale(X):
-    """Scale all columns except the first (which is all ones)"""
-    scaler = StandardScaler()
-    scaler.fit(X[:, 1:])
-    X[:, 1:] = scaler.transform(X[:, 1:])
-    return X
-
-def learning_schedule(t, t0, t1):
-    """Learning rate used in SGD"""
-    return t0/(t+t1)
-
-def accuracy(pred, target):
-    """Calculates the accuracy for classification problmes"""
-    return np.mean(abs(pred - target) < 0.5)
+    for i in range(num_samples):
+        nyhead.set_dipole_pos(pos_list[:,i]) #Lager en instans tilhørende posisjon pos_list[:,i]
+        M = nyhead.get_transformation_matrix() #Henter ut transformasjonsmatrisen tilhørende posisjon pos_list[:,i]
+        p = np.array(([0.0], [0.0], [1.0]))
+        #Roterer retningen til dipolmomentet slik at det står normalt på hjernebarken,
+        #i forhold til posisjonen pos_list[:, i]
+        p = nyhead.rotate_dipole_to_surface_normal(p)
+        eeg_i = M @ p #Genererer EEG-signalet tilhørende et dipolmoment i posisjon pos_list[:,i]
+        eeg[i, :] = eeg_i.T
+    return eeg, pos_list

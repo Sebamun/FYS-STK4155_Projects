@@ -35,33 +35,32 @@ def NN_model(inputsize, n_layers, n_neuron, eta, lamda):
 eeg = np.load(f'data/eeg_100.npy')              # (1000, 231)
 pos_list = np.load(f'data/pos_list_100.npy')    # (3, 1000)
 
-# num_sensors = 231
-# num_samples = 5000
-# num_positions = 74382
-#
-# def prepare_data(num_samples):
-#
-#     nyhead = NYHeadModel()
-#     dipole_locations = nyhead.cortex      # Der svulsten kan plasseres
-#     num_positions = dipole_locations.shape[1]
-#
-#     pos_list = np.zeros((3, num_samples))   # Posisjonene til svulstene
-#     for i in range(num_samples): # 0 til 1000
-#         idx = np.random.randint(0, num_positions) # Tilfeldig valgt posisjon blant X
-#         pos_list[:, i] = dipole_locations[:, idx] # Legger til posisjonen til svulsten
-#
-#     eeg = np.zeros((num_samples, 231))
-#
-#     for i in range(num_samples):
-#         nyhead.set_dipole_pos(pos_list[:,i]) #Lager en instans tilhørende posisjon pos_list[:,i]
-#         M = nyhead.get_transformation_matrix() #Henter ut transformasjonsmatrisen tilhørende posisjon pos_list[:,i]
-#         p = np.array(([0.0], [0.0], [1.0]))
-#         #Roterer retningen til dipolmomentet slik at det står normalt på hjernebarken,
-#         #i forhold til posisjonen pos_list[:, i]
-#         p = nyhead.rotate_dipole_to_surface_normal(p)
-#         eeg_i = M @ p #Genererer EEG-signalet tilhørende et dipolmoment i posisjon pos_list[:,i]
-#         eeg[i, :] = eeg_i.T
-#     return eeg, pos_list
+
+num_samples = 5000
+
+def prepare_data(num_samples):
+
+    nyhead = NYHeadModel()
+    dipole_locations = nyhead.cortex      # Der svulsten kan plasseres
+    num_positions = dipole_locations.shape[1]
+
+    pos_list = np.zeros((3, num_samples))   # Posisjonene til svulstene
+    for i in range(num_samples): # 0 til 1000
+        idx = np.random.randint(0, num_positions) # Tilfeldig valgt posisjon blant X
+        pos_list[:, i] = dipole_locations[:, idx] # Legger til posisjonen til svulsten
+
+    eeg = np.zeros((num_samples, 231))
+
+    for i in range(num_samples):
+        nyhead.set_dipole_pos(pos_list[:,i]) #Lager en instans tilhørende posisjon pos_list[:,i]
+        M = nyhead.get_transformation_matrix() #Henter ut transformasjonsmatrisen tilhørende posisjon pos_list[:,i]
+        p = np.array(([0.0], [0.0], [1.0]))
+        #Roterer retningen til dipolmomentet slik at det står normalt på hjernebarken,
+        #i forhold til posisjonen pos_list[:, i]
+        p = nyhead.rotate_dipole_to_surface_normal(p)
+        eeg_i = M @ p #Genererer EEG-signalet tilhørende et dipolmoment i posisjon pos_list[:,i]
+        eeg[i, :] = eeg_i.T
+    return eeg, pos_list
 
 # eeg, pos_list = prepare_data(num_samples)
 print(eeg.shape)
@@ -71,7 +70,7 @@ pos_list = pos_list.T
 inputsize = eeg.shape[1]
 n_layers = 5
 n_neuron = 100
-eta = 0.0001
+eta = 0.0001 # 0.0001
 lamda = 1e-6
 num_folds = 10
 
@@ -106,8 +105,8 @@ for train, test in kfold.split(inputs, targets):
     print(scores)
     pred = DNN_model.predict(X_test[0:5])
     print(pred)
-    print(y_test[0:5])# Increase fold number
-    
+    print(y_test[0:5])
+
     # Increase fold number
     fold_no = fold_no + 1
 
