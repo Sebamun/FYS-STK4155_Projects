@@ -79,11 +79,27 @@ eeg += np.random.normal(0,0.1, eeg.shape)
 X_train, X_test, y_train, y_test = splitter(eeg, pos_list, test_size=0.2)
 
 DNN_model = NN_model(inputsize, n_layers, n_neuron, eta, lamda)
-DNN_model.fit(X_train, y_train, epochs=50, batch_size=30, verbose=2)
+DNN_model.fit(X_train, y_train, epochs=50, batch_size=30, verbose=0)
 print('training complete')
 scores = DNN_model.evaluate(X_test, y_test)
 print(scores)
 
 pred = DNN_model.predict(X_test[0:5])
+print(pred)
+print(y_test[0:5])
+
+
+from sklearn.decomposition import PCA
+pca = PCA(n_components=5)
+pca.fit(eeg)
+xx = pca.transform(eeg)
+X_train, X_test, y_train, y_test = splitter(xx, pos_list, test_size=0.2)
+print(X_train.shape[1])
+print(X_test.shape[1])
+PCA_model = NN_model(xx.shape[1], n_layers, n_neuron, eta, lamda)
+PCA_model.fit(X_train, y_train, epochs=50, batch_size=30, verbose=0)
+print('training complete using PCA')
+
+pred = PCA_model.predict(X_test[0:5])
 print(pred)
 print(y_test[0:5])
