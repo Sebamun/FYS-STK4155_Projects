@@ -11,12 +11,11 @@ num_sensors = 231
 
 def prepare_data(num_signals):
     nyhead = NYHeadModel()
-    step_length = nyhead.cortex.shape[1]//num_signals + 1
-    dipole_locations = nyhead.cortex[:, ::step_length] # 8 positions
-    samples = 1000
+    dipole_locations = nyhead.cortex[:, 0:74381:30000] # 8 positions
+    samples = 10
     pos_list = np.zeros((3, samples))
     for i in range(samples):
-        idx = np.random.randint(0,8)
+        idx = np.random.randint(0,dipole_locations.shape[1])
         pos_list[:, i] = dipole_locations[:, idx]
     eeg = np.zeros((samples, 231))
 
@@ -67,29 +66,40 @@ def NN_model(inputsize, n_layers, n_neuron, eta, lamda):
     model=Sequential()
     for i in range(n_layers):       #Run loop to add hidden layers to the model
         if (i==0):                  #First layer requires input dimensions
-            model.add(Dense(n_neuron,activation='relu',kernel_regularizer=regularizers.l2(lamda),input_dim=inputsize))
+            model.add(Dense(n_neuron,activation='tanh',kernel_regularizer=regularizers.l2(lamda),input_dim=inputsize))
         else:                       #Subsequent layers are capable of automatic shape inferencing
-            model.add(Dense(n_neuron,activation='relu',kernel_regularizer=regularizers.l2(lamda)))
+            model.add(Dense(n_neuron,activation='tanh',kernel_regularizer=regularizers.l2(lamda)))
     model.add(Dense(3))
     sgd=optimizers.SGD(learning_rate=eta)#, momentum=0.9)
-    model.compile(optimizer=sgd, loss='mse')
+    model.compile(optimizer='sgd', loss='mse')
     #Tror feilen ligger i kostfunksjonen, det kan virke som at det optimaliserer i forhold til hele gjennomsnittet
     #Eller ikke, aner ikke hva som er feilen.
     return model
 
 pos_list = pos_list.T
 
-
-X_train,X_test,y_train,y_test=splitter(eeg, pos_list,test_size=0.1)
+# raw_data = eeg.T @ pos_list
+print(eeg[0:4, 0:4])
+print(pos_list[0:4, :])
+# split_data = eeg.T @ pos_list
+# print(raw_data - split_data)
+input()
+X_train,X_test,y_train,y_test = splitter(eeg, pos_list , test_size=0.1)
+# split_data = X_train.T @ y_train
+print(X_train[0:4, 0:4])
+print(y_train[0:4, :])
+input()
 scaler = StandardScaler()
 scaler.fit(X_train)
 X_train = scaler.transform(X_train)
 X_test = scaler.transform(X_test)
 # print(eeg.shape[1])
 # quit()
+# print(np.std(X_train, axis = 0))
+quit()
 
-DNN_model = NN_model(eeg.shape[1], 5, 100, 0.0001, 1e-6)
-DNN_model.fit(X_train,y_train,epochs=30,batch_size=30,verbose=2)
+DNN_model = NN_model(eeg.shape[1], 3, 20, 0.0001, 15)
+DNN_model.fit(X_train,y_train,epochs=100,batch_size=30,verbose=2)
 print('training complete')
 scores = DNN_model.evaluate(X_test, y_test)
 print(scores)
