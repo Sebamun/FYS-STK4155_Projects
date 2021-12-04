@@ -31,9 +31,6 @@ def NN_model(inputsize, n_layers, n_neuron, eta, lamda, act_func):
     model.compile(optimizer=sgd, loss='mse', metrics = ['accuracy'])
     return model
 
-# eeg = np.load(f'data/eeg_100.npy')              # (1000, 231)
-# pos_list = np.load(f'data/pos_list_100.npy')    # (3, 1000)
-
 def prepare_data(num_positions):
 
     nyhead = NYHeadModel()
@@ -61,14 +58,13 @@ def prepare_data(num_positions):
         eeg[i, :] = eeg_i.T
     return eeg, pos_list
 
-loss = []
 def bias_accuracy(act_funcs):
 
     # eeg, pos_list = prepare_data(num_positions)
     #print(eeg.shape)
     #print(pos_list.shape)
     eeg = np.load(f'data/eeg_100.npy')              # (1000, 231)
-    pos_list = np.load(f'data/pos_list_100.npy')
+    pos_list = np.load(f'data/pos_list_100.npy')    # (3, 1000)
     pos_list = pos_list.T
 
     inputsize = eeg.shape[1]
@@ -106,10 +102,12 @@ def bias_accuracy(act_funcs):
     for i in range(len(act_funcs)):
         DNN_model = NN_model(inputsize, n_layers, n_neuron, eta, lamda, act_funcs[i])
         history = DNN_model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=100, batch_size=30, verbose=0) # epoch = 50, verbose=2
-        #
-        # _, train_acc = DNN_model.evaluate(X_train, y_train, verbose=0)
-        # _, test_acc = DNN_model.evaluate(X_test, y_test, verbose=0)
 
+        _, train_acc = DNN_model.evaluate(X_train, y_train, verbose=0)
+        _, test_acc = DNN_model.evaluate(X_test, y_test, verbose=0)
+
+        print(history.history['loss'].shape)
+        quit()
         # plot loss during training
         ax1.plot(history.history['loss'], label=f'Train for {act_funcs[i]}')
         ax1.legend()
@@ -128,6 +126,6 @@ num_sensors = 231
 num_samples = 5000
 num_positions = 74382
 
-act_funcs = ['relu']
+act_funcs = ['relu', 'sigmoid', 'tanh']
 
 bias_accuracy(act_funcs)

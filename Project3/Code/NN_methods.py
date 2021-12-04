@@ -84,9 +84,8 @@ class NeuralNetwork:
 
             # Fit data to model
             fit_ = model.fit(
-                    inputs[train], targets[train], N_epochs,
-                    batch_size, verbose=0,
-                    validation_data=(inputs[test], targets[test])
+                    inputs[train], targets[train], batch_size, N_epochs,
+                    verbose=0, validation_data=(inputs[test], targets[test])
                     )
 
             pred.append(model.predict(inputs[test]))
@@ -97,8 +96,11 @@ class NeuralNetwork:
             accuracy.append(fit_.history['accuracy']) # train accuracy
             val_accuracy.append(fit_.history['val_accuracy']) # test accuracy
 
+            # print(model.predict(inputs[test])[-1])
+            # print(targets[test][-1])
+            # input()
             # Increase fold number
             fold_no = fold_no + 1
         print('Training completed')
-        return pred, target_data, loss, val_loss, accuracy, val_accuracy
+        return pred, target_data, np.array(loss), np.array(val_loss), np.array(accuracy), np.array(val_accuracy)
 
