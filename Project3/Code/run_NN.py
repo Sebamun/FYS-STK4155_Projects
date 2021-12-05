@@ -5,6 +5,7 @@ from lfpykit import CellGeometry, CurrentDipoleMoment
 from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
 from NN_methods import NeuralNetwork
 from plot import bias_accuracy
@@ -36,6 +37,8 @@ X_train, X_test, y_train, y_test = train_test_split(eeg, pos_list, test_size=0.2
 
 
 model = NeuralNetwork(X_train, X_test, y_train, y_test)
+
+# Run simple DNN
 # act_func = 'relu'
 # pred, loss, val_loss, accuracy, val_accuracy = model.simple(
 #                                                 inputsize, N_layers, N_neurons,
@@ -47,29 +50,51 @@ model = NeuralNetwork(X_train, X_test, y_train, y_test)
 # print(pred[0:5])
 # print(y_test[0:5])
 
+# # Run DNN with k-folding with different activation functions
+# act_funcs = ['relu', 'sigmoid', 'tanh']
+# for i in range(len(act_funcs)):
+#     pred, target_data, loss, val_loss, accuracy, val_accuracy = model.kfold(
+#                                                     inputsize, N_layers, N_neurons,
+#                                                     N_epochs, N_folds, batch_size,
+#                                                     eta, lmbd, act_funcs[i]
+#                                                     )
+#
+#     loss = np.mean(loss, axis=0)
+#     val_loss = np.mean(val_loss, axis=0)
+#     accuracy = np.mean(accuracy, axis=0)
+#     accuracy = np.mean(val_accuracy, axis=0)
+#
+#     bias_accuracy(loss, val_loss, accuracy, val_accuracy, N_epochs, act_funcs[i])
+#
+#     print(f"Predictions with k-folding using {act_funcs[i]}:")
+#     print("Pediction:")
+#     print(pred[-1][0:5][:])
+#     print("Target:")
+#     print(target_data[-1][0:5][:])
 
-# Merge inputs and targets
-act_funcs = ['relu', 'sigmoid', 'tanh']
-for i in range(len(act_funcs)):
-    pred, target_data, loss, val_loss, accuracy, val_accuracy = model.kfold(
-                                                    inputsize, N_layers, N_neurons,
-                                                    N_epochs, N_folds, batch_size,
-                                                    eta, lmbd, act_funcs[i]
-                                                    )
+# Run PCA with k-folding
+act_func = 'relu'
+pca = PCA(n_components=20)
+pca.fit(eeg)
+xx = pca.transform(eeg)
+X_train, X_test, y_train, y_test = train_test_split(xx, pos_list, test_size=0.2)
+model = NeuralNetwork(X_train, X_test, y_train, y_test)
+pred, target_data, loss, val_loss, accuracy, val_accuracy = model.kfold(
+                                            xx.shape[1], N_layers, N_neurons,
+                                            N_epochs, N_folds, batch_size,
+                                            eta, lmbd, act_func
+                                            )
 
-    loss = np.mean(loss, axis=0)
-    val_loss = np.mean(val_loss, axis=0)
-    accuracy = np.mean(accuracy, axis=0)
-    accuracy = np.mean(val_accuracy, axis=0)
+loss = np.mean(loss, axis=0)
+val_loss = np.mean(val_loss, axis=0)
+accuracy = np.mean(accuracy, axis=0)
+accuracy = np.mean(val_accuracy, axis=0)
 
-    bias_accuracy(loss, val_loss, accuracy, val_accuracy, N_epochs, act_funcs[i])
-
-    print(f"Predictions with k-folding using {act_funcs[i]}:")
-    print("Pediction:")
-    print(pred[-1][0:5][:])
-    print("Target:")
-    print(target_data[-1][0:5][:])
-
+print(f"Predictions for PCA with k-folding using {act_func}:")
+print("Pediction:")
+print(pred[-1][0:5][:])
+print("Target:")
+print(target_data[-1][0:5][:])
 
 
 

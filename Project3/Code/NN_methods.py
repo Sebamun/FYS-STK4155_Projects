@@ -96,9 +96,6 @@ class NeuralNetwork:
             accuracy.append(fit_.history['accuracy']) # train accuracy
             val_accuracy.append(fit_.history['val_accuracy']) # test accuracy
 
-            # print(model.predict(inputs[test])[-1])
-            # print(targets[test][-1])
-            # input()
             # Increase fold number
             fold_no = fold_no + 1
         print('Training completed')

@@ -82,35 +82,34 @@ eeg = scaler.transform(eeg)
 eeg += np.random.normal(0,0.1, eeg.shape)
 X_train, X_test, y_train, y_test = splitter(eeg, pos_list, test_size=0.2)
 
-# Merge inputs and targets
-inputs = np.concatenate((X_train, X_test), axis=0)
-targets = np.concatenate((y_train, y_test), axis=0)
+# # Merge inputs and targets
+# inputs = np.concatenate((X_train, X_test), axis=0)
+# targets = np.concatenate((y_train, y_test), axis=0)
+#
+# # Define the K-fold Cross Validator
+# kfold = KFold(n_splits=num_folds, shuffle=True)
+#
+# # K-fold Cross Validation model evaluation
+# fold_no = 1
+# for train, test in kfold.split(inputs, targets):
+#     DNN_model = NN_model(inputsize, n_layers, n_neuron, eta, lamda)
+#     # Generate a print
+#     print('------------------------------------------------------------------------')
+#     print(f'Training for fold {fold_no} ...')
+#
+#     # Fit data to model
+#     history = DNN_model.fit(inputs[train], targets[train], epochs=100, batch_size=30, verbose=0)
+#
+#     # Generate generalization metrics
+#     scores = DNN_model.evaluate(inputs[test], targets[test], verbose=0)
+#     print(scores)
+#     pred = DNN_model.predict(X_test[0:5])
+#     print(pred)
+#     print(y_test[0:5])
+#
+#     # Increase fold number
+#     fold_no = fold_no + 1
 
-# Define the K-fold Cross Validator
-kfold = KFold(n_splits=num_folds, shuffle=True)
-
-# K-fold Cross Validation model evaluation
-fold_no = 1
-for train, test in kfold.split(inputs, targets):
-    DNN_model = NN_model(inputsize, n_layers, n_neuron, eta, lamda)
-    # Generate a print
-    print('------------------------------------------------------------------------')
-    print(f'Training for fold {fold_no} ...')
-
-    # Fit data to model
-    history = DNN_model.fit(inputs[train], targets[train], epochs=100, batch_size=30, verbose=0)
-
-    # Generate generalization metrics
-    scores = DNN_model.evaluate(inputs[test], targets[test], verbose=0)
-    print(scores)
-    pred = DNN_model.predict(X_test[0:5])
-    print(pred)
-    print(y_test[0:5])
-
-    # Increase fold number
-    fold_no = fold_no + 1
-
-quit()
 
 from sklearn.decomposition import PCA
 pca = PCA(n_components=20)
