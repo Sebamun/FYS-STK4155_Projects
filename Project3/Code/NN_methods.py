@@ -14,6 +14,10 @@ class NeuralNetwork:
 
     def simple(self, inputsize, N_layers, N_neurons, N_epochs, batch_size, eta, lmbd, act_func):
         model = Sequential()
+        loss = []
+        val_loss = []
+        accuracy = []
+        val_accuracy = []
         #Input Layer
         model.add(
             Dense(N_neurons,
@@ -33,8 +37,8 @@ class NeuralNetwork:
 
         # Fit data to model
         fit_ = model.fit(
-                self.X_train, self.y_train, N_epochs,
-                batch_size, verbose=0,
+                self.X_train, self.y_train, batch_size,
+                N_epochs, verbose=0,
                 validation_data=(self.X_test, self.y_test)
                 )
         print('Training completed')
@@ -45,7 +49,8 @@ class NeuralNetwork:
         accuracy = fit_.history['accuracy'] # train accuracy
         val_accuracy = fit_.history['val_accuracy'] # test accuracy
 
-        return pred, loss, val_loss, accuracy, val_accuracy
+        return pred, np.array(loss), np.array(val_loss), np.array(accuracy), np.array(val_accuracy)
+        #loss, val_loss, accuracy, val_accuracy
 
 
     def kfold(self, inputsize, N_layers, N_neurons, N_epochs, N_folds, batch_size, eta, lmbd, act_func):
@@ -100,4 +105,3 @@ class NeuralNetwork:
             fold_no = fold_no + 1
         print('Training completed')
         return pred, target_data, np.array(loss), np.array(val_loss), np.array(accuracy), np.array(val_accuracy)
-
