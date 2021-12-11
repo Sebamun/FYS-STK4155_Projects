@@ -26,3 +26,7 @@ def prepare_data(num_samples):
         eeg_i = M @ p #Genererer EEG-signalet tilhørende et dipolmoment i posisjon pos_list[:,i]
         eeg[i, :] = eeg_i.T
     return eeg, pos_list
+
+def R2(y_data, y_model):
+    """Calculate R2 score"""
+    return 1 - np.sum((y_data - y_model) ** 2) / np.sum((y_data - np.mean(y_data)) ** 2)
