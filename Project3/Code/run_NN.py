@@ -8,10 +8,10 @@ from plot import plot_bias_accuracy, plot_bias_accuracy_simple, plot_R2
 from common import prepare_data
 
 # Prepare some data
-# N_samples = 10000 # 10000
-# eeg, pos_list = prepare_data(N_samples)
-eeg = np.load(f'data/eeg_100.npy')
-pos_list = np.load(f'data/pos_list_100.npy')
+N_samples = 10000 # 10000
+eeg, pos_list = prepare_data(N_samples)
+#eeg = np.load(f'data/eeg_100.npy')
+#pos_list = np.load(f'data/pos_list_100.npy')
 pos_list = pos_list.T
 
 # Define initial parameters
