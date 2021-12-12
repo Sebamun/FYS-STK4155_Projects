@@ -124,3 +124,17 @@ def plot_bias_accuracy_simple(loss, val_loss, accuracy, val_accuracy, N_epochs, 
     fig2.savefig(f'../Plots/val_loss_simple')
     fig3.savefig(f'../Plots/accuracy_simple')
     fig4.savefig(f'../Plots/val_accuracy_simple')
+
+def plot_R2(R2, N_epochs, act_funcs):
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot()
+    ax1.set_title('R2 score for different activation functions', fontsize=20)
+    ax1.set_xlabel('Number of epochs', fontsize=18)
+    ax1.set_ylabel('Score', fontsize=18)
+    ax1.tick_params(axis='both', which='major', labelsize=18)
+
+    for i in range(len(act_funcs)):
+        ax1.plot(R2[i], label=f'{act_funcs[i]}')
+        ax1.legend(fontsize=18)
+
+    fig1.savefig(f'../Plots/R2')

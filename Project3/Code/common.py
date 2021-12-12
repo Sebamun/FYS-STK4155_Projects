@@ -30,3 +30,7 @@ def prepare_data(num_samples):
 def R2(y_data, y_model):
     """Calculate R2 score"""
     return 1 - np.sum((y_data - y_model) ** 2) / np.sum((y_data - np.mean(y_data)) ** 2)
+
+def MSE(y_data, y_model):
+    """Calculate MSE"""
+    return np.mean((y_data - y_model)**2)
