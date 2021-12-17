@@ -50,12 +50,9 @@ def run_OLS_and_Ridge():
 
     return MSE2_Ridge
 
-<<<<<<< HEAD
-def compare_Ridge(optimal_MSE):
-=======
+#def compare_Ridge(optimal_MSE):
 
 def compare_lambdas(optimal_MSE):
->>>>>>> ab2e4df2968c141740fdcff1b955c7797fd95652
 
     np.random.seed(2018)            # Generate random values from seed.
 
@@ -96,8 +93,7 @@ def compare_lambdas(optimal_MSE):
     return lambdas[ind]
 
 optimal_MSE = run_OLS_and_Ridge()
-<<<<<<< HEAD
-compare_Ridge(optimal_MSE)
-=======
-#compare_lambdas(optimal_MSE)
->>>>>>> ab2e4df2968c141740fdcff1b955c7797fd95652
+
+#compare_Ridge(optimal_MSE)
+
+compare_lambdas(optimal_MSE)
