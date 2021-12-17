@@ -50,7 +50,7 @@ learning_schedule=lambda t,t0,t1: t0 #learning_schedule: constant learning rate=
 
 start = time.time()
 X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2, random_state=1)
-<<<<<<< HEAD
+
 for lmbd in lmbd_list:
     for batch_size in batch_size_list:
         for n_layers in n_layers_list:
@@ -100,9 +100,7 @@ for lmbd in lmbd_list:
                     MSE_relu = np.mean((z_test - z_o_relu)**2)
                     f.write(f'Relu      | {(time_relu-start):.1f} | {MSE_relu:.3f}|  {lmbd}  |     {eta}     |   {n_layers}    |        {n_hidden_neurons}         |   {epochs}   | \n')
                     #plot_surface(X, RELU_model, 'RELU', epochs, n_layers, xx, yy, N)
-=======
 
-<<<<<<< HEAD
 sigmoid_model = Sigmoid(t0, t1, lmbd, gamma, n_layers, n_hidden_neurons, X_train, 'regression')
 sigmoid_model.train(X_train, z_train, epochs, batch_size, learning_schedule=lambda t,t0,t1: t0)
 time_sigmoid = time.time()
@@ -112,7 +110,7 @@ f.write(f'Sigmoid   |  {(time_sigmoid-start):.1f} | {MSE_sigmoid:.3f}|  {lmbd}  
 
 plot_surface(X, sigmoid_model, 'Sigmoid', epochs, n_layers, xx, yy, N)
 # plot_surface(X, TANH_model, 'tanh', epochs, n_layers, xx, yy, N)
->>>>>>> efb540d17c9f458cc90a0a03598601b9ca89d6fb
+
 f.close()
 quit()
 
@@ -154,7 +152,6 @@ time_leaky = time.time()
 MSE_leaky = np.mean((z_test - z_o_leaky)**2)
 f.write(f'Leaky     | {(time_leaky-start):.1f} | {MSE_relu:.3f}|  {lmbd}  |     {eta}     |   {n_layers}    |        {n_hidden_neurons}         |   {epochs}   | \n')
 
-=======
 for lmbd in lmbd_list:
     for batch_size in batch_size_list:
         for n_layers in n_layers_list:
@@ -205,5 +202,5 @@ for lmbd in lmbd_list:
                     MSE_relu = np.mean((z_test - z_o_relu)**2)
                     f.write(f'Relu      | {(time_relu-start):.1f} | {MSE_relu:.3f}|  {lmbd}  |     {eta}     |   {n_layers}    |        {n_hidden_neurons}         |   {epochs}   | \n')
                     plot_surface(X, RELU_model, 'RELU', epochs, n_layers, n_hidden_neurons, xx, yy, N)
->>>>>>> ab2e4df2968c141740fdcff1b955c7797fd95652
+
 f.close()
