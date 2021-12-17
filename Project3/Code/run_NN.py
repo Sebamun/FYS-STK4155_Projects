@@ -9,9 +9,9 @@ from common import prepare_data
 
 # Prepare some data
 N_samples = 10000 # 10000
-eeg, pos_list = prepare_data(N_samples)
-#eeg = np.load(f'data/eeg_100.npy')
-#pos_list = np.load(f'data/pos_list_100.npy')
+# eeg, pos_list = prepare_data(N_samples)
+eeg = np.load(f'data/eeg_100.npy')
+pos_list = np.load(f'data/pos_list_100.npy')
 pos_list = pos_list.T
 
 # Define initial parameters
@@ -64,9 +64,10 @@ def run_kfold_DNN(act_funcs):
     accuracy_array = np.zeros_like(loss_array)
     val_accuracy_array = np.zeros_like(loss_array)
     R2_score_array = np.zeros_like(loss_array)
+    variance_array = np.zeros_like(loss_array)
 
     for i in range(len(act_funcs)):
-        pred, target_data, loss, val_loss, accuracy, val_accuracy, R2_score = model.kfold(
+        pred, target_data, loss, val_loss, accuracy, val_accuracy, R2_score, variance = model.kfold(
                                                         inputsize, N_layers, N_neurons,
                                                         N_epochs, N_folds, batch_size,
                                                         eta, lmbd, act_funcs[i]
@@ -76,7 +77,7 @@ def run_kfold_DNN(act_funcs):
         accuracy_array[i, :] = np.mean(accuracy, axis=0)
         val_accuracy_array[i, :] = np.mean(val_accuracy, axis=0)
         R2_score_array[i, :] = np.mean(val_accuracy, axis=0)
-
+        # variance_array[i, :] = np.mean(variance, axis=0)
         # print(f"Predictions with k-folding using {act_funcs[i]}:")
         # print("Prediction:")
         # print(pred[-1][0:5][:])

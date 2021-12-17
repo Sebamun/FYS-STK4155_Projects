@@ -47,7 +47,7 @@ class NeuralNetwork:
                 N_epochs, verbose=0,
                 validation_data=(self.X_test, self.y_test)
                 )
-        #print('Training completed')
+        print('Training completed')
 
         pred = model.predict(self.X_test)
         loss = fit_.history['loss'] # train loss
@@ -56,7 +56,6 @@ class NeuralNetwork:
         val_accuracy = fit_.history['val_accuracy'] # test accuracy
 
         return pred, np.array(loss), np.array(val_loss), np.array(accuracy), np.array(val_accuracy)
-        #loss, val_loss, accuracy, val_accuracy
 
 
     def kfold(self, inputsize, N_layers, N_neurons, N_epochs, N_folds, batch_size, eta, lmbd, act_func):
@@ -73,6 +72,7 @@ class NeuralNetwork:
         accuracy = []
         val_accuracy = []
         R2_score = []
+        variance = []
 
         fold_no = 1
         for train, test in kfold.split(inputs, targets):
@@ -93,7 +93,7 @@ class NeuralNetwork:
             #Output layer
             model.add(Dense(3, activation=None))
             sgd = optimizers.SGD(learning_rate=eta, momentum=0.9)
-            model.compile(optimizer=sgd, loss='mse', metrics = ['accuracy', r2_score])
+            model.compile(optimizer=sgd, loss='mse', metrics = ['accuracy', r2_score]) #['accuracy', 'variance', r2_score])
             # Fit data to model
             fit_ = model.fit(
                     inputs[train], targets[train], batch_size, N_epochs,
@@ -108,8 +108,10 @@ class NeuralNetwork:
             accuracy.append(fit_.history['accuracy'])
             val_accuracy.append(fit_.history['val_accuracy'])
             R2_score.append(fit_.history['r2_score'])
+            # variance.append(fit_.history['variance'])
+
 
             # Increase fold number
             fold_no = fold_no + 1
         print(f'Training completed for {act_func}')
-        return pred, target_data, np.array(loss), np.array(val_loss), np.array(accuracy), np.array(val_accuracy), np.array(R2_score)
+        return pred, target_data, np.array(loss), np.array(val_loss), np.array(accuracy), np.array(val_accuracy), np.array(R2_score), np.array(variance)

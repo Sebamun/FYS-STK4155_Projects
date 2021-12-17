@@ -19,6 +19,22 @@ def plot_R2(R2, N_epochs, act_funcs):
 
     fig1.savefig(f'../Plots/R2')
 
+# def bias_variance_tradeoff(poly_degrees, MSE, bias, variance, N, title, fname):
+#     poly_degrees_new = np.arange(1, len(poly_degrees), 2)
+#     fig, ax = plt.subplots()
+#     ax.set_title(title, fontsize=20)
+#     ax.set_xticks(poly_degrees_new)
+#     ax.tick_params(axis='both', which='major', labelsize=18)
+#     ax.set_title(f'Test data, {N}x{N} datapoints', fontsize=18)
+#     ax.plot(poly_degrees, MSE[1], label='MSE')
+#     ax.plot(poly_degrees, bias[1], label='Bias')
+#     ax.plot(poly_degrees, variance[1], label='Variance')
+#     ax.set_xlabel('Polynomial Degree', fontsize=18)
+#     ax.tick_params(axis='both', which='major', labelsize=18)
+#     ax.legend(fontsize=18)
+#     fig.savefig(fname)
+#     plt.close(fig)
+
 
 def plot_bias_accuracy(loss, val_loss, accuracy, val_accuracy, N_epochs, act_funcs):
 
