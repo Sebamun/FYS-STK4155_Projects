@@ -1,22 +1,13 @@
 import numpy as np
-import LFPy
-from lfpykit.eegmegcalc import NYHeadModel
-from lfpykit import CellGeometry, CurrentDipoleMoment
 from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from NN_methods import NeuralNetwork
-from plot import plot_bias_accuracy
-from common import prepare_data
-import matplotlib.pyplot as plt
 import time
 from sklearn.model_selection import KFold
 from tensorflow.keras.models import Sequential      # This allows appending layers to existing models
 from tensorflow.keras.layers import Dense           # This allows defining the characteristics of a particular layer
 from tensorflow.keras import optimizers             # This allows using whichever optimiser we want (sgd,adam,RMSprop)
 from tensorflow.keras import regularizers
-from plot import plot_test_train_loss, plot_expl_var, plot_test_loss, plot_test_train_reduced
+from plot import plot_test_train_loss
 
 class NN_PCA:
     def __init__(self, eeg, pos_list, N_layers, N_neurons, batch_size, eta, lmbd):

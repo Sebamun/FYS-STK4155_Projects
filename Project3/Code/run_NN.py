@@ -3,16 +3,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
-from NN_methods import NeuralNetwork
+# from NN_methods import NeuralNetwork
 from plot import plot_bias_accuracy, plot_bias_accuracy_simple, plot_R2, plot_bias_variance_tradeoff
-from common import prepare_data
+import load_eeg_data
 
-# Prepare some data
-N_samples = 10000 # 10000
-# eeg, pos_list = prepare_data(N_samples)
-eeg = np.load(f'data/eeg_100.npy')
-pos_list = np.load(f'data/pos_list_100.npy')
-pos_list = pos_list.T
+N_samples = 1000
+eeg, pos_list = load_eeg_data.load_data(N_samples)
 
 # Define initial parameters
 inputsize = eeg.shape[1]

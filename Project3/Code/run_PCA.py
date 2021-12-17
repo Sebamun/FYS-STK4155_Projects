@@ -1,24 +1,11 @@
 import numpy as np
-import LFPy
-from lfpykit.eegmegcalc import NYHeadModel
-from lfpykit import CellGeometry, CurrentDipoleMoment
-from sklearn.model_selection import train_test_split
-from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-
 from PCA_methods import NN_PCA
-from plot import plot_bias_accuracy
-from common import prepare_data
-import matplotlib.pyplot as plt
 from plot import plot_test_train_loss, plot_expl_var, plot_test_loss, plot_test_train_reduced
-import time
+import load_eeg_data
 
-# Generate data
 N_samples = 1000
-eeg, pos_list = prepare_data(N_samples)
-# eeg = np.load(f'data/eeg_100.npy')
-# pos_list = np.load(f'data/pos_list_100.npy')
-pos_list = pos_list.T
+eeg, pos_list = load_eeg_data.load_data(N_samples)
 
 # Define initial parameters
 inputsize = eeg.shape[1]
