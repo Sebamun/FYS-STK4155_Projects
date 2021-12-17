@@ -76,7 +76,7 @@ def run_kfold_DNN(act_funcs):
         val_loss_array[i, :] = np.mean(val_loss, axis=0)
         accuracy_array[i, :] = np.mean(accuracy, axis=0)
         val_accuracy_array[i, :] = np.mean(val_accuracy, axis=0)
-        R2_score_array[i, :] = np.mean(val_accuracy, axis=0)
+        R2_score_array[i, :] = np.mean(R2_score, axis=0)
         # variance_array[i, :] = np.mean(variance, axis=0)
         # print(f"Predictions with k-folding using {act_funcs[i]}:")
         # print("Prediction:")
