@@ -36,8 +36,18 @@ def prepare_data(num_samples):
         eeg[i, :] = eeg_i.T
     return eeg, pos_list
 
+<<<<<<< HEAD:Project3/Code/produce_eeg_data.py
 if __name__ == '__main__':
     for num_samples in [500, 1_000, 10_000]:
         eeg, pos_list = prepare_data(num_samples)
         np.save(f'data/eeg_{num_samples}', eeg)
         np.save(f'data/pos_list_{num_samples}', pos_list)
+=======
+def R2(y_data, y_model):
+    """Calculate R2 score"""
+    return 1 - np.sum((y_data - y_model) ** 2) / np.sum((y_data - np.mean(y_data)) ** 2)
+
+def MSE(y_data, y_model):
+    """Calculate MSE"""
+    return np.mean((y_data - y_model)**2)
+>>>>>>> 70fbb0b7cada5507123011678113ee2be507f947:Project3/Code/common.py

@@ -6,6 +6,7 @@ from tensorflow.keras import regularizers           # This allows using whicheve
 from sklearn.model_selection import KFold
 import tensorflow.keras.backend as K
 
+
 def r2_score(y_true, y_pred):
     SS_res =  K.sum(K.square(y_true - y_pred))
     SS_tot = K.sum(K.square(y_true - K.mean(y_true)))
@@ -73,6 +74,7 @@ class NeuralNetwork:
         accuracy = []
         val_accuracy = []
         R2_score = []
+        variance = []
 
         fold_no = 1
         for train, test in kfold.split(inputs, targets):
@@ -108,7 +110,6 @@ class NeuralNetwork:
             accuracy.append(fit_.history['accuracy'])
             val_accuracy.append(fit_.history['val_accuracy'])
             R2_score.append(fit_.history['r2_score'])
-
 
             # Increase fold number
             fold_no = fold_no + 1
