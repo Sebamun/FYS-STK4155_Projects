@@ -21,14 +21,17 @@ def plot_R2(R2, act_funcs):
 
     fig1.savefig(f'../Plots/R2')
 
-def plot_bias_variance_tradeoff(loss_array, val_loss_array, act_funcs):
+def plot_bias_variance_tradeoff(loss_array, val_loss_array, act_funcs, N_epochs):
     for i, act_func in enumerate(act_funcs):
+        start = 3
+        epochs = np.arange(start,N_epochs,1)
         fig, ax = plt.subplots()
         ax.tick_params(axis='both', which='major', labelsize=18)
-        ax.set_title(f'Bias-Variance Tradeoff with {act_func}', fontsize=20)
-        ax.plot(loss_array[i,3:], label='Train sample')
-        ax.plot(val_loss_array[i,3:], label='Test sample')
-        ax.set_xlabel('Model complexity', fontsize=18)
+        ax.set_title(f'Bias-Variance Tradeoff with {act_func} as activation function', fontsize=20)
+        ax.plot(epochs, loss_array[i,start:], label='Train sample')
+        ax.plot(epochs, val_loss_array[i,start:], label='Test sample')
+        ax.set_xlabel('Number of epochs', fontsize=18)
+        ax.set_ylabel('Prediction Error', fontsize=18)
         ax.tick_params(axis='both', which='major', labelsize=18)
         ax.legend(fontsize=18)
         fig.savefig(f'../Plots/bias_variance_{act_func}')
