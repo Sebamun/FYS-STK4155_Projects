@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
-# from NN_methods import NeuralNetwork
+from NN_methods import NeuralNetwork
 from plot import plot_bias_accuracy, plot_bias_accuracy_simple, plot_R2, plot_bias_variance_tradeoff
 import load_eeg_data
 
