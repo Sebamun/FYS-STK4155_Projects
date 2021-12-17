@@ -11,6 +11,7 @@ def r2_score(y_true, y_pred):
     SS_tot = K.sum(K.square(y_true - K.mean(y_true)))
     return ( 1 - SS_res/(SS_tot + K.epsilon()) )
 
+
 class NeuralNetwork:
     def __init__(self, X_train, X_test, y_train, y_test):
         self.X_train = X_train
@@ -72,7 +73,6 @@ class NeuralNetwork:
         accuracy = []
         val_accuracy = []
         R2_score = []
-        variance = []
 
         fold_no = 1
         for train, test in kfold.split(inputs, targets):
@@ -93,7 +93,7 @@ class NeuralNetwork:
             #Output layer
             model.add(Dense(3, activation=None))
             sgd = optimizers.SGD(learning_rate=eta, momentum=0.9)
-            model.compile(optimizer=sgd, loss='mse', metrics = ['accuracy', r2_score]) #['accuracy', 'variance', r2_score])
+            model.compile(optimizer=sgd, loss='mse', metrics = ['accuracy', r2_score])
             # Fit data to model
             fit_ = model.fit(
                     inputs[train], targets[train], batch_size, N_epochs,
@@ -108,10 +108,9 @@ class NeuralNetwork:
             accuracy.append(fit_.history['accuracy'])
             val_accuracy.append(fit_.history['val_accuracy'])
             R2_score.append(fit_.history['r2_score'])
-            # variance.append(fit_.history['variance'])
 
 
             # Increase fold number
             fold_no = fold_no + 1
         print(f'Training completed for {act_func}')
-        return pred, target_data, np.array(loss), np.array(val_loss), np.array(accuracy), np.array(val_accuracy), np.array(R2_score), np.array(variance)
+        return pred, target_data, np.array(loss), np.array(val_loss), np.array(accuracy), np.array(val_accuracy), np.array(R2_score)

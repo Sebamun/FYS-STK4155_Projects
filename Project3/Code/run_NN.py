@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
 from NN_methods import NeuralNetwork
-from plot import plot_bias_accuracy, plot_bias_accuracy_simple, plot_R2
+from plot import plot_bias_accuracy, plot_bias_accuracy_simple, plot_R2, plot_bias_variance_tradeoff
 from common import prepare_data
 
 # Prepare some data
@@ -22,7 +22,7 @@ N_epochs = 30
 batch_size = 30
 eta = 0.0001
 lmbd = 1e-6
-N_folds = 10
+N_folds = 5 #10
 
 # Scale the data and append noice
 scaler = StandardScaler()
@@ -64,10 +64,9 @@ def run_kfold_DNN(act_funcs):
     accuracy_array = np.zeros_like(loss_array)
     val_accuracy_array = np.zeros_like(loss_array)
     R2_score_array = np.zeros_like(loss_array)
-    variance_array = np.zeros_like(loss_array)
 
     for i in range(len(act_funcs)):
-        pred, target_data, loss, val_loss, accuracy, val_accuracy, R2_score, variance = model.kfold(
+        pred, target_data, loss, val_loss, accuracy, val_accuracy, R2_score = model.kfold(
                                                         inputsize, N_layers, N_neurons,
                                                         N_epochs, N_folds, batch_size,
                                                         eta, lmbd, act_funcs[i]
@@ -77,15 +76,15 @@ def run_kfold_DNN(act_funcs):
         accuracy_array[i, :] = np.mean(accuracy, axis=0)
         val_accuracy_array[i, :] = np.mean(val_accuracy, axis=0)
         R2_score_array[i, :] = np.mean(R2_score, axis=0)
-        # variance_array[i, :] = np.mean(variance, axis=0)
         # print(f"Predictions with k-folding using {act_funcs[i]}:")
         # print("Prediction:")
         # print(pred[-1][0:5][:])
         # print("Target:")
         # print(target_data[-1][0:5][:])
 
-    plot_bias_accuracy(loss_array, val_loss_array, accuracy_array, val_accuracy_array, N_epochs, act_funcs)
-    plot_R2(R2_score_array, N_epochs, act_funcs)
+    plot_bias_accuracy(loss_array, val_loss_array, accuracy_array, val_accuracy_array, act_funcs)
+    plot_R2(R2_score_array, act_funcs)
+    plot_bias_variance_tradeoff(loss_array, val_loss_array, act_funcs)
 
 # Run PCA with k-folding
 def run_kfold_PCA(act_func):

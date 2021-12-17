@@ -7,7 +7,7 @@ plt.style.use('seaborn')
 plt.rc('text', usetex=True)
 plt.rc('text.latex', preamble=r'\usepackage{amsmath}')
 
-def plot_R2(R2, N_epochs, act_funcs):
+def plot_R2(R2, act_funcs):
     fig1 = plt.figure()
     ax1 = fig1.add_subplot()
     ax1.set_title('R2 score for different activation functions', fontsize=20)
@@ -21,24 +21,20 @@ def plot_R2(R2, N_epochs, act_funcs):
 
     fig1.savefig(f'../Plots/R2')
 
-# def bias_variance_tradeoff(poly_degrees, MSE, bias, variance, N, title, fname):
-#     poly_degrees_new = np.arange(1, len(poly_degrees), 2)
-#     fig, ax = plt.subplots()
-#     ax.set_title(title, fontsize=20)
-#     ax.set_xticks(poly_degrees_new)
-#     ax.tick_params(axis='both', which='major', labelsize=18)
-#     ax.set_title(f'Test data, {N}x{N} datapoints', fontsize=18)
-#     ax.plot(poly_degrees, MSE[1], label='MSE')
-#     ax.plot(poly_degrees, bias[1], label='Bias')
-#     ax.plot(poly_degrees, variance[1], label='Variance')
-#     ax.set_xlabel('Polynomial Degree', fontsize=18)
-#     ax.tick_params(axis='both', which='major', labelsize=18)
-#     ax.legend(fontsize=18)
-#     fig.savefig(fname)
-#     plt.close(fig)
+def plot_bias_variance_tradeoff(loss_array, val_loss_array, act_funcs):
+    for i, act_func in enumerate(act_funcs):
+        fig, ax = plt.subplots()
+        ax.tick_params(axis='both', which='major', labelsize=18)
+        ax.set_title(f'Bias-Variance Tradeoff with {act_func}', fontsize=20)
+        ax.plot(loss_array[i,:], label='Train sample')
+        ax.plot(val_loss_array[i,:], label='Test sample')
+        ax.set_xlabel('Model complexity', fontsize=18)
+        ax.tick_params(axis='both', which='major', labelsize=18)
+        ax.legend(fontsize=18)
+        fig.savefig(f'../Plots/bias_variance_{act_func}')
 
 
-def plot_bias_accuracy(loss, val_loss, accuracy, val_accuracy, N_epochs, act_funcs):
+def plot_bias_accuracy(loss, val_loss, accuracy, val_accuracy, act_funcs):
 
     fig1 = plt.figure()
     ax1 = fig1.add_subplot()
@@ -90,7 +86,7 @@ def plot_bias_accuracy(loss, val_loss, accuracy, val_accuracy, N_epochs, act_fun
     fig3.savefig(f'../Plots/accuracy')
     fig4.savefig(f'../Plots/val_accuracy')
 
-def plot_bias_accuracy_simple(loss, val_loss, accuracy, val_accuracy, N_epochs, act_funcs):
+def plot_bias_accuracy_simple(loss, val_loss, accuracy, val_accuracy, act_funcs):
     fig1 = plt.figure()
     ax1 = fig1.add_subplot()
     ax1.set_title('Training loss without k-folding', fontsize=20)
@@ -114,7 +110,7 @@ def plot_bias_accuracy_simple(loss, val_loss, accuracy, val_accuracy, N_epochs, 
     ax3.tick_params(axis='both', which='major', labelsize=18)
 
 
-def plot_test_train_loss(loss, val_loss, N_epochs, act_funcs, lmbd, n_comps_list, N_samples, error_std):
+def plot_test_train_loss(loss, val_loss, act_funcs, lmbd, n_comps_list, N_samples, error_std):
     fig1 = plt.figure()
     ax1 = fig1.add_subplot()
     title = r'MSE for training - and test data, $\sigma$ ='+f'{error_std}'
@@ -149,7 +145,7 @@ def plot_expl_var(expl_var_list, error_std_list):
         print(f'Sum of the {i+1} first PCs = {np.sum(expl_var_list[0][0:i]*100)}')
 
 
-def plot_test_loss(val_loss, N_epochs, n_comps_list, error_std):
+def plot_test_loss(val_loss, n_comps_list, error_std):
     fig1 = plt.figure()
     ax1 = fig1.add_subplot()
     title = r'MSE for test data, $\sigma$ ='+f'{error_std}'
@@ -167,7 +163,7 @@ def plot_test_loss(val_loss, N_epochs, n_comps_list, error_std):
 
     fig1.savefig(f'../Plots/PCA_plots/Test_MSE_err{error_std}.png')
 
-def plot_test_train_reduced(loss, val_loss, N_epochs, act_funcs, lmbd, N_samples, error_std):
+def plot_test_train_reduced(loss, val_loss, act_funcs, lmbd, N_samples, error_std):
     fig, axes = plt.subplots(1,2)
 
     title = r'MSE, $\sigma$ ='+f'{error_std}'
