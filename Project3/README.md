@@ -33,7 +33,7 @@ python3 produce_eeg_data.py
 Here;
 * python3 run_NN.py fits EEG data from 1000 samples using FFNN with and without k-folding and:
   * provides plots of loss, accuracy and bias-variance-tradeoff
-  * noice ...
+  * writes the loss and accuracy values given different noise deviations to file
     * with 231 features, batch size of 30 samples, 5 hidden layers, 100 neurons, 30 epochs and 10 folds.
 
 * python3 run_PCA.py fits EEG data from 1000 patients using FFNN with and without k-folding and:
