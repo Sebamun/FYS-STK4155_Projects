@@ -36,7 +36,10 @@ Here;
   * writes the loss and accuracy values given different noise deviations to file
     * with 231 features, batch size of 30 samples, 5 hidden layers, 100 neurons, 30 epochs and 10 folds.
 
-* python3 run_PCA.py fits EEG data from 1000 patients using FFNN with and without k-folding and:
+* python3 run_PCA.py fits EEG data from 1000 patients using FFNN with k-folding and:
+   * Train the NN varying the number of principle components. To change how many components one wants to use, edit the n_comps_list
+   * Train the network w/o PCA, but with 10 extraced features, first 10 uniformly distributed, and then first 10.
+   * Make a scree plot of the PC's, varying the noise.
 
 * python3 produce_eeg_data.py places a dipole moment in cortex of human brain for N number of patients and:  
   * writes EEG and localizations to files 
